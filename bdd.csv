@@ -1,0 +1,11 @@
+cards,,columns,,users,,projects,,comments,,history,,scripts,
+id,uint,id,uint,id,uint,id,uint,id,uint,id,uint,id,uint
+name,string,name,string,name,string,name,string,content,string,type,uint,type,uint
+desc,string,project_id,uint,admin,bool,admins_id,string,cards_id,uint,id_object,uint,id_object,uint
+column_id,uint,desc,string,password,string,read,string,autor_id,uint,column_name,string,filename,string
+project_id,uint,tags,string,mail,string,,,,,content,string,,
+tags,string,scripts_id,uint,active,bool,,,,,,,,
+users_id,uint,write,string,,,,,,,,,,
+scripts_id,uint,,,,,,,,,,,,
+write,string,,,,,,,,,,,,
+
