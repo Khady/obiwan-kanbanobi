@@ -1,5 +1,5 @@
 For init the database, add the following line in /etc/postgresql/<maybe sub-dir>/pg_hba.conf:
 
-local cumulus cumulus password
- 
+local kanban kanban password
+
 And just execute initdb.sh with the user postgres.

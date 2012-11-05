@@ -4,7 +4,7 @@ SET client_encoding = 'UTF8';
 CREATE TABLE cards (
     id integer NOT NULL,
     name text NOT NULL,
-    desc text NOT NULL,
+    content text NOT NULL,
     column_id integer NOT NULL,
     project_id integer NOT NULL,
     tags text NOT NULL,
@@ -18,7 +18,7 @@ CREATE TABLE columns (
     id integer NOT NULL,
     name text NOT NULL,
     project_id integer NOT NULL,
-    desc text NOT NULL,
+    content text NOT NULL,
     tags text NOT NULL,
     scripts_id integer NOT NULL,
     write text NOT NULL
@@ -28,8 +28,8 @@ CREATE TABLE users (
     id integer NOT NULL,
     name text NOT NULL,
     admin boolean NOT NULL DEFAULT(false),
-    password string NOT NULL,
-    mail string NOT NULL,
+    password text NOT NULL,
+    mail text NOT NULL,
     active boolean NOT NULL DEFAULT(false)
 );
 
@@ -49,7 +49,7 @@ CREATE TABLE comments (
 
 CREATE TABLE history (
     id integer NOT NULL,
-    type integer NOT NULL,
+    change_type integer NOT NULL,
     object_id integer NOT NULL,
     column_name text NOT NULL,
     content text NOT NULL
@@ -57,7 +57,7 @@ CREATE TABLE history (
 
 CREATE TABLE scripts (
     id integer NOT NULL,
-    type integer NOT NULL,
+    script_type integer NOT NULL,
     object_id integer NOT NULL,
     filename text NOT NULL
 );
