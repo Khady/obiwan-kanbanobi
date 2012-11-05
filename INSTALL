@@ -2,4 +2,8 @@ For init the database, add the following line in /etc/postgresql/<maybe sub-dir>
 
 local kanban kanban password
 
+Reload postgresql with:
+
+/etc/init.d/postgresql restart
+
 And just execute initdb.sh with the user postgres.
