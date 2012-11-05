@@ -1,0 +1,39 @@
+package message;
+
+enum CMD {
+     X = 1;
+     Y = 2;
+};
+
+enum CIBLE {
+     USERS      = 1;
+     COLUMNS    = 2;
+     PROJECTS   = 3;
+     CARDS      = 4;
+     ADMIN      = 5;
+};
+
+message Msg {
+        required CIBLE cible = 1;
+        message Users {
+                required CMD cmd = 1;
+        }
+        message Columns {
+                required CMD cmd = 1;
+        }
+        message Projects {
+                required CMD cmd = 1;
+        }
+        message Cards {
+                required CMD cmd = 1;
+        }
+        message Admin {
+                required CMD cmd = 1;
+        }
+        optional Users users = 2;
+        optional Columns columns = 3;
+        optional Projects projects = 4;
+        optional Cards cards = 5;
+        optional Admin admin = 6;
+}
+
