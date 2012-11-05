@@ -1,0 +1,4 @@
+Merci de ne pas creer de dossier src.
+
+Nous allons dev le client dans un dossier "kanban" ou quelque chose du
+style pour ne pas avoir des imports degeulasses dans le code.
