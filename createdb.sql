@@ -9,7 +9,7 @@ CREATE TABLE cards (
     project_id integer NOT NULL,
     tags text NOT NULL,
     users_id integer NOT NULL,
-    scripts_id integer NOT NULL,
+    scripts_id text NOT NULL,
     write text NOT NULL,
     origin timestamp NOT NULL
 );
@@ -20,7 +20,7 @@ CREATE TABLE columns (
     project_id integer NOT NULL,
     content text NOT NULL,
     tags text NOT NULL,
-    scripts_id integer NOT NULL,
+    scripts_id text NOT NULL,
     write text NOT NULL
 );
 

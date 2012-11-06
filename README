@@ -1,3 +1,17 @@
 Obi-Wan Kanbanobi
 Master Kanban
 
+Build Requirements
+==================
+
+ * Go >= 1.0
+ * Goprotobuf
+ * pq
+ * Python
+
+Run Requirements
+================
+
+ * PostgreSQL
+ * Python
+ * A modern firefox or chromium
