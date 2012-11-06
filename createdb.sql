@@ -8,7 +8,7 @@ CREATE TABLE cards (
     column_id integer NOT NULL,
     project_id integer NOT NULL,
     tags text NOT NULL,
-    users_id integer NOT NULL,
+    users_id text NOT NULL,
     scripts_id text NOT NULL,
     write text NOT NULL,
     origin timestamp NOT NULL
@@ -37,7 +37,8 @@ CREATE TABLE projects (
     id integer NOT NULL,
     name text NOT NULL,
     admins_id text NOT NULL,
-    read text NOT NULL
+    read text NOT NULL,
+    content text NOT NULL
 );
 
 CREATE TABLE comments (
@@ -45,6 +46,7 @@ CREATE TABLE comments (
     content text NOT NULL,
     cards_id integer NOT NULL,
     author_id integer NOT NULL
+    project_id integer NOT NULL
 );
 
 CREATE TABLE history (
