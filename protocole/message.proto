@@ -15,25 +15,55 @@ enum CIBLE {
 
 message Msg {
         required CIBLE cible = 1;
+	required uint target = 2; // contains author id (who is speaking) in reception and addressee msg in sending 
+
         message Users {
-                required CMD cmd = 1;
+		required uint	id = 1;
+		required string name = 2;
+		required string password = 3;
+		required bool	admin = 4; // is SUPERadmin or not
+		optional string mail = 5;
         }
+
         message Columns {
-                required CMD cmd = 1;
+		required uint	project_id = 1;
+		required uint	id = 2;
+		required string name = 3;
+		optional string desc = 4;
+		optional string tags = 5;
+		optional string scripts_ids = 6; // IDs of the scripts attached to the column
+		optional string	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
         }
+
         message Projects {
-                required CMD cmd = 1;
+		required uint	id = 1;
+		required string name = 2;
+		optional string admins_id = 3; // list of the administrator users of the projects
+		optional string read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
         }
+
         message Cards {
-                required CMD cmd = 1;
+		// Comments struct
+		message Comment {
+			required uint id = 1;
+			required string content = 2;
+			required string author_id = 3;
+		}
+		required uint	id = 1;
+		required uint	project_id = 2;
+		required uint	column_id = 3;
+		required string name = 4;
+		repeated Comment comments = 5; // repeated = dynamically sized array of Comments
+		optional string desc = 6;
+		optional string tags = 7;
+		optional string users_id = 8; // ID of the card author
+		optional string scripts_ids = 9; // IDs of the scripts attached to the card
+		optional string	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
         }
-        message Admin {
-                required CMD cmd = 1;
-        }
-        optional Users users = 2;
-        optional Columns columns = 3;
-        optional Projects projects = 4;
-        optional Cards cards = 5;
-        optional Admin admin = 6;
+
+        optional Users users = 3;
+        optional Columns columns = 4;
+        optional Projects projects = 5;
+        optional Cards cards = 6;
 }
 
