@@ -96,11 +96,11 @@ func (x *CIBLE) UnmarshalJSON(data []byte) error {
 
 type Msg struct {
 	Cible            *CIBLE        `protobuf:"varint,1,req,name=cible,enum=message.CIBLE" json:"cible,omitempty"`
-	Users            *Msg_Users    `protobuf:"bytes,2,opt,name=users" json:"users,omitempty"`
-	Columns          *Msg_Columns  `protobuf:"bytes,3,opt,name=columns" json:"columns,omitempty"`
-	Projects         *Msg_Projects `protobuf:"bytes,4,opt,name=projects" json:"projects,omitempty"`
-	Cards            *Msg_Cards    `protobuf:"bytes,5,opt,name=cards" json:"cards,omitempty"`
-	Admin            *Msg_Admin    `protobuf:"bytes,6,opt,name=admin" json:"admin,omitempty"`
+	Target           *uint32       `protobuf:"varint,2,req,name=target" json:"target,omitempty"`
+	Users            *Msg_Users    `protobuf:"bytes,3,opt,name=users" json:"users,omitempty"`
+	Columns          *Msg_Columns  `protobuf:"bytes,4,opt,name=columns" json:"columns,omitempty"`
+	Projects         *Msg_Projects `protobuf:"bytes,5,opt,name=projects" json:"projects,omitempty"`
+	Cards            *Msg_Cards    `protobuf:"bytes,6,opt,name=cards" json:"cards,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
@@ -111,6 +111,13 @@ func (*Msg) ProtoMessage()       {}
 func (this *Msg) GetCible() CIBLE {
 	if this != nil && this.Cible != nil {
 		return *this.Cible
+	}
+	return 0
+}
+
+func (this *Msg) GetTarget() uint32 {
+	if this != nil && this.Target != nil {
+		return *this.Target
 	}
 	return 0
 }
@@ -143,91 +150,269 @@ func (this *Msg) GetCards() *Msg_Cards {
 	return nil
 }
 
-func (this *Msg) GetAdmin() *Msg_Admin {
-	if this != nil {
-		return this.Admin
-	}
-	return nil
-}
-
 type Msg_Users struct {
-	Cmd              *CMD   `protobuf:"varint,1,req,name=cmd,enum=message.CMD" json:"cmd,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	Name             *string `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
+	Password         *string `protobuf:"bytes,3,req,name=password" json:"password,omitempty"`
+	Admin            *bool   `protobuf:"varint,4,req,name=admin" json:"admin,omitempty"`
+	Mail             *string `protobuf:"bytes,5,opt,name=mail" json:"mail,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (this *Msg_Users) Reset()         { *this = Msg_Users{} }
 func (this *Msg_Users) String() string { return proto.CompactTextString(this) }
 func (*Msg_Users) ProtoMessage()       {}
 
-func (this *Msg_Users) GetCmd() CMD {
-	if this != nil && this.Cmd != nil {
-		return *this.Cmd
+func (this *Msg_Users) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
 	}
 	return 0
 }
 
+func (this *Msg_Users) GetName() string {
+	if this != nil && this.Name != nil {
+		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Users) GetPassword() string {
+	if this != nil && this.Password != nil {
+		return *this.Password
+	}
+	return ""
+}
+
+func (this *Msg_Users) GetAdmin() bool {
+	if this != nil && this.Admin != nil {
+		return *this.Admin
+	}
+	return false
+}
+
+func (this *Msg_Users) GetMail() string {
+	if this != nil && this.Mail != nil {
+		return *this.Mail
+	}
+	return ""
+}
+
 type Msg_Columns struct {
-	Cmd              *CMD   `protobuf:"varint,1,req,name=cmd,enum=message.CMD" json:"cmd,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+	ProjectId        *uint32 `protobuf:"varint,1,req,name=project_id" json:"project_id,omitempty"`
+	Id               *uint32 `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
+	Name             *string `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
+	Desc             *string `protobuf:"bytes,4,opt,name=desc" json:"desc,omitempty"`
+	Tags             *string `protobuf:"bytes,5,opt,name=tags" json:"tags,omitempty"`
+	ScriptsIds       *string `protobuf:"bytes,6,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Write            *string `protobuf:"bytes,7,opt,name=write" json:"write,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (this *Msg_Columns) Reset()         { *this = Msg_Columns{} }
 func (this *Msg_Columns) String() string { return proto.CompactTextString(this) }
 func (*Msg_Columns) ProtoMessage()       {}
 
-func (this *Msg_Columns) GetCmd() CMD {
-	if this != nil && this.Cmd != nil {
-		return *this.Cmd
+func (this *Msg_Columns) GetProjectId() uint32 {
+	if this != nil && this.ProjectId != nil {
+		return *this.ProjectId
 	}
 	return 0
 }
 
+func (this *Msg_Columns) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
+	}
+	return 0
+}
+
+func (this *Msg_Columns) GetName() string {
+	if this != nil && this.Name != nil {
+		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Columns) GetDesc() string {
+	if this != nil && this.Desc != nil {
+		return *this.Desc
+	}
+	return ""
+}
+
+func (this *Msg_Columns) GetTags() string {
+	if this != nil && this.Tags != nil {
+		return *this.Tags
+	}
+	return ""
+}
+
+func (this *Msg_Columns) GetScriptsIds() string {
+	if this != nil && this.ScriptsIds != nil {
+		return *this.ScriptsIds
+	}
+	return ""
+}
+
+func (this *Msg_Columns) GetWrite() string {
+	if this != nil && this.Write != nil {
+		return *this.Write
+	}
+	return ""
+}
+
 type Msg_Projects struct {
-	Cmd              *CMD   `protobuf:"varint,1,req,name=cmd,enum=message.CMD" json:"cmd,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	Name             *string `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
+	AdminsId         *string `protobuf:"bytes,3,opt,name=admins_id" json:"admins_id,omitempty"`
+	Read             *string `protobuf:"bytes,4,opt,name=read" json:"read,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (this *Msg_Projects) Reset()         { *this = Msg_Projects{} }
 func (this *Msg_Projects) String() string { return proto.CompactTextString(this) }
 func (*Msg_Projects) ProtoMessage()       {}
 
-func (this *Msg_Projects) GetCmd() CMD {
-	if this != nil && this.Cmd != nil {
-		return *this.Cmd
+func (this *Msg_Projects) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
 	}
 	return 0
 }
 
+func (this *Msg_Projects) GetName() string {
+	if this != nil && this.Name != nil {
+		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Projects) GetAdminsId() string {
+	if this != nil && this.AdminsId != nil {
+		return *this.AdminsId
+	}
+	return ""
+}
+
+func (this *Msg_Projects) GetRead() string {
+	if this != nil && this.Read != nil {
+		return *this.Read
+	}
+	return ""
+}
+
 type Msg_Cards struct {
-	Cmd              *CMD   `protobuf:"varint,1,req,name=cmd,enum=message.CMD" json:"cmd,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
+	Id               *uint32              `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	ProjectId        *uint32              `protobuf:"varint,2,req,name=project_id" json:"project_id,omitempty"`
+	ColumnId         *uint32              `protobuf:"varint,3,req,name=column_id" json:"column_id,omitempty"`
+	Name             *string              `protobuf:"bytes,4,req,name=name" json:"name,omitempty"`
+	Comments         []*Msg_Cards_Comment `protobuf:"bytes,5,rep,name=comments" json:"comments,omitempty"`
+	Desc             *string              `protobuf:"bytes,6,opt,name=desc" json:"desc,omitempty"`
+	Tags             *string              `protobuf:"bytes,7,opt,name=tags" json:"tags,omitempty"`
+	UsersId          *string              `protobuf:"bytes,8,opt,name=users_id" json:"users_id,omitempty"`
+	ScriptsIds       *string              `protobuf:"bytes,9,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Write            *string              `protobuf:"bytes,10,opt,name=write" json:"write,omitempty"`
+	XXX_unrecognized []byte               `json:"-"`
 }
 
 func (this *Msg_Cards) Reset()         { *this = Msg_Cards{} }
 func (this *Msg_Cards) String() string { return proto.CompactTextString(this) }
 func (*Msg_Cards) ProtoMessage()       {}
 
-func (this *Msg_Cards) GetCmd() CMD {
-	if this != nil && this.Cmd != nil {
-		return *this.Cmd
+func (this *Msg_Cards) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
 	}
 	return 0
 }
 
-type Msg_Admin struct {
-	Cmd              *CMD   `protobuf:"varint,1,req,name=cmd,enum=message.CMD" json:"cmd,omitempty"`
-	XXX_unrecognized []byte `json:"-"`
-}
-
-func (this *Msg_Admin) Reset()         { *this = Msg_Admin{} }
-func (this *Msg_Admin) String() string { return proto.CompactTextString(this) }
-func (*Msg_Admin) ProtoMessage()       {}
-
-func (this *Msg_Admin) GetCmd() CMD {
-	if this != nil && this.Cmd != nil {
-		return *this.Cmd
+func (this *Msg_Cards) GetProjectId() uint32 {
+	if this != nil && this.ProjectId != nil {
+		return *this.ProjectId
 	}
 	return 0
+}
+
+func (this *Msg_Cards) GetColumnId() uint32 {
+	if this != nil && this.ColumnId != nil {
+		return *this.ColumnId
+	}
+	return 0
+}
+
+func (this *Msg_Cards) GetName() string {
+	if this != nil && this.Name != nil {
+		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Cards) GetDesc() string {
+	if this != nil && this.Desc != nil {
+		return *this.Desc
+	}
+	return ""
+}
+
+func (this *Msg_Cards) GetTags() string {
+	if this != nil && this.Tags != nil {
+		return *this.Tags
+	}
+	return ""
+}
+
+func (this *Msg_Cards) GetUsersId() string {
+	if this != nil && this.UsersId != nil {
+		return *this.UsersId
+	}
+	return ""
+}
+
+func (this *Msg_Cards) GetScriptsIds() string {
+	if this != nil && this.ScriptsIds != nil {
+		return *this.ScriptsIds
+	}
+	return ""
+}
+
+func (this *Msg_Cards) GetWrite() string {
+	if this != nil && this.Write != nil {
+		return *this.Write
+	}
+	return ""
+}
+
+type Msg_Cards_Comment struct {
+	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	Content          *string `protobuf:"bytes,2,req,name=content" json:"content,omitempty"`
+	AuthorId         *string `protobuf:"bytes,3,req,name=author_id" json:"author_id,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (this *Msg_Cards_Comment) Reset()         { *this = Msg_Cards_Comment{} }
+func (this *Msg_Cards_Comment) String() string { return proto.CompactTextString(this) }
+func (*Msg_Cards_Comment) ProtoMessage()       {}
+
+func (this *Msg_Cards_Comment) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
+	}
+	return 0
+}
+
+func (this *Msg_Cards_Comment) GetContent() string {
+	if this != nil && this.Content != nil {
+		return *this.Content
+	}
+	return ""
+}
+
+func (this *Msg_Cards_Comment) GetAuthorId() string {
+	if this != nil && this.AuthorId != nil {
+		return *this.AuthorId
+	}
+	return ""
 }
 
 func init() {

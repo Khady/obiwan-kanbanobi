@@ -15,10 +15,10 @@ enum CIBLE {
 
 message Msg {
         required CIBLE cible = 1;
-	required uint target = 2; // contains author id (who is speaking) in reception and addressee msg in sending 
+	required uint32 target = 2; // contains author id (who is speaking) in reception and addressee msg in sending 
 
         message Users {
-		required uint	id = 1;
+		required uint32	id = 1;
 		required string name = 2;
 		required string password = 3;
 		required bool	admin = 4; // is SUPERadmin or not
@@ -26,8 +26,8 @@ message Msg {
         }
 
         message Columns {
-		required uint	project_id = 1;
-		required uint	id = 2;
+		required uint32	project_id = 1;
+		required uint32	id = 2;
 		required string name = 3;
 		optional string desc = 4;
 		optional string tags = 5;
@@ -36,7 +36,7 @@ message Msg {
         }
 
         message Projects {
-		required uint	id = 1;
+		required uint32	id = 1;
 		required string name = 2;
 		optional string admins_id = 3; // list of the administrator users of the projects
 		optional string read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
@@ -45,13 +45,13 @@ message Msg {
         message Cards {
 		// Comments struct
 		message Comment {
-			required uint id = 1;
+			required uint32 id = 1;
 			required string content = 2;
 			required string author_id = 3;
 		}
-		required uint	id = 1;
-		required uint	project_id = 2;
-		required uint	column_id = 3;
+		required uint32	id = 1;
+		required uint32	project_id = 2;
+		required uint32	column_id = 3;
 		required string name = 4;
 		repeated Comment comments = 5; // repeated = dynamically sized array of Comments
 		optional string desc = 6;

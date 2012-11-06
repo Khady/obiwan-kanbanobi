@@ -45,7 +45,7 @@ CREATE TABLE comments (
     id integer NOT NULL,
     content text NOT NULL,
     cards_id integer NOT NULL,
-    author_id integer NOT NULL
+    author_id integer NOT NULL,
     project_id integer NOT NULL
 );
 
