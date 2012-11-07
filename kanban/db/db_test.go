@@ -7,9 +7,9 @@ import (
 )
 
 func Test_GetNbUsers(t *testing.T) {
-	db, err := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
+	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
 	defer db.Close()
-	if num := GetNbUsers(db); num == -1 || err != nil {
+	if _, err := GetNbUsers(db); err != nil {
 		t.Error("Impossible de connaitre le nombre d'users")
 	}
 }
@@ -99,13 +99,3 @@ func Test_ChangeAdminUser(t *testing.T) {
 	}
 	db.Exec("delete from users where name = $1", "super test")
 }
-
-// func Test_Connexion(t *testing.T) {
-// 	db, err := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-// 	defer db.Close()
-// 	if u, err := GetUsers(); err == nil {
-// 		t.Log("it works!", u)
-// 	} else {
-// 		t.Error("Epic fail!", err)
-// 	}
-// }
