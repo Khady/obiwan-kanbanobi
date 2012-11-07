@@ -10,7 +10,7 @@ CREATE TABLE cards (
     tags text NOT NULL,
     users_id text NOT NULL,
     scripts_id text NOT NULL,
-    write text NOT NULL,
+    write text NOT NULL
 );
 
 CREATE TABLE columns (
@@ -44,7 +44,7 @@ CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     content text NOT NULL,
     cards_id integer NOT NULL,
-    author_id integer NOT NULL,
+    author_id integer NOT NULL
 );
 
 CREATE TABLE history (
