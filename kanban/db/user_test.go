@@ -1,8 +1,8 @@
 package db
 
 import (
-	_ "github.com/bmizerany/pq"
 	"database/sql"
+	_ "github.com/bmizerany/pq"
 	"testing"
 )
 
@@ -20,7 +20,7 @@ func Test_GetUsersById(t *testing.T) {
 	id := 1
 	if u, err := GetUsersById(db, id); err != nil {
 		t.Error("User non existant.", err)
-	} else if u.id != id {
+	} else if u.Id != id {
 		t.Error("Mauvais id")
 	}
 }
@@ -31,7 +31,7 @@ func Test_GetUsersByName(t *testing.T) {
 	name := "adm"
 	if u, err := GetUsersByName(db, name); err != nil {
 		t.Error("User non existant.", err)
-	} else if u.name != name {
+	} else if u.Name != name {
 		t.Error("Mauvais name")
 	}
 }
@@ -43,26 +43,26 @@ func Test_ChangeStateUser(t *testing.T) {
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	row := db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	old_state := u.active
-	if err := changeStateUser(db, u.id, false); err != nil {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	old_state := u.Active
+	if err := changeStateUser(db, u.Id, false); err != nil {
 		t.Error("Impossible to change state.", err)
 	}
 	row = db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	if old_state == u.active {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	if old_state == u.Active {
 		t.Error("The fonc failed to change the state")
 	}
-	ActivateUser(db, u.id)
+	ActivateUser(db, u.Id)
 	row = db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	if old_state != u.active {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	if old_state != u.Active {
 		t.Error("The fonc ActivateUser failed to change the state")
 	}
-	UnactivateUser(db, u.id)
+	UnactivateUser(db, u.Id)
 	row = db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	if old_state == u.active {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	if old_state == u.Active {
 		t.Error("The fonc UnactivateUser failed to change the state")
 	}
 	db.Exec("delete from users where name = $1", "super test")
@@ -75,26 +75,26 @@ func Test_ChangeAdminUser(t *testing.T) {
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	row := db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	old_state := u.admin
-	if err := changeAdminUser(db, u.id, true); err != nil {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	old_state := u.Admin
+	if err := changeAdminUser(db, u.Id, true); err != nil {
 		t.Error("Impossible to change state.", err)
 	}
 	row = db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	if old_state == u.admin {
-		t.Error("The fonc ChangeAdminUser failed to change the state", u.admin)
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	if old_state == u.Admin {
+		t.Error("The fonc ChangeAdminUser failed to change the state", u.Admin)
 	}
-	UnadminUser(db, u.id)
+	UnadminUser(db, u.Id)
 	row = db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	if old_state != u.admin {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	if old_state != u.Admin {
 		t.Error("The fonc AdminUser failed to change the state")
 	}
-	AdminUser(db, u.id)
+	AdminUser(db, u.Id)
 	row = db.QueryRow("select * from users where name = $1", "super test")
-	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-	if old_state == u.admin {
+	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
+	if old_state == u.Admin {
 		t.Error("The fonc UnadminUser failed to change the state")
 	}
 	db.Exec("delete from users where name = $1", "super test")

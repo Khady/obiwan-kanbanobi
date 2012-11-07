@@ -6,10 +6,10 @@ import (
 )
 
 type Comment struct {
-	Id		 int
-	Content		 string
-	Cards_id	 int
-	Author_id	 int
+	Id        int
+	Content   string
+	Cards_id  int
+	Author_id int
 }
 
 func UpdateComment(db *sql.DB, c *Comment) error {
@@ -23,4 +23,3 @@ func AddComment(db *sql.DB, c *Comment) error {
 		c.Content, c.Cards_id, c.Author_id)
 	return err
 }
-

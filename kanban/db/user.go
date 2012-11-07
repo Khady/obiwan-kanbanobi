@@ -6,17 +6,17 @@ import (
 )
 
 type User struct {
-	id       int
-	name     string
-	admin    bool
-	password string
-	mail     string
-	active   bool
+	Id       int
+	Name     string
+	Admin    bool
+	Password string
+	Mail     string
+	Active   bool
 }
 
 func AddUser(db *sql.DB, u *User) error {
 	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",
-		u.name, u.admin, u.password, u.mail, u.active)
+		u.Name, u.Admin, u.Password, u.Mail, u.Active)
 	return err
 }
 
@@ -27,7 +27,7 @@ func DelUser(db *sql.DB, id int) error {
 
 func UpdateUser(db *sql.DB, u *User) error {
 	_, err := db.Exec("update users set name = $1, admin = $2, password = $3, mail = $4, active = $5 where id = $6",
-		u.name, u.admin, u.password, u.mail, u.active, u.id)
+		u.Name, u.Admin, u.Password, u.Mail, u.Active, u.Id)
 	return err
 }
 
@@ -63,21 +63,21 @@ func ChangeUserMail(db *sql.DB, id int, mail string) error {
 func GetNbUsers(db *sql.DB) (int, error) {
 	var num int
 	row := db.QueryRow("select count(*) from users")
-	err := row.Scan(&num);
+	err := row.Scan(&num)
 	return num, err
 }
 
 func GetUsersById(db *sql.DB, id int) (*User, error) {
 	u := &User{}
 	row := db.QueryRow("select * from users where id = $1", id)
-	err := row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
+	err := row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	return u, err
 }
 
 func GetUsersByName(db *sql.DB, name string) (*User, error) {
 	u := &User{}
 	row := db.QueryRow("select * from users where name = $1", name)
-	err := row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
+	err := row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	return u, err
 }
 

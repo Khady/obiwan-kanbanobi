@@ -6,15 +6,15 @@ import (
 )
 
 type Card struct {
-	Id		 int
-	Name		 string
-	Content		 string
-	Column_id	 int
-	Project_id	 int
-	Tags		 string
-	Users_id	 string
-	Scripts_id	 string
-	Write		 string
+	Id         int
+	Name       string
+	Content    string
+	Column_id  int
+	Project_id int
+	Tags       string
+	Users_id   string
+	Scripts_id string
+	Write      string
 }
 
 func UpdateCard(db *sql.DB, c *Card) error {
