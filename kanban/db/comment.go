@@ -23,3 +23,8 @@ func AddComment(db *sql.DB, c *Comment) error {
 		c.Content, c.Cards_id, c.Author_id)
 	return err
 }
+
+func DelComment(db *sql.DB, id int) error {
+	_, err := db.Exec("delete from comments where id = $1", id)
+	return err
+}
