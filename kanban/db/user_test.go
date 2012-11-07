@@ -39,13 +39,13 @@ func Test_GetUsersByName(t *testing.T) {
 func Test_ChangeStateUser(t *testing.T) {
 	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
 	defer db.Close()
-	u := &user{}
+	u := &User{}
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	row := db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
 	old_state := u.active
-	if err := ChangeStateUser(db, u.id, false); err != nil {
+	if err := changeStateUser(db, u.id, false); err != nil {
 		t.Error("Impossible to change state.", err)
 	}
 	row = db.QueryRow("select * from users where name = $1", "super test")
@@ -71,13 +71,13 @@ func Test_ChangeStateUser(t *testing.T) {
 func Test_ChangeAdminUser(t *testing.T) {
 	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
 	defer db.Close()
-	u := &user{}
+	u := &User{}
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	row := db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
 	old_state := u.admin
-	if err := ChangeAdminUser(db, u.id, true); err != nil {
+	if err := changeAdminUser(db, u.id, true); err != nil {
 		t.Error("Impossible to change state.", err)
 	}
 	row = db.QueryRow("select * from users where name = $1", "super test")

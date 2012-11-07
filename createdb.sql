@@ -11,7 +11,6 @@ CREATE TABLE cards (
     users_id text NOT NULL,
     scripts_id text NOT NULL,
     write text NOT NULL,
-    origin timestamp NOT NULL
 );
 
 CREATE TABLE columns (

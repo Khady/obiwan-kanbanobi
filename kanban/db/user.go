@@ -5,7 +5,7 @@ import (
 	_ "github.com/bmizerany/pq"
 )
 
-type user struct {
+type User struct {
 	id       int
 	name     string
 	admin    bool
@@ -14,7 +14,7 @@ type user struct {
 	active   bool
 }
 
-func AddUser(db *sql.DB, u *user) error {
+func AddUser(db *sql.DB, u *User) error {
 	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",
 		u.name, u.admin, u.password, u.mail, u.active)
 	return err
@@ -25,7 +25,7 @@ func DelUser(db *sql.DB, id int) error {
 	return err
 }
 
-func UpdateUser(db *sql.DB, u *user) error {
+func UpdateUser(db *sql.DB, u *User) error {
 	_, err := db.Exec("update users set name = $1, admin = $2, password = $3, mail = $4, active = $5 where id = $6",
 		u.name, u.admin, u.password, u.mail, u.active, u.id)
 	return err
@@ -50,12 +50,12 @@ func CheckPassword(db *sql.DB, id int, new_password string) (bool, error) {
 	return check, err
 }
 
-func ChangeName(db *sql.DB, id int, name string) error {
+func ChangeUserName(db *sql.DB, id int, name string) error {
 	_, err := db.Exec("update users set name = $1 where id = $2", name, id)
 	return err
 }
 
-func ChangeMail(db *sql.DB, id int, mail string) error {
+func ChangeUserMail(db *sql.DB, id int, mail string) error {
 	_, err := db.Exec("update users set mail = $1 where id = $2", mail, id)
 	return err
 }
@@ -67,62 +67,42 @@ func GetNbUsers(db *sql.DB) (int, error) {
 	return num, err
 }
 
-func GetUsersById(db *sql.DB, id int) (*user, error) {
-	u := &user{}
+func GetUsersById(db *sql.DB, id int) (*User, error) {
+	u := &User{}
 	row := db.QueryRow("select * from users where id = $1", id)
 	err := row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
 	return u, err
 }
 
-func GetUsersByName(db *sql.DB, name string) (*user, error) {
-	u := &user{}
+func GetUsersByName(db *sql.DB, name string) (*User, error) {
+	u := &User{}
 	row := db.QueryRow("select * from users where name = $1", name)
 	err := row.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
 	return u, err
 }
 
-func ChangeStateUser(db *sql.DB, id int, state bool) error {
+func changeStateUser(db *sql.DB, id int, state bool) error {
 	_, err := db.Exec("update users set active = $1 where id = $2", state, id)
 	return err
 }
 
 func ActivateUser(db *sql.DB, id int) error {
-	return ChangeStateUser(db, id, true)
+	return changeStateUser(db, id, true)
 }
 
 func UnactivateUser(db *sql.DB, id int) error {
-	return ChangeStateUser(db, id, false)
+	return changeStateUser(db, id, false)
 }
 
-func ChangeAdminUser(db *sql.DB, id int, state bool) error {
+func changeAdminUser(db *sql.DB, id int, state bool) error {
 	_, err := db.Exec("update users set admin = $1 where id = $2", state, id)
 	return err
 }
 
 func AdminUser(db *sql.DB, id int) error {
-	return ChangeAdminUser(db, id, true)
+	return changeAdminUser(db, id, true)
 }
 
 func UnadminUser(db *sql.DB, id int) error {
-	return ChangeAdminUser(db, id, false)
+	return changeAdminUser(db, id, false)
 }
-
-// func Connexion() (*user, error) {
-// 	db, err := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-// 	defer db.Close()
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	res, err := db.Query("select * from users;")
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	u := &user{}
-// 	for res.Next() {
-// 		err = res.Scan(&u.id, &u.name, &u.admin, &u.password, &u.mail, &u.active)
-// 		if err != nil {
-// 			return nil, err
-// 		}
-// 	}
-// 	return u, nil
-// }
