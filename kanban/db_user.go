@@ -31,18 +31,18 @@ func GetNbUsers(db *sql.DB) (int, error) {
 	return num, err
 }
 
-func (u *User) AddUser(db *sql.DB) error {
+func (u *User) Add(db *sql.DB) error {
 	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",
 		u.Name, u.Admin, u.Password, u.Mail, u.Active)
 	return err
 }
 
-func (u *User) DelUser(db *sql.DB) error {
+func (u *User) Del(db *sql.DB) error {
 	_, err := db.Exec("delete from users where id = $1", u.Id)
 	return err
 }
 
-func (u *User) UpdateUser(db *sql.DB) error {
+func (u *User) Update(db *sql.DB) error {
 	_, err := db.Exec("update users set name = $1, admin = $2, password = $3, mail = $4, active = $5 where id = $6",
 		u.Name, u.Admin, u.Password, u.Mail, u.Active, u.Id)
 	return err
@@ -67,40 +67,40 @@ func (u *User) CheckPassword(db *sql.DB, new_password string) (bool, error) {
 	return check, err
 }
 
-func (u *User) ChangeUserName(db *sql.DB, name string) error {
+func (u *User) ChangeName(db *sql.DB, name string) error {
 	_, err := db.Exec("update users set name = $1 where id = $2", name, u.Id)
 	return err
 }
 
-func (u *User) ChangeUserMail(db *sql.DB, mail string) error {
+func (u *User) ChangeMail(db *sql.DB, mail string) error {
 	_, err := db.Exec("update users set mail = $1 where id = $2", mail, u.Id)
 	return err
 }
 
-func (u *User) GetUserById(db *sql.DB) error {
+func (u *User) GetById(db *sql.DB) error {
 	row := db.QueryRow("select * from users where id = $1", u.Id)
 	err := row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	return err
 }
 
-func (u *User) GetUserByName(db *sql.DB) error {
+func (u *User) GetByName(db *sql.DB) error {
 	row := db.QueryRow("select * from users where name = $1", u.Name)
 	err := row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	return err
 }
 
-func (u *User) ActivateUser(db *sql.DB) error {
+func (u *User) Activate(db *sql.DB) error {
 	return changeStateUser(db, u.Id, true)
 }
 
-func (u *User) UnactivateUser(db *sql.DB) error {
+func (u *User) Unactivate(db *sql.DB) error {
 	return changeStateUser(db, u.Id, false)
 }
 
-func (u *User) AdminUser(db *sql.DB) error {
+func (u *User) PutAdmin(db *sql.DB) error {
 	return changeAdminUser(db, u.Id, true)
 }
 
-func (u *User) UnadminUser(db *sql.DB) error {
+func (u *User) Unadmin(db *sql.DB) error {
 	return changeAdminUser(db, u.Id, false)
 }
