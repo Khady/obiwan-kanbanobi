@@ -11,11 +11,13 @@ enum CIBLE {
      PROJECTS   = 3;
      CARDS      = 4;
      ADMIN      = 5;
+     IDENT      = 6;
 };
 
 message Msg {
         required CIBLE cible = 1;
 	required uint32 target = 2; // contains author id (who is speaking) in reception and addressee msg in sending 
+        required string session_id = 7
 
         message Users {
 		required uint32	id = 1;
@@ -59,6 +61,10 @@ message Msg {
 		optional string users_id = 8; // ID of the card author
 		optional string scripts_ids = 9; // IDs of the scripts attached to the card
 		optional string	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+        }
+        
+        message Ident {
+                
         }
 
         optional Users users = 3;

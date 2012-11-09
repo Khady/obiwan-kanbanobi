@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"runtime"
 )
 
 func handleConnection(conn net.Conn) {
@@ -22,6 +23,8 @@ func handleConnection(conn net.Conn) {
 }
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	ln, err := net.Listen("tcp", ":6010")
 	if err != nil {
 		panic(err)
