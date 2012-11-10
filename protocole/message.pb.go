@@ -16,17 +16,32 @@ var _ = math.Inf
 type CMD int32
 
 const (
-	CMD_X CMD = 1
-	CMD_Y CMD = 2
+	CMD_CREATE  CMD = 1
+	CMD_MODIFY  CMD = 2
+	CMD_DELETE  CMD = 3
+	CMD_GET     CMD = 4
+	CMD_MOVE    CMD = 5
+	CMD_CONNECT CMD = 6
+	CMD_LOGOUT  CMD = 7
 )
 
 var CMD_name = map[int32]string{
-	1: "X",
-	2: "Y",
+	1: "CREATE",
+	2: "MODIFY",
+	3: "DELETE",
+	4: "GET",
+	5: "MOVE",
+	6: "CONNECT",
+	7: "LOGOUT",
 }
 var CMD_value = map[string]int32{
-	"X": 1,
-	"Y": 2,
+	"CREATE":  1,
+	"MODIFY":  2,
+	"DELETE":  3,
+	"GET":     4,
+	"MOVE":    5,
+	"CONNECT": 6,
+	"LOGOUT":  7,
 }
 
 func (x CMD) Enum() *CMD {
@@ -49,58 +64,72 @@ func (x *CMD) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-type CIBLE int32
+type TARGET int32
 
 const (
-	CIBLE_USERS    CIBLE = 1
-	CIBLE_COLUMNS  CIBLE = 2
-	CIBLE_PROJECTS CIBLE = 3
-	CIBLE_CARDS    CIBLE = 4
-	CIBLE_ADMIN    CIBLE = 5
+	TARGET_USERS    TARGET = 1
+	TARGET_COLUMNS  TARGET = 2
+	TARGET_PROJECTS TARGET = 3
+	TARGET_CARDS    TARGET = 4
+	TARGET_ADMIN    TARGET = 5
+	TARGET_IDENT    TARGET = 6
+	TARGET_ERROR    TARGET = 7
+	TARGET_NOTIF    TARGET = 8
 )
 
-var CIBLE_name = map[int32]string{
+var TARGET_name = map[int32]string{
 	1: "USERS",
 	2: "COLUMNS",
 	3: "PROJECTS",
 	4: "CARDS",
 	5: "ADMIN",
+	6: "IDENT",
+	7: "ERROR",
+	8: "NOTIF",
 }
-var CIBLE_value = map[string]int32{
+var TARGET_value = map[string]int32{
 	"USERS":    1,
 	"COLUMNS":  2,
 	"PROJECTS": 3,
 	"CARDS":    4,
 	"ADMIN":    5,
+	"IDENT":    6,
+	"ERROR":    7,
+	"NOTIF":    8,
 }
 
-func (x CIBLE) Enum() *CIBLE {
-	p := new(CIBLE)
+func (x TARGET) Enum() *TARGET {
+	p := new(TARGET)
 	*p = x
 	return p
 }
-func (x CIBLE) String() string {
-	return proto.EnumName(CIBLE_name, int32(x))
+func (x TARGET) String() string {
+	return proto.EnumName(TARGET_name, int32(x))
 }
-func (x CIBLE) MarshalJSON() ([]byte, error) {
+func (x TARGET) MarshalJSON() ([]byte, error) {
 	return json.Marshal(x.String())
 }
-func (x *CIBLE) UnmarshalJSON(data []byte) error {
-	value, err := proto.UnmarshalJSONEnum(CIBLE_value, data, "CIBLE")
+func (x *TARGET) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(TARGET_value, data, "TARGET")
 	if err != nil {
 		return err
 	}
-	*x = CIBLE(value)
+	*x = TARGET(value)
 	return nil
 }
 
 type Msg struct {
-	Cible            *CIBLE        `protobuf:"varint,1,req,name=cible,enum=message.CIBLE" json:"cible,omitempty"`
-	Target           *uint32       `protobuf:"varint,2,req,name=target" json:"target,omitempty"`
-	Users            *Msg_Users    `protobuf:"bytes,3,opt,name=users" json:"users,omitempty"`
-	Columns          *Msg_Columns  `protobuf:"bytes,4,opt,name=columns" json:"columns,omitempty"`
-	Projects         *Msg_Projects `protobuf:"bytes,5,opt,name=projects" json:"projects,omitempty"`
-	Cards            *Msg_Cards    `protobuf:"bytes,6,opt,name=cards" json:"cards,omitempty"`
+	Target           *TARGET       `protobuf:"varint,1,req,name=target,enum=message.TARGET" json:"target,omitempty"`
+	Command          *CMD          `protobuf:"varint,2,req,name=command,enum=message.CMD" json:"command,omitempty"`
+	AuthorId         *uint32       `protobuf:"varint,3,req,name=author_id" json:"author_id,omitempty"`
+	SessionId        *string       `protobuf:"bytes,4,req,name=session_id" json:"session_id,omitempty"`
+	Users            *Msg_Users    `protobuf:"bytes,5,opt,name=users" json:"users,omitempty"`
+	Columns          *Msg_Columns  `protobuf:"bytes,6,opt,name=columns" json:"columns,omitempty"`
+	Projects         *Msg_Projects `protobuf:"bytes,7,opt,name=projects" json:"projects,omitempty"`
+	Cards            *Msg_Cards    `protobuf:"bytes,8,opt,name=cards" json:"cards,omitempty"`
+	Ident            *Msg_Ident    `protobuf:"bytes,9,opt,name=ident" json:"ident,omitempty"`
+	Error            *Msg_Error    `protobuf:"bytes,10,opt,name=error" json:"error,omitempty"`
+	Notif            *Msg_Notif    `protobuf:"bytes,11,opt,name=notif" json:"notif,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
@@ -108,18 +137,32 @@ func (this *Msg) Reset()         { *this = Msg{} }
 func (this *Msg) String() string { return proto.CompactTextString(this) }
 func (*Msg) ProtoMessage()       {}
 
-func (this *Msg) GetCible() CIBLE {
-	if this != nil && this.Cible != nil {
-		return *this.Cible
-	}
-	return 0
-}
-
-func (this *Msg) GetTarget() uint32 {
+func (this *Msg) GetTarget() TARGET {
 	if this != nil && this.Target != nil {
 		return *this.Target
 	}
 	return 0
+}
+
+func (this *Msg) GetCommand() CMD {
+	if this != nil && this.Command != nil {
+		return *this.Command
+	}
+	return 0
+}
+
+func (this *Msg) GetAuthorId() uint32 {
+	if this != nil && this.AuthorId != nil {
+		return *this.AuthorId
+	}
+	return 0
+}
+
+func (this *Msg) GetSessionId() string {
+	if this != nil && this.SessionId != nil {
+		return *this.SessionId
+	}
+	return ""
 }
 
 func (this *Msg) GetUsers() *Msg_Users {
@@ -146,6 +189,27 @@ func (this *Msg) GetProjects() *Msg_Projects {
 func (this *Msg) GetCards() *Msg_Cards {
 	if this != nil {
 		return this.Cards
+	}
+	return nil
+}
+
+func (this *Msg) GetIdent() *Msg_Ident {
+	if this != nil {
+		return this.Ident
+	}
+	return nil
+}
+
+func (this *Msg) GetError() *Msg_Error {
+	if this != nil {
+		return this.Error
+	}
+	return nil
+}
+
+func (this *Msg) GetNotif() *Msg_Notif {
+	if this != nil {
+		return this.Notif
 	}
 	return nil
 }
@@ -415,7 +479,63 @@ func (this *Msg_Cards_Comment) GetAuthorId() string {
 	return ""
 }
 
+type Msg_Ident struct {
+	Login            *string `protobuf:"bytes,1,req,name=login" json:"login,omitempty"`
+	Hash             *string `protobuf:"bytes,2,req,name=hash" json:"hash,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (this *Msg_Ident) Reset()         { *this = Msg_Ident{} }
+func (this *Msg_Ident) String() string { return proto.CompactTextString(this) }
+func (*Msg_Ident) ProtoMessage()       {}
+
+func (this *Msg_Ident) GetLogin() string {
+	if this != nil && this.Login != nil {
+		return *this.Login
+	}
+	return ""
+}
+
+func (this *Msg_Ident) GetHash() string {
+	if this != nil && this.Hash != nil {
+		return *this.Hash
+	}
+	return ""
+}
+
+type Msg_Error struct {
+	ErrorId          *uint32 `protobuf:"varint,1,req,name=error_id" json:"error_id,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (this *Msg_Error) Reset()         { *this = Msg_Error{} }
+func (this *Msg_Error) String() string { return proto.CompactTextString(this) }
+func (*Msg_Error) ProtoMessage()       {}
+
+func (this *Msg_Error) GetErrorId() uint32 {
+	if this != nil && this.ErrorId != nil {
+		return *this.ErrorId
+	}
+	return 0
+}
+
+type Msg_Notif struct {
+	Msg              *string `protobuf:"bytes,1,opt,name=msg" json:"msg,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (this *Msg_Notif) Reset()         { *this = Msg_Notif{} }
+func (this *Msg_Notif) String() string { return proto.CompactTextString(this) }
+func (*Msg_Notif) ProtoMessage()       {}
+
+func (this *Msg_Notif) GetMsg() string {
+	if this != nil && this.Msg != nil {
+		return *this.Msg
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterEnum("message.CMD", CMD_name, CMD_value)
-	proto.RegisterEnum("message.CIBLE", CIBLE_name, CIBLE_value)
+	proto.RegisterEnum("message.TARGET", TARGET_name, TARGET_value)
 }

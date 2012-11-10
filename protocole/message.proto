@@ -24,7 +24,7 @@ enum TARGET {
 message Msg {
   required TARGET	target = 1;
   required CMD		command = 2;
-  required uint32	author_id = 3; // contains author id (who is speaking) in reception and addressee msg in sending 
+  required uint32	author_id = 3; // contains author id (who is speaking) in reception and addressee msg in sending
   required string	session_id = 4;
 
     message Users {
@@ -70,10 +70,10 @@ message Msg {
     optional string	scripts_ids = 9; // IDs of the scripts attached to the card
     optional string	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
   }
-        
+
   message Ident {
-    required string	login;
-    required string	hash;
+    required string	login = 1;
+    required string	hash = 2;
   }
 
   message Error {
