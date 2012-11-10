@@ -1,12 +1,12 @@
 package main
 
 import (
-	"crypto/tls"
-	"time"
 	"bufio"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net"
+	"time"
 )
 
 var SERVER_CERT = []byte(`-----BEGIN CERTIFICATE-----

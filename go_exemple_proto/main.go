@@ -2,8 +2,8 @@ package main
 
 import (
 	"code.google.com/p/goprotobuf/proto"
-	"log"
 	"fmt"
+	"log"
 	"obi-wan-kanbanobi/protocole"
 )
 
@@ -11,9 +11,9 @@ func main() {
 	cible := message.CIBLE_USERS
 	cmd := message.CMD_Y
 	test := &message.Msg{
-	Cible: &cible,
-	Users: &message.Msg_Users{
-		Cmd: &cmd,
+		Cible: &cible,
+		Users: &message.Msg_Users{
+			Cmd: &cmd,
 		},
 	}
 	// test := &example.Test{

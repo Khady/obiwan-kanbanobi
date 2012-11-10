@@ -1,14 +1,14 @@
 package main
 
 import (
-	// "database/sql"
-	// _ "github.com/bmizerany/pq"
+// "database/sql"
+// _ "github.com/bmizerany/pq"
 )
 
 type Script struct {
-	Id         int
+	Id          int
 	script_type int
-	object_id int
+	object_id   int
 	column_name string
-	Content    string
+	Content     string
 }

@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "database/sql"
-	// _ "github.com/bmizerany/pq"
+// "database/sql"
+// _ "github.com/bmizerany/pq"
 )
 
 type Column struct {
@@ -14,5 +14,3 @@ type Column struct {
 	Scripts_id string
 	Write      string
 }
-
-

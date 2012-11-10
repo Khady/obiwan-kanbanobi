@@ -2,8 +2,8 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"crypto/tls"
+	"fmt"
 )
 
 func main() {
@@ -16,9 +16,9 @@ func main() {
 	client := tls.Client(conn, &tls.Config{})
 
 	err = client.Handshake()
-        if err != nil {
+	if err != nil {
 		panic(err)
-        }
+	}
 
 	data, err := bufio.NewReader(conn).ReadString('\n')
 	if err != nil {
