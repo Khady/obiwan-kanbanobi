@@ -1,27 +1,31 @@
 package main
 
 import (
-	"database/sql"
-	_ "github.com/bmizerany/pq"
 	"testing"
 )
 
+var INFO_CONNECT string = "postgres://kanban:mdp@127.0.0.1:5432/kanban"
+
 func Test_GetNbUsers(t *testing.T) {
-	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-	defer db.Close()
-	if _, err := GetNbUsers(db); err != nil {
+	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+		t.Error("fail dans l'initpool", err)
+	}
+	if _, err := GetNbUsers(dbPool); err != nil {
 		t.Error("Impossible de connaitre le nombre d'users")
 	}
 }
 
 func Test_GetUsersByName(t *testing.T) {
-	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-	defer db.Close()
+	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+		t.Error("fail dans l'initpool", err)
+	}
+	db := dbPool.GetConnection()
+	defer dbPool.ReleaseConnection(db)
 	name := "super test"
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	u := &User{1, "super test", false, "pass", "user@world.com", true}
-	if err := u.GetByName(db); err != nil {
+	if err := u.GetByName(dbPool); err != nil {
 		t.Error("User non existant.", err)
 	} else if u.Name != name {
 		t.Error("Mauvais name")
@@ -30,14 +34,17 @@ func Test_GetUsersByName(t *testing.T) {
 }
 
 func Test_GetUserById(t *testing.T) {
-	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-	defer db.Close()
+	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+		t.Error("fail dans l'initpool", err)
+	}
+	db := dbPool.GetConnection()
+	defer dbPool.ReleaseConnection(db)
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	u := &User{1, "super test", false, "pass", "user@world.com", true}
-	u.GetByName(db)
+	u.GetByName(dbPool)
 	id := u.Id
-	if err := u.GetById(db); err != nil {
+	if err := u.GetById(dbPool); err != nil {
 		t.Error("User non existant.", err)
 	} else if u.Id != id {
 		t.Error("Mauvais id")
@@ -46,15 +53,18 @@ func Test_GetUserById(t *testing.T) {
 }
 
 func Test_ChangeStateUser(t *testing.T) {
-	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-	defer db.Close()
+	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+		t.Error("fail dans l'initpool", err)
+	}
+	db := dbPool.GetConnection()
+	defer dbPool.ReleaseConnection(db)
 	u := &User{}
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	row := db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	old_state := u.Active
-	if err := changeStateUser(db, u.Id, false); err != nil {
+	if err := changeStateUser(dbPool, u.Id, false); err != nil {
 		t.Error("Impossible to change state.", err)
 	}
 	row = db.QueryRow("select * from users where name = $1", "super test")
@@ -62,13 +72,13 @@ func Test_ChangeStateUser(t *testing.T) {
 	if old_state == u.Active {
 		t.Error("The fonc failed to change the state")
 	}
-	u.Activate(db)
+	u.Activate(dbPool)
 	row = db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	if old_state != u.Active {
 		t.Error("The fonc ActivateUser failed to change the state")
 	}
-	u.Unactivate(db)
+	u.Unactivate(dbPool)
 	row = db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	if old_state == u.Active {
@@ -78,15 +88,18 @@ func Test_ChangeStateUser(t *testing.T) {
 }
 
 func Test_ChangeAdminUser(t *testing.T) {
-	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-	defer db.Close()
+	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+		t.Error("fail dans l'initpool", err)
+	}
+	db := dbPool.GetConnection()
+	defer dbPool.ReleaseConnection(db)
 	u := &User{}
 	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
  VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
 	row := db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	old_state := u.Admin
-	if err := changeAdminUser(db, u.Id, true); err != nil {
+	if err := changeAdminUser(dbPool, u.Id, true); err != nil {
 		t.Error("Impossible to change state.", err)
 	}
 	row = db.QueryRow("select * from users where name = $1", "super test")
@@ -94,13 +107,13 @@ func Test_ChangeAdminUser(t *testing.T) {
 	if old_state == u.Admin {
 		t.Error("The fonc ChangeAdminUser failed to change the state", u.Admin)
 	}
-	u.Unadmin(db)
+	u.Unadmin(dbPool)
 	row = db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	if old_state != u.Admin {
 		t.Error("The fonc AdminUser failed to change the state")
 	}
-	u.PutAdmin(db)
+	u.PutAdmin(dbPool)
 	row = db.QueryRow("select * from users where name = $1", "super test")
 	row.Scan(&u.Id, &u.Name, &u.Admin, &u.Password, &u.Mail, &u.Active)
 	if old_state == u.Admin {
