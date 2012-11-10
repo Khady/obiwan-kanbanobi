@@ -1,75 +1,94 @@
 package message;
 
 enum CMD {
-     X = 1;
-     Y = 2;
+  CREATE	= 1;
+  MODIFY	= 2;
+  DELETE	= 3;
+  GET		= 4;
+  MOVE		= 5;
+  CONNECT      	= 6;
+  LOGOUT	= 7;
 };
 
-enum CIBLE {
-     USERS      = 1;
-     COLUMNS    = 2;
-     PROJECTS   = 3;
-     CARDS      = 4;
-     ADMIN      = 5;
-     IDENT      = 6;
+enum TARGET {
+  USERS		= 1;
+  COLUMNS	= 2;
+  PROJECTS	= 3;
+  CARDS		= 4;
+  ADMIN		= 5;
+  IDENT		= 6;
+  ERROR		= 7;
+  NOTIF		= 8;
 };
 
 message Msg {
-        required CIBLE cible = 1;
-	required uint32 target = 2; // contains author id (who is speaking) in reception and addressee msg in sending 
-        required string session_id = 7
+  required TARGET	target = 1;
+  required CMD		command = 2;
+  required uint32	author_id = 3; // contains author id (who is speaking) in reception and addressee msg in sending 
+  required string	session_id = 4;
 
-        message Users {
-		required uint32	id = 1;
-		required string name = 2;
-		required string password = 3;
-		required bool	admin = 4; // is SUPERadmin or not
-		optional string mail = 5;
-        }
+    message Users {
+      required uint32	id = 1;
+      required string	name = 2;
+      required string	password = 3;
+      required bool	admin = 4; // is SUPERadmin or not
+      optional string	mail = 5;
+    }
 
-        message Columns {
-		required uint32	project_id = 1;
-		required uint32	id = 2;
-		required string name = 3;
-		optional string desc = 4;
-		optional string tags = 5;
-		optional string scripts_ids = 6; // IDs of the scripts attached to the column
-		optional string	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
-        }
+    message Columns {
+      required uint32	project_id = 1;
+      required uint32	id = 2;
+      required string	name = 3;
+      optional string	desc = 4;
+      optional string	tags = 5;
+      optional string	scripts_ids = 6; // IDs of the scripts attached to the column
+      optional string	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
+    }
 
-        message Projects {
-		required uint32	id = 1;
-		required string name = 2;
-		optional string admins_id = 3; // list of the administrator users of the projects
-		optional string read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
-        }
+  message Projects {
+    required uint32	id = 1;
+    required string	name = 2;
+    optional string	admins_id = 3; // list of the administrator users of the projects
+    optional string	read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
+  }
 
-        message Cards {
-		// Comments struct
-		message Comment {
-			required uint32 id = 1;
-			required string content = 2;
-			required string author_id = 3;
-		}
-		required uint32	id = 1;
-		required uint32	project_id = 2;
-		required uint32	column_id = 3;
-		required string name = 4;
-		repeated Comment comments = 5; // repeated = dynamically sized array of Comments
-		optional string desc = 6;
-		optional string tags = 7;
-		optional string users_id = 8; // ID of the card author
-		optional string scripts_ids = 9; // IDs of the scripts attached to the card
-		optional string	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
-        }
+  message Cards {
+    // Comments struct
+    message Comment {
+      required uint32	id = 1;
+      required string	content = 2;
+      required string	author_id = 3;
+    }
+    required uint32	id = 1;
+    required uint32	project_id = 2;
+    required uint32	column_id = 3;
+    required string	name = 4;
+    repeated Comment	comments = 5; // repeated = dynamically sized array of Comments
+    optional string	desc = 6;
+    optional string	tags = 7;
+    optional string	users_id = 8; // ID of the card author
+    optional string	scripts_ids = 9; // IDs of the scripts attached to the card
+    optional string	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+  }
         
-        message Ident {
-                
-        }
+  message Ident {
+    required string	login;
+    required string	hash;
+  }
 
-        optional Users users = 3;
-        optional Columns columns = 4;
-        optional Projects projects = 5;
-        optional Cards cards = 6;
+  message Error {
+    required uint32	error_id = 1;
+  }
+
+  message Notif {
+    optional string	msg = 1;
+  }
+
+  optional Users	users = 5;
+  optional Columns	columns = 6;
+  optional Projects	projects = 7;
+  optional Cards	cards = 8;
+  optional Ident	ident = 9;
+  optional Error	error = 10;
+  optional Notif	notif = 11;
 }
-
