@@ -14,28 +14,35 @@ func Test_GetNbUsers(t *testing.T) {
 	}
 }
 
-func Test_GetUserById(t *testing.T) {
-	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
-	defer db.Close()
-	id := 1
-	u := &User{1, "adm", false, "pass", "user@world.com", true}
-	if err := u.GetById(db); err != nil {
-		t.Error("User non existant.", err)
-	} else if u.Id != id {
-		t.Error("Mauvais id")
-	}
-}
-
 func Test_GetUsersByName(t *testing.T) {
 	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
 	defer db.Close()
-	name := "adm"
-	u := &User{1, "adm", false, "pass", "user@world.com", true}
+	name := "super test"
+	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
+ VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
+	u := &User{1, "super test", false, "pass", "user@world.com", true}
 	if err := u.GetByName(db); err != nil {
 		t.Error("User non existant.", err)
 	} else if u.Name != name {
 		t.Error("Mauvais name")
 	}
+	db.Exec("delete from users where name = $1", "super test")
+}
+
+func Test_GetUserById(t *testing.T) {
+	db, _ := sql.Open("postgres", "user=kanban password=mdp dbname=kanban")
+	defer db.Close()
+	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
+ VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
+	u := &User{1, "super test", false, "pass", "user@world.com", true}
+	u.GetByName(db)
+	id := u.Id
+	if err := u.GetById(db); err != nil {
+		t.Error("User non existant.", err)
+	} else if u.Id != id {
+		t.Error("Mauvais id")
+	}
+	db.Exec("delete from users where name = $1", "super test")
 }
 
 func Test_ChangeStateUser(t *testing.T) {
