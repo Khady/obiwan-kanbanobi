@@ -10,18 +10,5 @@ func db_open(url string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	return sql.Open("postgres", conn_str);
+	return sql.Open("postgres", conn_str)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
