@@ -41,15 +41,15 @@ message Msg {
       required string	name = 3;
       optional string	desc = 4;
       optional string	tags = 5;
-      optional string	scripts_ids = 6; // IDs of the scripts attached to the column
-      optional string	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
+      optional uint32	scripts_ids = 6; // IDs of the scripts attached to the column
+      repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
     }
 
   message Projects {
     required uint32	id = 1;
     required string	name = 2;
-    optional string	admins_id = 3; // list of the administrator users of the projects
-    optional string	read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
+    repeated uint32	admins_id = 3; // list of the administrator users of the projects
+    repeated uint32	read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
   }
 
   message Cards {
@@ -67,8 +67,8 @@ message Msg {
     optional string	desc = 6;
     optional string	tags = 7;
     optional string	users_id = 8; // ID of the card author
-    optional string	scripts_ids = 9; // IDs of the scripts attached to the card
-    optional string	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+    optional uint32	scripts_ids = 9; // IDs of the scripts attached to the card
+    repeated uint32	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
   }
 
   message Ident {
