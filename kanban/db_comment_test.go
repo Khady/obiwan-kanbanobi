@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-func Test_Update(t *testing.T) {
+func Test_UpdateComment(t *testing.T) {
 	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -28,7 +28,7 @@ func Test_Update(t *testing.T) {
 	db.Exec("delete from comments *")
 }
 
-func Test_Add(t *testing.T) {
+func Test_AddComment(t *testing.T) {
 	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -48,7 +48,7 @@ func Test_Add(t *testing.T) {
 	db.Exec("delete from comments *")
 }
 
-func Test_Del(t *testing.T) {
+func Test_DelComment(t *testing.T) {
 	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -70,7 +70,7 @@ func Test_Del(t *testing.T) {
 	}
 }
 
-func Test_Get(t *testing.T) {
+func Test_GetComment(t *testing.T) {
 	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
