@@ -19,6 +19,7 @@ enum TARGET {
   IDENT		= 6;
   ERROR		= 7;
   NOTIF		= 8;
+  METADATA      = 9;
 };
 
 message Msg {
@@ -69,6 +70,13 @@ message Msg {
     optional string	users_id = 8; // ID of the card author
     optional uint32	scripts_ids = 9; // IDs of the scripts attached to the card
     repeated uint32	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+  }
+
+  message Metadata {
+    required uint32     object_type = 1;
+    required uint32     object_id = 2;
+    optional string     data_key = 3;
+    optional uint32     data_value = 4;
   }
 
   message Ident {

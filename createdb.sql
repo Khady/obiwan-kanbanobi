@@ -61,3 +61,11 @@ CREATE TABLE scripts (
     object_id integer NOT NULL,
     filename text NOT NULL
 );
+
+CREATE TABLE metadata (
+    id SERIAL PRIMARY KEY,
+    object_type integer NOT NULL,
+    object_id integer NOT NULL,
+    data_key text NOT NULL,
+    data_value text NOT NULL
+);

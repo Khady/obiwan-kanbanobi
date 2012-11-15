@@ -75,6 +75,7 @@ const (
 	TARGET_IDENT    TARGET = 6
 	TARGET_ERROR    TARGET = 7
 	TARGET_NOTIF    TARGET = 8
+	TARGET_METADATA TARGET = 9
 )
 
 var TARGET_name = map[int32]string{
@@ -86,6 +87,7 @@ var TARGET_name = map[int32]string{
 	6: "IDENT",
 	7: "ERROR",
 	8: "NOTIF",
+	9: "METADATA",
 }
 var TARGET_value = map[string]int32{
 	"USERS":    1,
@@ -96,6 +98,7 @@ var TARGET_value = map[string]int32{
 	"IDENT":    6,
 	"ERROR":    7,
 	"NOTIF":    8,
+	"METADATA": 9,
 }
 
 func (x TARGET) Enum() *TARGET {
@@ -263,14 +266,14 @@ func (this *Msg_Users) GetMail() string {
 }
 
 type Msg_Columns struct {
-	ProjectId        *uint32 `protobuf:"varint,1,req,name=project_id" json:"project_id,omitempty"`
-	Id               *uint32 `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
-	Name             *string `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
-	Desc             *string `protobuf:"bytes,4,opt,name=desc" json:"desc,omitempty"`
-	Tags             *string `protobuf:"bytes,5,opt,name=tags" json:"tags,omitempty"`
-	ScriptsIds       *string `protobuf:"bytes,6,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
-	Write            *string `protobuf:"bytes,7,opt,name=write" json:"write,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	ProjectId        *uint32  `protobuf:"varint,1,req,name=project_id" json:"project_id,omitempty"`
+	Id               *uint32  `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
+	Name             *string  `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
+	Desc             *string  `protobuf:"bytes,4,opt,name=desc" json:"desc,omitempty"`
+	Tags             *string  `protobuf:"bytes,5,opt,name=tags" json:"tags,omitempty"`
+	ScriptsIds       *uint32  `protobuf:"varint,6,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Write            []uint32 `protobuf:"varint,7,rep,name=write" json:"write,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (this *Msg_Columns) Reset()         { *this = Msg_Columns{} }
@@ -312,26 +315,19 @@ func (this *Msg_Columns) GetTags() string {
 	return ""
 }
 
-func (this *Msg_Columns) GetScriptsIds() string {
+func (this *Msg_Columns) GetScriptsIds() uint32 {
 	if this != nil && this.ScriptsIds != nil {
 		return *this.ScriptsIds
 	}
-	return ""
-}
-
-func (this *Msg_Columns) GetWrite() string {
-	if this != nil && this.Write != nil {
-		return *this.Write
-	}
-	return ""
+	return 0
 }
 
 type Msg_Projects struct {
-	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
-	Name             *string `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
-	AdminsId         *string `protobuf:"bytes,3,opt,name=admins_id" json:"admins_id,omitempty"`
-	Read             *string `protobuf:"bytes,4,opt,name=read" json:"read,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	Id               *uint32  `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	Name             *string  `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
+	AdminsId         []uint32 `protobuf:"varint,3,rep,name=admins_id" json:"admins_id,omitempty"`
+	Read             []uint32 `protobuf:"varint,4,rep,name=read" json:"read,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (this *Msg_Projects) Reset()         { *this = Msg_Projects{} }
@@ -352,20 +348,6 @@ func (this *Msg_Projects) GetName() string {
 	return ""
 }
 
-func (this *Msg_Projects) GetAdminsId() string {
-	if this != nil && this.AdminsId != nil {
-		return *this.AdminsId
-	}
-	return ""
-}
-
-func (this *Msg_Projects) GetRead() string {
-	if this != nil && this.Read != nil {
-		return *this.Read
-	}
-	return ""
-}
-
 type Msg_Cards struct {
 	Id               *uint32              `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	ProjectId        *uint32              `protobuf:"varint,2,req,name=project_id" json:"project_id,omitempty"`
@@ -375,8 +357,8 @@ type Msg_Cards struct {
 	Desc             *string              `protobuf:"bytes,6,opt,name=desc" json:"desc,omitempty"`
 	Tags             *string              `protobuf:"bytes,7,opt,name=tags" json:"tags,omitempty"`
 	UsersId          *string              `protobuf:"bytes,8,opt,name=users_id" json:"users_id,omitempty"`
-	ScriptsIds       *string              `protobuf:"bytes,9,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
-	Write            *string              `protobuf:"bytes,10,opt,name=write" json:"write,omitempty"`
+	ScriptsIds       *uint32              `protobuf:"varint,9,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Write            []uint32             `protobuf:"varint,10,rep,name=write" json:"write,omitempty"`
 	XXX_unrecognized []byte               `json:"-"`
 }
 
@@ -433,18 +415,11 @@ func (this *Msg_Cards) GetUsersId() string {
 	return ""
 }
 
-func (this *Msg_Cards) GetScriptsIds() string {
+func (this *Msg_Cards) GetScriptsIds() uint32 {
 	if this != nil && this.ScriptsIds != nil {
 		return *this.ScriptsIds
 	}
-	return ""
-}
-
-func (this *Msg_Cards) GetWrite() string {
-	if this != nil && this.Write != nil {
-		return *this.Write
-	}
-	return ""
+	return 0
 }
 
 type Msg_Cards_Comment struct {
@@ -477,6 +452,46 @@ func (this *Msg_Cards_Comment) GetAuthorId() string {
 		return *this.AuthorId
 	}
 	return ""
+}
+
+type Msg_Metadata struct {
+	ObjectType       *uint32 `protobuf:"varint,1,req,name=object_type" json:"object_type,omitempty"`
+	ObjectId         *uint32 `protobuf:"varint,2,req,name=object_id" json:"object_id,omitempty"`
+	DataKey          *string `protobuf:"bytes,3,opt,name=data_key" json:"data_key,omitempty"`
+	DataValue        *uint32 `protobuf:"varint,4,opt,name=data_value" json:"data_value,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (this *Msg_Metadata) Reset()         { *this = Msg_Metadata{} }
+func (this *Msg_Metadata) String() string { return proto.CompactTextString(this) }
+func (*Msg_Metadata) ProtoMessage()       {}
+
+func (this *Msg_Metadata) GetObjectType() uint32 {
+	if this != nil && this.ObjectType != nil {
+		return *this.ObjectType
+	}
+	return 0
+}
+
+func (this *Msg_Metadata) GetObjectId() uint32 {
+	if this != nil && this.ObjectId != nil {
+		return *this.ObjectId
+	}
+	return 0
+}
+
+func (this *Msg_Metadata) GetDataKey() string {
+	if this != nil && this.DataKey != nil {
+		return *this.DataKey
+	}
+	return ""
+}
+
+func (this *Msg_Metadata) GetDataValue() uint32 {
+	if this != nil && this.DataValue != nil {
+		return *this.DataValue
+	}
+	return 0
 }
 
 type Msg_Ident struct {
