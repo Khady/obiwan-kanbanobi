@@ -1,14 +1,5 @@
 package main
 
-type User struct {
-	Id       int
-	Name     string
-	Admin    bool
-	Password string
-	Mail     string
-	Active   bool
-}
-
 func changeStateUser(p *ConnectionPoolWrapper, id int, state bool) error {
 	db := p.GetConnection()
 	_, err := db.Exec("update users set active = $1 where id = $2", state, id)

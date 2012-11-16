@@ -1,10 +1,5 @@
 package main
 
-import (
-// "database/sql"
-// _ "github.com/bmizerany/pq"
-)
-
 type Column struct {
 	Id         int
 	Name       string

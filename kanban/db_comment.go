@@ -1,12 +1,5 @@
 package main
 
-type Comment struct {
-	Id        int
-	Content   string
-	Cards_id  int
-	Author_id int
-}
-
 func (c *Comment) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)

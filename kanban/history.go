@@ -1,10 +1,5 @@
 package main
 
-import (
-// "database/sql"
-// _ "github.com/bmizerany/pq"
-)
-
 type History struct {
 	Id          int
 	change_type int

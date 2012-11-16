@@ -5,18 +5,6 @@ import (
 	"strings"
 )
 
-type Card struct {
-	Id         int
-	Name       string
-	Content    string
-	Column_id  int
-	Project_id int
-	Tags       []string
-	Users_id   []int
-	Scripts_id []int
-	Write      []int
-}
-
 type cellUpdate func (*Card, *ConnectionPoolWrapper, []int) error
 type cellGet func (*Card, *ConnectionPoolWrapper) ([]int, error)
 
