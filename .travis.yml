@@ -1,1 +1,4 @@
 language: go
+script: go test -v ./kanban/
+install:
+  - go get github.com/bmizerany/pq
