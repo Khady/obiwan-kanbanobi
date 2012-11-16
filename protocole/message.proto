@@ -28,23 +28,23 @@ message Msg {
   required uint32	author_id = 3; // contains author id (who is speaking) in reception and addressee msg in sending
   required string	session_id = 4;
 
-    message Users {
-      required uint32	id = 1;
-      required string	name = 2;
-      required string	password = 3;
-      required bool	admin = 4; // is SUPERadmin or not
-      optional string	mail = 5;
-    }
+  message Users {
+    required uint32	id = 1;
+    required string	name = 2;
+    required string	password = 3;
+    required bool	admin = 4; // is SUPERadmin or not
+    optional string	mail = 5;
+  }
 
-    message Columns {
-      required uint32	project_id = 1;
-      required uint32	id = 2;
-      required string	name = 3;
-      optional string	desc = 4;
-      optional string	tags = 5;
-      optional uint32	scripts_ids = 6; // IDs of the scripts attached to the column
-      repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
-    }
+  message Columns {
+    required uint32	project_id = 1;
+    required uint32	id = 2;
+    required string	name = 3;
+    optional string	desc = 4;
+    optional string	tags = 5;
+    optional uint32	scripts_ids = 6; // IDs of the scripts attached to the column
+    repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
+  }
 
   message Projects {
     required uint32	id = 1;
