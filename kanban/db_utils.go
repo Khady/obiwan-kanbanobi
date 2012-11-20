@@ -34,3 +34,24 @@ func updateIntSliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	_, err := db.Exec("update $1 set $2 = $3 where id = $4", column_name, base_name, new_cell, id)
 	return err
 }
+
+func getStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, id int) ([]string, error) {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	var cell string
+	var cell_ids []string
+	row := db.QueryRow("select $1 from $2 where id = $3", column_name, base_name, id)
+	if err := row.Scan(&cell); err != nil {
+		return cell_ids, err
+	}
+	cell_ids = strings.Split(cell, " ")
+	return cell_ids, nil
+}
+
+func updateStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []string, id int) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	new_cell := strings.Join(cell, " ")
+	_, err := db.Exec("update $1 set $2 = $3 where id = $4", column_name, base_name, new_cell, id)
+	return err
+}
