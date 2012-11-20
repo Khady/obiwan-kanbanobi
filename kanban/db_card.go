@@ -21,6 +21,13 @@ VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
 	return err
 }
 
+func (c *Card) Del(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	_, err := db.Exec("delete from cards where id = $1", c.Id)
+	return err
+}
+
 func (c *Card) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
@@ -31,6 +38,13 @@ func (c *Card) Update(p *ConnectionPoolWrapper) error {
 	_, err := db.Exec(`update cards set name = $1, content = $2, column_id = $3, project_id = $4,
 tags = $5, users_id = $6, scripts_id = $7, write = $8 where id = $9`,
 		c.Name, c.Content, c.Column_id, c.Project_id, tags, uid, sid, write, c.Id)
+	return err
+}
+
+func (c *Card) ChangeColumn_id(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	_, err := db.Exec("update cards set column_id = $1 where id = $2", c.Column_id, c.Id)
 	return err
 }
 
@@ -50,6 +64,14 @@ func (c *Card) ChangeContent(p *ConnectionPoolWrapper) error {
 
 // PRESQUE TOUTES LES FONCTIONS QUI SUIVENT PEUVENT ETRE UTILISEES DE MANIERE TRES PROCHE
 // PAR LES COLONNES ET LES PROJETS, IL FAUDRA PENSER A BIEN FACTORISER
+
+func (c *Card) UpdateTags(p *ConnectionPoolWrapper, tags []string) error {
+	return updateStringSliceCell(p, "cards", "tags", tags, c.Id)
+}
+
+func (c *Card) GetTags(p *ConnectionPoolWrapper) ([]string, error) {
+	return getStringSliceCell(p, "cards", "tags", c.Id)
+}
 
 func (c *Card) UpdateWrite(p *ConnectionPoolWrapper, write []int) error {
 	return updateIntSliceCell(p, "cards", "write", write, c.Id)
