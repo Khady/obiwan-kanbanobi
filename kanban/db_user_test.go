@@ -4,10 +4,9 @@ import (
 	"testing"
 )
 
-var INFO_CONNECT string = "postgres://kanban:mdp@127.0.0.1:5432/kanban"
-
 func Test_GetNbUsers(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	if _, err := GetNbUsers(dbPool); err != nil {
@@ -16,7 +15,8 @@ func Test_GetNbUsers(t *testing.T) {
 }
 
 func Test_GetUsersByName(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()
@@ -34,7 +34,8 @@ func Test_GetUsersByName(t *testing.T) {
 }
 
 func Test_GetUserById(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()
@@ -53,7 +54,8 @@ func Test_GetUserById(t *testing.T) {
 }
 
 func Test_ChangeStateUser(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()
@@ -88,7 +90,8 @@ func Test_ChangeStateUser(t *testing.T) {
 }
 
 func Test_ChangeAdminUser(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()

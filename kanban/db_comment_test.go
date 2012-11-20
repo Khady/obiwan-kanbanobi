@@ -5,7 +5,8 @@ import (
 )
 
 func Test_UpdateComment(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()
@@ -29,7 +30,8 @@ func Test_UpdateComment(t *testing.T) {
 }
 
 func Test_AddComment(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()
@@ -49,7 +51,8 @@ func Test_AddComment(t *testing.T) {
 }
 
 func Test_DelComment(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	var count int
@@ -71,7 +74,8 @@ func Test_DelComment(t *testing.T) {
 }
 
 func Test_GetComment(t *testing.T) {
-	if err := dbPool.InitPool(2, db_open, INFO_CONNECT); err != nil {
+	readConf(CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
 	db := dbPool.GetConnection()
