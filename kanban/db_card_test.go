@@ -5,7 +5,7 @@ import (
 )
 
 func Test_UpdateCard(t *testing.T) {
-	readConf(CONF_FILE)
+	readConf(TEST_CONF_FILE)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}

@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-type cellUpdate func (*Card, *ConnectionPoolWrapper, []int) error
-type cellGet func (*Card, *ConnectionPoolWrapper) ([]int, error)
+type cellUpdate func(*Card, *ConnectionPoolWrapper, []int) error
+type cellGet func(*Card, *ConnectionPoolWrapper) ([]int, error)
 
 func (c *Card) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
@@ -105,7 +105,7 @@ func (c *Card) delIdInCell(p *ConnectionPoolWrapper, id int, cg cellGet, cu cell
 	if id_idx != len(cell_ids) {
 		new_ids := []int{}
 		new_ids = append(new_ids, cell_ids[:id_idx]...)
-		new_ids = append(new_ids, cell_ids[id_idx + 1:]...)
+		new_ids = append(new_ids, cell_ids[id_idx+1:]...)
 		return cu(c, p, new_ids)
 	}
 	return err

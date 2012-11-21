@@ -1,4 +1,9 @@
 language: go
+before_script:
+  - psql -c 'create database kanban;' -U postgres
+  - psql -c 'GRANT ALL PRIVILEGES ON DATABASE kanban TO postgres;' -U postgres
+  - psql -U postgres -d kanban -f createdb.sql
 script: go test -v ./kanban/
 install:
   - go get github.com/bmizerany/pq
+  - go get code.google.com/p/goconf/conf

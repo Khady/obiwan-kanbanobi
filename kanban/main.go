@@ -1,18 +1,25 @@
 package main
 
 import (
-	"fmt"
 	"code.google.com/p/goconf/conf"
+	"flag"
+	"fmt"
 )
 
-const CONF_FILE string = "kanban.conf"
+const TEST_CONF_FILE string = "kanban.conf"
+
+var CONF_FILE = flag.String("c", "kanban.conf", "Configuration file")
+var LOG_FILE = flag.String("l", "kanban.log", "Log file")
+var SPORT = flag.Int("p", 9658, "Server port")
+var TLS = flag.Bool("tls", false, "Activate tls")
+var VERBOSE = flag.Bool("v", false, "Verbose mode")
 
 var (
 	info_connect_bdd string // postgres://kanban:mdp@127.0.0.1:5432/kanban
-	server_port int		// 9658
-	log_file string		// kanban.log
-	tls_mode bool		// false
-	verbose_mode bool	// false
+	server_port      int    // 9658
+	log_file         string // kanban.log
+	tls_mode         bool   // false
+	verbose_mode     bool   // false
 )
 
 func readConf(filename string) error {
@@ -47,7 +54,8 @@ func readConf(filename string) error {
 }
 
 func main() {
-	if err := readConf(CONF_FILE); err != nil {
+	flag.Parse()
+	if err := readConf(*CONF_FILE); err != nil {
 		fmt.Println("Error with the configuration file:", err)
 		return
 	}

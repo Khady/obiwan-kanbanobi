@@ -5,7 +5,7 @@ import (
 )
 
 func Test_GetNbUsers(t *testing.T) {
-	readConf(CONF_FILE)
+	readConf(TEST_CONF_FILE)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -15,7 +15,7 @@ func Test_GetNbUsers(t *testing.T) {
 }
 
 func Test_GetUsersByName(t *testing.T) {
-	readConf(CONF_FILE)
+	readConf(TEST_CONF_FILE)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -34,7 +34,7 @@ func Test_GetUsersByName(t *testing.T) {
 }
 
 func Test_GetUserById(t *testing.T) {
-	readConf(CONF_FILE)
+	readConf(TEST_CONF_FILE)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -54,7 +54,7 @@ func Test_GetUserById(t *testing.T) {
 }
 
 func Test_ChangeStateUser(t *testing.T) {
-	readConf(CONF_FILE)
+	readConf(TEST_CONF_FILE)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}
@@ -90,7 +90,7 @@ func Test_ChangeStateUser(t *testing.T) {
 }
 
 func Test_ChangeAdminUser(t *testing.T) {
-	readConf(CONF_FILE)
+	readConf(TEST_CONF_FILE)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		t.Error("fail dans l'initpool", err)
 	}

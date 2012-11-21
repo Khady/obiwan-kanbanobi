@@ -1,4 +1,4 @@
-GRANT ALL PRIVILEGES ON DATABASE kanban TO kanban;
+-- GRANT ALL PRIVILEGES ON DATABASE kanban TO kanban;
 SET client_encoding = 'UTF8';
 
 CREATE TABLE cards (
