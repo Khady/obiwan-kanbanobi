@@ -1,7 +1,6 @@
 package main
 
 import (
-	"sort"
 	"strings"
 )
 
@@ -69,9 +68,6 @@ func (c *Card) DelComments(p *ConnectionPoolWrapper) error {
 	return err
 }
 
-// PRESQUE TOUTES LES FONCTIONS QUI SUIVENT PEUVENT ETRE UTILISEES DE MANIERE TRES PROCHE
-// PAR LES COLONNES ET LES PROJETS, IL FAUDRA PENSER A BIEN FACTORISER
-
 func (c *Card) UpdateTags(p *ConnectionPoolWrapper, tags []string) error {
 	return updateStringSliceCell(p, "cards", "tags", tags, c.Id)
 }
@@ -96,62 +92,29 @@ func (c *Card) GetScript(p *ConnectionPoolWrapper) ([]int, error) {
 	return getIntSliceCell(p, "cards", "scripts_id", c.Id)
 }
 
-// Ces deux fonctions vont etre utilisees a la fois pour la gestion des
-// scripts et pour la gestions des drois d'ecriture puisque le comportement
-// est exactement le meme. Il sagit de modifier correctement la chaine contenant
-// une liste d'id et de la retourner
-
-func (c *Card) delIdInCell(p *ConnectionPoolWrapper, id int, cg cellGet, cu cellUpdate) error {
-	cell_ids, err := cg(c, p)
-	if err != nil {
-		return err
-	}
-	id_idx := sort.Search(len(cell_ids), func(i int) bool { return cell_ids[i] == id }) // C'est pas un peu crade ce search niveau complexite ?
-	if id_idx != len(cell_ids) {
-		new_ids := []int{}
-		new_ids = append(new_ids, cell_ids[:id_idx]...)
-		new_ids = append(new_ids, cell_ids[id_idx+1:]...)
-		return cu(c, p, new_ids)
-	}
-	return err
-}
-
-func (c *Card) addIdInCell(p *ConnectionPoolWrapper, id int, cg cellGet, cu cellUpdate) error {
-	cell_ids, err := cg(c, p)
-	if err != nil {
-		return err
-	}
-	id_idx := sort.Search(len(cell_ids), func(i int) bool { return cell_ids[i] == id }) // C'est pas un peu crade ce search niveau complexite ?
-	if id_idx == len(cell_ids) {
-		cell_ids = append(cell_ids, id)
-		err = cu(c, p, cell_ids)
-	}
-	return err
-}
-
 // Ajoute des droits de modifications sur la carte a une personne.
 // Modifie la chaine deja existante pour y ajouer l'utilisateur correctement
 // Creation de la chaine si elle n'existait pas deja
 func (c *Card) AddWrite(p *ConnectionPoolWrapper, id int) error {
-	return c.addIdInCell(p, id, (*Card).GetWrite, (*Card).UpdateWrite)
+	return addIdInCell(p, id, c.Id, "cards", "write")
 }
 
 // Suppression d'un utilisateur de la chaine de write
 // Ne renvoie pas d'erreur si l'utilisateur n'etait pas present
 func (c *Card) DelWrite(p *ConnectionPoolWrapper, id int) error {
-	return c.delIdInCell(p, id, (*Card).GetWrite, (*Card).UpdateWrite)
+	return delIdInCell(p, id, c.Id, "cards", "write")
 }
 
 // Ajoute un script sur la carte.
 // Modifie la chaine deja existante pour y ajouer le script correctement
 // Creation de la chaine si elle n'existait pas deja
 func (c *Card) AddScript(p *ConnectionPoolWrapper, id int) error {
-	return c.addIdInCell(p, id, (*Card).GetScript, (*Card).UpdateScript)
+	return addIdInCell(p, id, c.Id, "cards", "scripts_id")
 }
 
 // Suppression d'un script de la chaine de write
 // Ne renvoie pas d'erreur si l'script n'etait pas present
 func (c *Card) DelScript(p *ConnectionPoolWrapper, id int) error {
-	return c.delIdInCell(p, id, (*Card).GetScript, (*Card).UpdateScript)
+	return delIdInCell(p, id, c.Id, "cards", "scripts_id")
 
 }
