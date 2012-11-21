@@ -102,9 +102,7 @@ func (c *Card) GetScript(p *ConnectionPoolWrapper) ([]int, error) {
 // une liste d'id et de la retourner
 
 func (c *Card) delIdInCell(p *ConnectionPoolWrapper, id int, cg cellGet, cu cellUpdate) error {
-	db := p.GetConnection()
-	defer p.ReleaseConnection(db)
-	cell_ids, err := cg(c, dbPool)
+	cell_ids, err := cg(c, p)
 	if err != nil {
 		return err
 	}
@@ -119,8 +117,6 @@ func (c *Card) delIdInCell(p *ConnectionPoolWrapper, id int, cg cellGet, cu cell
 }
 
 func (c *Card) addIdInCell(p *ConnectionPoolWrapper, id int, cg cellGet, cu cellUpdate) error {
-	db := p.GetConnection()
-	defer p.ReleaseConnection(db)
 	cell_ids, err := cg(c, p)
 	if err != nil {
 		return err

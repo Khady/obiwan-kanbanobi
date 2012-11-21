@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"github.com/bmizerany/pq"
+	"sort"
 	"strings"
 )
 
@@ -53,5 +54,33 @@ func updateStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_na
 	defer p.ReleaseConnection(db)
 	new_cell := strings.Join(cell, " ")
 	_, err := db.Exec("update $1 set $2 = $3 where id = $4", column_name, base_name, new_cell, id)
+	return err
+}
+
+func addIdInCell(p *ConnectionPoolWrapper, id int, elem_id int, table string, column string) error {
+	cell_ids, err := getIntSliceCell(p, table, column, elem_id)
+	if err != nil {
+		return err
+	}
+	id_idx := sort.Search(len(cell_ids), func(i int) bool { return cell_ids[i] == id }) // C'est pas un peu crade ce search niveau complexite ?
+	if id_idx == len(cell_ids) {
+		cell_ids = append(cell_ids, id)
+		err = updateIntSliceCell(p, table, column, cell_ids, elem_id)
+	}
+	return err
+}
+
+func delIdInCell(p *ConnectionPoolWrapper, id int, elem_id int, table string, column string) error {
+	cell_ids, err := getIntSliceCell(p, table, column, elem_id)
+	if err != nil {
+		return err
+	}
+	id_idx := sort.Search(len(cell_ids), func(i int) bool { return cell_ids[i] == id }) // C'est pas un peu crade ce search niveau complexite ?
+	if id_idx != len(cell_ids) {
+		new_ids := []int{}
+		new_ids = append(new_ids, cell_ids[:id_idx]...)
+		new_ids = append(new_ids, cell_ids[id_idx+1:]...)
+		return updateIntSliceCell(p, table, column, new_ids, elem_id)
+	}
 	return err
 }
