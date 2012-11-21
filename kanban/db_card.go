@@ -62,6 +62,13 @@ func (c *Card) ChangeContent(p *ConnectionPoolWrapper) error {
 	return err
 }
 
+func (c *Card) DelComments(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	_, err := db.Exec("delete from comments where cards_id = $1", c.Id)
+	return err
+}
+
 // PRESQUE TOUTES LES FONCTIONS QUI SUIVENT PEUVENT ETRE UTILISEES DE MANIERE TRES PROCHE
 // PAR LES COLONNES ET LES PROJETS, IL FAUDRA PENSER A BIEN FACTORISER
 

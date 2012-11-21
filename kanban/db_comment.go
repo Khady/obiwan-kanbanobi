@@ -30,3 +30,12 @@ func (c *Comment) Get(p *ConnectionPoolWrapper) error {
 	err := row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id)
 	return err
 }
+
+func (c *Comment) CountForCard(p *ConnectionPoolWrapper) (int, error) {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	var count int
+	row := db.QueryRow("select count(*) from comments where cards_id = $1", c.Cards_id)
+	err := row.Scan(&count)
+	return count, err
+}

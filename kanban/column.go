@@ -5,7 +5,7 @@ type Column struct {
 	Name       string
 	Project_id int
 	Content    string
-	Tags       string
-	Scripts_id string
-	Write      string
+	Tags       []string
+	Scripts_id []int
+	Write      []int
 }
