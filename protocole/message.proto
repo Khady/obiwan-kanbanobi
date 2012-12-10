@@ -41,8 +41,8 @@ message Msg {
     required uint32	id = 2;
     required string	name = 3;
     optional string	desc = 4;
-    optional string	tags = 5;
-    optional uint32	scripts_ids = 6; // IDs of the scripts attached to the column
+    repeated string	tags = 5;
+    repeated uint32	scripts_ids = 6; // IDs of the scripts attached to the column
     repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
   }
 
@@ -55,21 +55,24 @@ message Msg {
 
   message Cards {
     // Comments struct
-    message Comment {
-      required uint32	id = 1;
-      required string	content = 2;
-      required string	author_id = 3;
-    }
     required uint32	id = 1;
     required uint32	project_id = 2;
     required uint32	column_id = 3;
     required string	name = 4;
-    repeated Comment	comments = 5; // repeated = dynamically sized array of Comments
+    // repeated Comment	comments = 5; // repeated = dynamically sized array of Comments
     optional string	desc = 6;
-    optional string	tags = 7;
-    optional string	users_id = 8; // ID of the card author
-    optional uint32	scripts_ids = 9; // IDs of the scripts attached to the card
+    repeated string	tags = 7;
+    optional string	user_id = 8; // ID of the card author
+    repeated uint32	scripts_ids = 9; // IDs of the scripts attached to the card
     repeated uint32	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+  }
+
+  message Comment {
+    required uint32	id = 1;
+    required string	content = 2;
+    required string	author_id = 3;
+    required uint32     timestamp = 4;
+    required uint32     card_id = 5;
   }
 
   message Metadata {

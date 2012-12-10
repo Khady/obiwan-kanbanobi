@@ -8,7 +8,7 @@ CREATE TABLE cards (
     column_id integer NOT NULL,
     project_id integer NOT NULL,
     tags text NOT NULL,
-    users_id text NOT NULL,
+    user_id text NOT NULL,
     scripts_id text NOT NULL,
     write text NOT NULL
 );
@@ -45,6 +45,7 @@ CREATE TABLE comments (
     content text NOT NULL,
     cards_id integer NOT NULL,
     author_id integer NOT NULL
+    -- rajouter un champ pour la date
 );
 
 CREATE TABLE history (
@@ -69,3 +70,8 @@ CREATE TABLE metadata (
     data_key text NOT NULL,
     data_value text NOT NULL
 );
+
+-- CREATE TABLE sessions {
+--     id SERIAL PRIMARY KEY,
+--     -- 
+-- };
