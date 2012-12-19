@@ -4,6 +4,8 @@ import (
 	"code.google.com/p/goconf/conf"
 	"flag"
 	"fmt"
+	"log"
+	"os"
 )
 
 const TEST_CONF_FILE string = "kanban.conf"
@@ -13,6 +15,9 @@ var LOG_FILE = flag.String("l", "kanban.log", "Log file")
 var SPORT = flag.Int("p", 9658, "Server port")
 var TLS = flag.Bool("tls", false, "Activate tls")
 var VERBOSE = flag.Bool("v", false, "Verbose mode")
+
+var LOGGER *log.Logger
+var LOG_FLAGS = log.LstdFlags
 
 var (
 	info_connect_bdd string // postgres://kanban:mdp@127.0.0.1:5432/kanban
@@ -59,4 +64,13 @@ func main() {
 		fmt.Println("Error with the configuration file:", err)
 		return
 	}
+	f, err := os.OpenFile(*LOG_FILE, os.O_CREATE | os.O_WRONLY | os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Println("Impossible to open log file")
+		return
+	}
+	defer f.Close()
+	LOGGER = log.New(f, "", LOG_FLAGS)
+	LOGGER.Print("toto")
+	// startServer()
 }
