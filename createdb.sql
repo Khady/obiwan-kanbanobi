@@ -44,8 +44,8 @@ CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
     content text NOT NULL,
     cards_id integer NOT NULL,
-    author_id integer NOT NULL
-    -- rajouter un champ pour la date
+    author_id integer NOT NULL,
+    comment_date timestamp NOT NULL
 );
 
 CREATE TABLE history (

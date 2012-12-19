@@ -11,8 +11,8 @@ func (c *Comment) Update(p *ConnectionPoolWrapper) error {
 func (c *Comment) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("INSERT INTO comments(content, cards_id, author_id) VALUES($1, $2, $3);",
-		c.Content, c.Cards_id, c.Author_id)
+	_, err := db.Exec("INSERT INTO comments(content, cards_id, author_id, comment_date) VALUES($1, $2, $3, $4);",
+		c.Content, c.Cards_id, c.Author_id, c.Comment_date)
 	return err
 }
 
@@ -27,7 +27,7 @@ func (c *Comment) Get(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select * from comments where id = $1", c.Id)
-	err := row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id)
+	err := row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id, &c.Comment_date)
 	return err
 }
 

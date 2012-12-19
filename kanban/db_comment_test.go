@@ -2,6 +2,7 @@ package main
 
 import (
 	"testing"
+	"time"
 )
 
 func Test_UpdateComment(t *testing.T) {
@@ -11,18 +12,18 @@ func Test_UpdateComment(t *testing.T) {
 	}
 	db := dbPool.GetConnection()
 	defer dbPool.ReleaseConnection(db)
-	db.Exec(`INSERT INTO comments(content, cards_id, author_id)
- VALUES('super content', '10', '10');`)
+	db.Exec(`INSERT INTO comments(content, cards_id, author_id, comment_date)
+ VALUES('super content', '10', '10', $1);`, time.Now())
 	row := db.QueryRow("select id from comments where content = 'super content'")
 	var id int
 	row.Scan(&id)
-	oldc := &Comment{id, "new super content", 5, 5}
+	oldc := &Comment{id, "new super content", 5, 5, time.Now()}
 	if err := oldc.Update(dbPool); err != nil {
 		t.Error(err)
 	}
 	row = db.QueryRow("select * from comments where id = $1", oldc.Id)
 	c := &Comment{}
-	row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id)
+	row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id, &c.Comment_date)
 	if c.Content != "new super content" || c.Cards_id != 5 || c.Author_id != 5 {
 		t.Error("Fail dans l'update, data non correspondantes", c)
 	}
@@ -36,14 +37,14 @@ func Test_AddComment(t *testing.T) {
 	}
 	db := dbPool.GetConnection()
 	defer dbPool.ReleaseConnection(db)
-	oldc := &Comment{1, "new super content", 5, 5}
+	oldc := &Comment{1, "new super content", 5, 5, time.Now()}
 	oldc.Add(dbPool)
 	row := db.QueryRow("select id from comments where content = 'new super content'")
 	var id int
 	row.Scan(&id)
 	row = db.QueryRow("select * from comments where id = $1", id)
 	c := &Comment{}
-	err := row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id)
+	err := row.Scan(&c.Id, &c.Content, &c.Cards_id, &c.Author_id, &c.Comment_date)
 	if err != nil || c.Content != "new super content" || c.Cards_id != 5 || c.Author_id != 5 {
 		t.Error("Fail dans l'update, data non correspondantes", err)
 	}
@@ -59,7 +60,7 @@ func Test_DelComment(t *testing.T) {
 	db := dbPool.GetConnection()
 	defer dbPool.ReleaseConnection(db)
 	db.Exec(`INSERT INTO comments(content, cards_id, author_id)
- VALUES('super content', '10', '10');`)
+ VALUES('super content', '10', '10', $1);`, time.Now())
 	row := db.QueryRow("select id from comments where content = 'super content'")
 	var id int
 	row.Scan(&id)
@@ -80,8 +81,8 @@ func Test_GetComment(t *testing.T) {
 	}
 	db := dbPool.GetConnection()
 	defer dbPool.ReleaseConnection(db)
-	db.Exec(`INSERT INTO comments(content, cards_id, author_id)
- VALUES('super content', '10', '10');`)
+	db.Exec(`INSERT INTO comments(content, cards_id, author_id, comment_date)
+ VALUES('super content', '10', '10', $1);`, time.Now())
 	row := db.QueryRow("select id from comments where content = 'super content'")
 	var id int
 	row.Scan(&id)
