@@ -11,10 +11,10 @@ func (c *Card) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	tags := strings.Join(c.Tags, " ")
-	uid := strings.Join(SString_of_SInt(c.Users_id), " ")
+	uid := strings.Join(SString_of_SInt(c.User_id), " ")
 	sid := strings.Join(SString_of_SInt(c.Scripts_id), " ")
 	write := strings.Join(SString_of_SInt(c.Write), " ")
-	_, err := db.Exec(`INSERT INTO cards(name, content, column_id, project_id, tags, users_id, scripts_id, write)
+	_, err := db.Exec(`INSERT INTO cards(name, content, column_id, project_id, tags, user_id, scripts_id, write)
 VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
 		c.Name, c.Content, c.Column_id, c.Project_id, tags, uid, sid, write)
 	return err
@@ -31,11 +31,11 @@ func (c *Card) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	tags := strings.Join(c.Tags, " ")
-	uid := strings.Join(SString_of_SInt(c.Users_id), " ")
+	uid := strings.Join(SString_of_SInt(c.User_id), " ")
 	sid := strings.Join(SString_of_SInt(c.Scripts_id), " ")
 	write := strings.Join(SString_of_SInt(c.Write), " ")
 	_, err := db.Exec(`update cards set name = $1, content = $2, column_id = $3, project_id = $4,
-tags = $5, users_id = $6, scripts_id = $7, write = $8 where id = $9`,
+tags = $5, user_id = $6, scripts_id = $7, write = $8 where id = $9`,
 		c.Name, c.Content, c.Column_id, c.Project_id, tags, uid, sid, write, c.Id)
 	return err
 }

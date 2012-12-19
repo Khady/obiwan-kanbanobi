@@ -6,8 +6,9 @@ enum CMD {
   DELETE	= 3;
   GET		= 4;
   MOVE		= 5;
-  CONNECT      	= 6;
-  LOGOUT	= 7;
+  CONNECT       = 6;
+  ERROR         = 7;
+  NONE          = 8;
 };
 
 enum TARGET {
@@ -84,7 +85,8 @@ message Msg {
 
   message Ident {
     required string	login = 1;
-    required string	hash = 2;
+    optional string	password = 2;
+    optional string	hash = 3;
   }
 
   message Error {

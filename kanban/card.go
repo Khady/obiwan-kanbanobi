@@ -7,7 +7,7 @@ type Card struct {
 	Column_id  int
 	Project_id int
 	Tags       []string
-	Users_id   []int
+	User_id    []int
 	Scripts_id []int
 	Write      []int
 }
