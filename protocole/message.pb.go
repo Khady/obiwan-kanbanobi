@@ -13,57 +13,6 @@ var _ = proto.Marshal
 var _ = &json.SyntaxError{}
 var _ = math.Inf
 
-type CMD int32
-
-const (
-	CMD_CREATE  CMD = 1
-	CMD_MODIFY  CMD = 2
-	CMD_DELETE  CMD = 3
-	CMD_GET     CMD = 4
-	CMD_MOVE    CMD = 5
-	CMD_CONNECT CMD = 6
-	CMD_LOGOUT  CMD = 7
-)
-
-var CMD_name = map[int32]string{
-	1: "CREATE",
-	2: "MODIFY",
-	3: "DELETE",
-	4: "GET",
-	5: "MOVE",
-	6: "CONNECT",
-	7: "LOGOUT",
-}
-var CMD_value = map[string]int32{
-	"CREATE":  1,
-	"MODIFY":  2,
-	"DELETE":  3,
-	"GET":     4,
-	"MOVE":    5,
-	"CONNECT": 6,
-	"LOGOUT":  7,
-}
-
-func (x CMD) Enum() *CMD {
-	p := new(CMD)
-	*p = x
-	return p
-}
-func (x CMD) String() string {
-	return proto.EnumName(CMD_name, int32(x))
-}
-func (x CMD) MarshalJSON() ([]byte, error) {
-	return json.Marshal(x.String())
-}
-func (x *CMD) UnmarshalJSON(data []byte) error {
-	value, err := proto.UnmarshalJSONEnum(CMD_value, data, "CMD")
-	if err != nil {
-		return err
-	}
-	*x = CMD(value)
-	return nil
-}
-
 type TARGET int32
 
 const (
@@ -73,9 +22,8 @@ const (
 	TARGET_CARDS    TARGET = 4
 	TARGET_ADMIN    TARGET = 5
 	TARGET_IDENT    TARGET = 6
-	TARGET_ERROR    TARGET = 7
-	TARGET_NOTIF    TARGET = 8
-	TARGET_METADATA TARGET = 9
+	TARGET_NOTIF    TARGET = 7
+	TARGET_METADATA TARGET = 8
 )
 
 var TARGET_name = map[int32]string{
@@ -85,9 +33,8 @@ var TARGET_name = map[int32]string{
 	4: "CARDS",
 	5: "ADMIN",
 	6: "IDENT",
-	7: "ERROR",
-	8: "NOTIF",
-	9: "METADATA",
+	7: "NOTIF",
+	8: "METADATA",
 }
 var TARGET_value = map[string]int32{
 	"USERS":    1,
@@ -96,9 +43,8 @@ var TARGET_value = map[string]int32{
 	"CARDS":    4,
 	"ADMIN":    5,
 	"IDENT":    6,
-	"ERROR":    7,
-	"NOTIF":    8,
-	"METADATA": 9,
+	"NOTIF":    7,
+	"METADATA": 8,
 }
 
 func (x TARGET) Enum() *TARGET {
@@ -118,6 +64,63 @@ func (x *TARGET) UnmarshalJSON(data []byte) error {
 		return err
 	}
 	*x = TARGET(value)
+	return nil
+}
+
+type CMD int32
+
+const (
+	CMD_CREATE     CMD = 1
+	CMD_MODIFY     CMD = 2
+	CMD_DELETE     CMD = 3
+	CMD_GET        CMD = 4
+	CMD_MOVE       CMD = 5
+	CMD_CONNECT    CMD = 6
+	CMD_DISCONNECT CMD = 7
+	CMD_ERROR      CMD = 8
+	CMD_NONE       CMD = 9
+)
+
+var CMD_name = map[int32]string{
+	1: "CREATE",
+	2: "MODIFY",
+	3: "DELETE",
+	4: "GET",
+	5: "MOVE",
+	6: "CONNECT",
+	7: "DISCONNECT",
+	8: "ERROR",
+	9: "NONE",
+}
+var CMD_value = map[string]int32{
+	"CREATE":     1,
+	"MODIFY":     2,
+	"DELETE":     3,
+	"GET":        4,
+	"MOVE":       5,
+	"CONNECT":    6,
+	"DISCONNECT": 7,
+	"ERROR":      8,
+	"NONE":       9,
+}
+
+func (x CMD) Enum() *CMD {
+	p := new(CMD)
+	*p = x
+	return p
+}
+func (x CMD) String() string {
+	return proto.EnumName(CMD_name, int32(x))
+}
+func (x CMD) MarshalJSON() ([]byte, error) {
+	return json.Marshal(x.String())
+}
+func (x *CMD) UnmarshalJSON(data []byte) error {
+	value, err := proto.UnmarshalJSONEnum(CMD_value, data, "CMD")
+	if err != nil {
+		return err
+	}
+	*x = CMD(value)
 	return nil
 }
 
@@ -270,8 +273,8 @@ type Msg_Columns struct {
 	Id               *uint32  `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
 	Name             *string  `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
 	Desc             *string  `protobuf:"bytes,4,opt,name=desc" json:"desc,omitempty"`
-	Tags             *string  `protobuf:"bytes,5,opt,name=tags" json:"tags,omitempty"`
-	ScriptsIds       *uint32  `protobuf:"varint,6,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Tags             []string `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
+	ScriptsIds       []uint32 `protobuf:"varint,6,rep,name=scripts_ids" json:"scripts_ids,omitempty"`
 	Write            []uint32 `protobuf:"varint,7,rep,name=write" json:"write,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
@@ -308,20 +311,6 @@ func (this *Msg_Columns) GetDesc() string {
 	return ""
 }
 
-func (this *Msg_Columns) GetTags() string {
-	if this != nil && this.Tags != nil {
-		return *this.Tags
-	}
-	return ""
-}
-
-func (this *Msg_Columns) GetScriptsIds() uint32 {
-	if this != nil && this.ScriptsIds != nil {
-		return *this.ScriptsIds
-	}
-	return 0
-}
-
 type Msg_Projects struct {
 	Id               *uint32  `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	Name             *string  `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
@@ -349,17 +338,16 @@ func (this *Msg_Projects) GetName() string {
 }
 
 type Msg_Cards struct {
-	Id               *uint32              `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
-	ProjectId        *uint32              `protobuf:"varint,2,req,name=project_id" json:"project_id,omitempty"`
-	ColumnId         *uint32              `protobuf:"varint,3,req,name=column_id" json:"column_id,omitempty"`
-	Name             *string              `protobuf:"bytes,4,req,name=name" json:"name,omitempty"`
-	Comments         []*Msg_Cards_Comment `protobuf:"bytes,5,rep,name=comments" json:"comments,omitempty"`
-	Desc             *string              `protobuf:"bytes,6,opt,name=desc" json:"desc,omitempty"`
-	Tags             *string              `protobuf:"bytes,7,opt,name=tags" json:"tags,omitempty"`
-	UsersId          *string              `protobuf:"bytes,8,opt,name=users_id" json:"users_id,omitempty"`
-	ScriptsIds       *uint32              `protobuf:"varint,9,opt,name=scripts_ids" json:"scripts_ids,omitempty"`
-	Write            []uint32             `protobuf:"varint,10,rep,name=write" json:"write,omitempty"`
-	XXX_unrecognized []byte               `json:"-"`
+	Id               *uint32  `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	ProjectId        *uint32  `protobuf:"varint,2,req,name=project_id" json:"project_id,omitempty"`
+	ColumnId         *uint32  `protobuf:"varint,3,req,name=column_id" json:"column_id,omitempty"`
+	Name             *string  `protobuf:"bytes,4,req,name=name" json:"name,omitempty"`
+	Desc             *string  `protobuf:"bytes,6,opt,name=desc" json:"desc,omitempty"`
+	Tags             []string `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
+	UserId           *string  `protobuf:"bytes,8,opt,name=user_id" json:"user_id,omitempty"`
+	ScriptsIds       []uint32 `protobuf:"varint,9,rep,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Write            []uint32 `protobuf:"varint,10,rep,name=write" json:"write,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (this *Msg_Cards) Reset()         { *this = Msg_Cards{} }
@@ -401,57 +389,59 @@ func (this *Msg_Cards) GetDesc() string {
 	return ""
 }
 
-func (this *Msg_Cards) GetTags() string {
-	if this != nil && this.Tags != nil {
-		return *this.Tags
+func (this *Msg_Cards) GetUserId() string {
+	if this != nil && this.UserId != nil {
+		return *this.UserId
 	}
 	return ""
 }
 
-func (this *Msg_Cards) GetUsersId() string {
-	if this != nil && this.UsersId != nil {
-		return *this.UsersId
-	}
-	return ""
-}
-
-func (this *Msg_Cards) GetScriptsIds() uint32 {
-	if this != nil && this.ScriptsIds != nil {
-		return *this.ScriptsIds
-	}
-	return 0
-}
-
-type Msg_Cards_Comment struct {
+type Msg_Comment struct {
 	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	Content          *string `protobuf:"bytes,2,req,name=content" json:"content,omitempty"`
 	AuthorId         *string `protobuf:"bytes,3,req,name=author_id" json:"author_id,omitempty"`
+	Timestamp        *uint32 `protobuf:"varint,4,req,name=timestamp" json:"timestamp,omitempty"`
+	CardId           *uint32 `protobuf:"varint,5,req,name=card_id" json:"card_id,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (this *Msg_Cards_Comment) Reset()         { *this = Msg_Cards_Comment{} }
-func (this *Msg_Cards_Comment) String() string { return proto.CompactTextString(this) }
-func (*Msg_Cards_Comment) ProtoMessage()       {}
+func (this *Msg_Comment) Reset()         { *this = Msg_Comment{} }
+func (this *Msg_Comment) String() string { return proto.CompactTextString(this) }
+func (*Msg_Comment) ProtoMessage()       {}
 
-func (this *Msg_Cards_Comment) GetId() uint32 {
+func (this *Msg_Comment) GetId() uint32 {
 	if this != nil && this.Id != nil {
 		return *this.Id
 	}
 	return 0
 }
 
-func (this *Msg_Cards_Comment) GetContent() string {
+func (this *Msg_Comment) GetContent() string {
 	if this != nil && this.Content != nil {
 		return *this.Content
 	}
 	return ""
 }
 
-func (this *Msg_Cards_Comment) GetAuthorId() string {
+func (this *Msg_Comment) GetAuthorId() string {
 	if this != nil && this.AuthorId != nil {
 		return *this.AuthorId
 	}
 	return ""
+}
+
+func (this *Msg_Comment) GetTimestamp() uint32 {
+	if this != nil && this.Timestamp != nil {
+		return *this.Timestamp
+	}
+	return 0
+}
+
+func (this *Msg_Comment) GetCardId() uint32 {
+	if this != nil && this.CardId != nil {
+		return *this.CardId
+	}
+	return 0
 }
 
 type Msg_Metadata struct {
@@ -496,7 +486,7 @@ func (this *Msg_Metadata) GetDataValue() uint32 {
 
 type Msg_Ident struct {
 	Login            *string `protobuf:"bytes,1,req,name=login" json:"login,omitempty"`
-	Hash             *string `protobuf:"bytes,2,req,name=hash" json:"hash,omitempty"`
+	Password         *string `protobuf:"bytes,2,opt,name=password" json:"password,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -511,9 +501,9 @@ func (this *Msg_Ident) GetLogin() string {
 	return ""
 }
 
-func (this *Msg_Ident) GetHash() string {
-	if this != nil && this.Hash != nil {
-		return *this.Hash
+func (this *Msg_Ident) GetPassword() string {
+	if this != nil && this.Password != nil {
+		return *this.Password
 	}
 	return ""
 }
@@ -551,6 +541,6 @@ func (this *Msg_Notif) GetMsg() string {
 }
 
 func init() {
-	proto.RegisterEnum("message.CMD", CMD_name, CMD_value)
 	proto.RegisterEnum("message.TARGET", TARGET_name, TARGET_value)
+	proto.RegisterEnum("message.CMD", CMD_name, CMD_value)
 }

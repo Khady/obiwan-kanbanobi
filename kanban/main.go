@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"runtime"
 )
 
 const TEST_CONF_FILE string = "kanban.conf"
 
 var CONF_FILE = flag.String("c", "kanban.conf", "Configuration file")
 var LOG_FILE = flag.String("l", "kanban.log", "Log file")
-var SPORT = flag.Int("p", 9658, "Server port")
+var SPORT = flag.String("p", "9658", "Server port")
 var TLS = flag.Bool("tls", false, "Activate tls")
 var VERBOSE = flag.Bool("v", false, "Verbose mode")
 
@@ -59,6 +60,7 @@ func readConf(filename string) error {
 }
 
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	flag.Parse()
 	if err := readConf(*CONF_FILE); err != nil {
 		fmt.Println("Error with the configuration file:", err)
@@ -71,6 +73,5 @@ func main() {
 	}
 	defer f.Close()
 	LOGGER = log.New(f, "", LOG_FLAGS)
-	LOGGER.Print("toto")
-	// startServer()
+	startServer()
 }

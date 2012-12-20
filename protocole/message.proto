@@ -1,16 +1,5 @@
 package message;
 
-enum CMD {
-  CREATE	= 1;
-  MODIFY	= 2;
-  DELETE	= 3;
-  GET		= 4;
-  MOVE		= 5;
-  CONNECT       = 6;
-  ERROR         = 7;
-  NONE          = 8;
-};
-
 enum TARGET {
   USERS		= 1;
   COLUMNS	= 2;
@@ -18,9 +7,20 @@ enum TARGET {
   CARDS		= 4;
   ADMIN		= 5;
   IDENT		= 6;
-  ERROR		= 7;
-  NOTIF		= 8;
-  METADATA      = 9;
+  NOTIF		= 7;
+  METADATA      = 8;
+};
+
+enum CMD {
+  CREATE	= 1;
+  MODIFY	= 2;
+  DELETE	= 3;
+  GET		= 4;
+  MOVE		= 5;
+  CONNECT       = 6;
+  DISCONNECT    = 7;
+  ERROR		= 8;
+  NONE          = 9;
 };
 
 message Msg {
@@ -86,7 +86,6 @@ message Msg {
   message Ident {
     required string	login = 1;
     optional string	password = 2;
-    optional string	hash = 3;
   }
 
   message Error {
