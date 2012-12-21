@@ -11,49 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='message.proto',
   package='message',
-  serialized_pb='\n\rmessage.proto\x12\x07message\"\xda\x07\n\x03Msg\x12\x1f\n\x06target\x18\x01 \x02(\x0e\x32\x0f.message.TARGET\x12\x1d\n\x07\x63ommand\x18\x02 \x02(\x0e\x32\x0c.message.CMD\x12\x11\n\tauthor_id\x18\x03 \x02(\r\x12\x12\n\nsession_id\x18\x04 \x02(\t\x12!\n\x05users\x18\x05 \x01(\x0b\x32\x12.message.Msg.Users\x12%\n\x07\x63olumns\x18\x06 \x01(\x0b\x32\x14.message.Msg.Columns\x12\'\n\x08projects\x18\x07 \x01(\x0b\x32\x15.message.Msg.Projects\x12!\n\x05\x63\x61rds\x18\x08 \x01(\x0b\x32\x12.message.Msg.Cards\x12!\n\x05ident\x18\t \x01(\x0b\x32\x12.message.Msg.Ident\x12!\n\x05\x65rror\x18\n \x01(\x0b\x32\x12.message.Msg.Error\x12!\n\x05notif\x18\x0b \x01(\x0b\x32\x12.message.Msg.Notif\x1aP\n\x05Users\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x10\n\x08password\x18\x03 \x02(\t\x12\r\n\x05\x61\x64min\x18\x04 \x02(\x08\x12\x0c\n\x04mail\x18\x05 \x01(\t\x1aw\n\x07\x43olumns\x12\x12\n\nproject_id\x18\x01 \x02(\r\x12\n\n\x02id\x18\x02 \x02(\r\x12\x0c\n\x04name\x18\x03 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x04 \x01(\t\x12\x0c\n\x04tags\x18\x05 \x01(\t\x12\x13\n\x0bscripts_ids\x18\x06 \x01(\r\x12\r\n\x05write\x18\x07 \x03(\r\x1a\x45\n\x08Projects\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x11\n\tadmins_id\x18\x03 \x03(\r\x12\x0c\n\x04read\x18\x04 \x03(\r\x1a\x83\x02\n\x05\x43\x61rds\x12\n\n\x02id\x18\x01 \x02(\r\x12\x12\n\nproject_id\x18\x02 \x02(\r\x12\x11\n\tcolumn_id\x18\x03 \x02(\r\x12\x0c\n\x04name\x18\x04 \x02(\t\x12,\n\x08\x63omments\x18\x05 \x03(\x0b\x32\x1a.message.Msg.Cards.Comment\x12\x0c\n\x04\x64\x65sc\x18\x06 \x01(\t\x12\x0c\n\x04tags\x18\x07 \x01(\t\x12\x10\n\x08users_id\x18\x08 \x01(\t\x12\x13\n\x0bscripts_ids\x18\t \x01(\r\x12\r\n\x05write\x18\n \x03(\r\x1a\x39\n\x07\x43omment\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0f\n\x07\x63ontent\x18\x02 \x02(\t\x12\x11\n\tauthor_id\x18\x03 \x02(\t\x1a$\n\x05Ident\x12\r\n\x05login\x18\x01 \x02(\t\x12\x0c\n\x04hash\x18\x02 \x02(\t\x1a\x19\n\x05\x45rror\x12\x10\n\x08\x65rror_id\x18\x01 \x02(\r\x1a\x14\n\x05Notif\x12\x0b\n\x03msg\x18\x01 \x01(\t*U\n\x03\x43MD\x12\n\n\x06\x43REATE\x10\x01\x12\n\n\x06MODIFY\x10\x02\x12\n\n\x06\x44\x45LETE\x10\x03\x12\x07\n\x03GET\x10\x04\x12\x08\n\x04MOVE\x10\x05\x12\x0b\n\x07\x43ONNECT\x10\x06\x12\n\n\x06LOGOUT\x10\x07*e\n\x06TARGET\x12\t\n\x05USERS\x10\x01\x12\x0b\n\x07\x43OLUMNS\x10\x02\x12\x0c\n\x08PROJECTS\x10\x03\x12\t\n\x05\x43\x41RDS\x10\x04\x12\t\n\x05\x41\x44MIN\x10\x05\x12\t\n\x05IDENT\x10\x06\x12\t\n\x05\x45RROR\x10\x07\x12\t\n\x05NOTIF\x10\x08')
-
-_CMD = descriptor.EnumDescriptor(
-  name='CMD',
-  full_name='message.CMD',
-  filename=None,
-  file=DESCRIPTOR,
-  values=[
-    descriptor.EnumValueDescriptor(
-      name='CREATE', index=0, number=1,
-      options=None,
-      type=None),
-    descriptor.EnumValueDescriptor(
-      name='MODIFY', index=1, number=2,
-      options=None,
-      type=None),
-    descriptor.EnumValueDescriptor(
-      name='DELETE', index=2, number=3,
-      options=None,
-      type=None),
-    descriptor.EnumValueDescriptor(
-      name='GET', index=3, number=4,
-      options=None,
-      type=None),
-    descriptor.EnumValueDescriptor(
-      name='MOVE', index=4, number=5,
-      options=None,
-      type=None),
-    descriptor.EnumValueDescriptor(
-      name='CONNECT', index=5, number=6,
-      options=None,
-      type=None),
-    descriptor.EnumValueDescriptor(
-      name='LOGOUT', index=6, number=7,
-      options=None,
-      type=None),
-  ],
-  containing_type=None,
-  options=None,
-  serialized_start=1015,
-  serialized_end=1100,
-)
-
+  serialized_pb='\n\rmessage.proto\x12\x07message\"\xad\x08\n\x03Msg\x12\x1f\n\x06target\x18\x01 \x02(\x0e\x32\x0f.message.TARGET\x12\x1d\n\x07\x63ommand\x18\x02 \x02(\x0e\x32\x0c.message.CMD\x12\x11\n\tauthor_id\x18\x03 \x02(\r\x12\x12\n\nsession_id\x18\x04 \x02(\t\x12!\n\x05users\x18\x05 \x01(\x0b\x32\x12.message.Msg.Users\x12%\n\x07\x63olumns\x18\x06 \x01(\x0b\x32\x14.message.Msg.Columns\x12\'\n\x08projects\x18\x07 \x01(\x0b\x32\x15.message.Msg.Projects\x12!\n\x05\x63\x61rds\x18\x08 \x01(\x0b\x32\x12.message.Msg.Cards\x12!\n\x05ident\x18\t \x01(\x0b\x32\x12.message.Msg.Ident\x12!\n\x05\x65rror\x18\n \x01(\x0b\x32\x12.message.Msg.Error\x12!\n\x05notif\x18\x0b \x01(\x0b\x32\x12.message.Msg.Notif\x1aP\n\x05Users\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x10\n\x08password\x18\x03 \x02(\t\x12\r\n\x05\x61\x64min\x18\x04 \x02(\x08\x12\x0c\n\x04mail\x18\x05 \x01(\t\x1aw\n\x07\x43olumns\x12\x12\n\nproject_id\x18\x01 \x02(\r\x12\n\n\x02id\x18\x02 \x02(\r\x12\x0c\n\x04name\x18\x03 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x04 \x01(\t\x12\x0c\n\x04tags\x18\x05 \x03(\t\x12\x13\n\x0bscripts_ids\x18\x06 \x03(\r\x12\r\n\x05write\x18\x07 \x03(\r\x1a\x45\n\x08Projects\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x11\n\tadmins_id\x18\x03 \x03(\r\x12\x0c\n\x04read\x18\x04 \x03(\r\x1a\x99\x01\n\x05\x43\x61rds\x12\n\n\x02id\x18\x01 \x02(\r\x12\x12\n\nproject_id\x18\x02 \x02(\r\x12\x11\n\tcolumn_id\x18\x03 \x02(\r\x12\x0c\n\x04name\x18\x04 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x06 \x01(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x0f\n\x07user_id\x18\x08 \x01(\t\x12\x13\n\x0bscripts_ids\x18\t \x03(\r\x12\r\n\x05write\x18\n \x03(\r\x1a]\n\x07\x43omment\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0f\n\x07\x63ontent\x18\x02 \x02(\t\x12\x11\n\tauthor_id\x18\x03 \x02(\t\x12\x11\n\ttimestamp\x18\x04 \x02(\r\x12\x0f\n\x07\x63\x61rd_id\x18\x05 \x02(\r\x1aX\n\x08Metadata\x12\x13\n\x0bobject_type\x18\x01 \x02(\r\x12\x11\n\tobject_id\x18\x02 \x02(\r\x12\x10\n\x08\x64\x61ta_key\x18\x03 \x01(\t\x12\x12\n\ndata_value\x18\x04 \x01(\r\x1a(\n\x05Ident\x12\r\n\x05login\x18\x01 \x02(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x1a\x19\n\x05\x45rror\x12\x10\n\x08\x65rror_id\x18\x01 \x02(\r\x1a\x14\n\x05Notif\x12\x0b\n\x03msg\x18\x01 \x01(\t*h\n\x06TARGET\x12\t\n\x05USERS\x10\x01\x12\x0b\n\x07\x43OLUMNS\x10\x02\x12\x0c\n\x08PROJECTS\x10\x03\x12\t\n\x05\x43\x41RDS\x10\x04\x12\t\n\x05\x41\x44MIN\x10\x05\x12\t\n\x05IDENT\x10\x06\x12\t\n\x05NOTIF\x10\x07\x12\x0c\n\x08METADATA\x10\x08*n\n\x03\x43MD\x12\n\n\x06\x43REATE\x10\x01\x12\n\n\x06MODIFY\x10\x02\x12\n\n\x06\x44\x45LETE\x10\x03\x12\x07\n\x03GET\x10\x04\x12\x08\n\x04MOVE\x10\x05\x12\x0b\n\x07\x43ONNECT\x10\x06\x12\x0e\n\nDISCONNECT\x10\x07\x12\t\n\x05\x45RROR\x10\x08\x12\x08\n\x04NONE\x10\t')
 
 _TARGET = descriptor.EnumDescriptor(
   name='TARGET',
@@ -86,36 +44,88 @@ _TARGET = descriptor.EnumDescriptor(
       options=None,
       type=None),
     descriptor.EnumValueDescriptor(
-      name='ERROR', index=6, number=7,
+      name='NOTIF', index=6, number=7,
       options=None,
       type=None),
     descriptor.EnumValueDescriptor(
-      name='NOTIF', index=7, number=8,
+      name='METADATA', index=7, number=8,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=1102,
-  serialized_end=1203,
+  serialized_start=1098,
+  serialized_end=1202,
 )
 
 
-CREATE = 1
-MODIFY = 2
-DELETE = 3
-GET = 4
-MOVE = 5
-CONNECT = 6
-LOGOUT = 7
+_CMD = descriptor.EnumDescriptor(
+  name='CMD',
+  full_name='message.CMD',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    descriptor.EnumValueDescriptor(
+      name='CREATE', index=0, number=1,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='MODIFY', index=1, number=2,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DELETE', index=2, number=3,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='GET', index=3, number=4,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='MOVE', index=4, number=5,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='CONNECT', index=5, number=6,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='DISCONNECT', index=6, number=7,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='ERROR', index=7, number=8,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='NONE', index=8, number=9,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=1204,
+  serialized_end=1314,
+)
+
+
 USERS = 1
 COLUMNS = 2
 PROJECTS = 3
 CARDS = 4
 ADMIN = 5
 IDENT = 6
-ERROR = 7
-NOTIF = 8
+NOTIF = 7
+METADATA = 8
+CREATE = 1
+MODIFY = 2
+DELETE = 3
+GET = 4
+MOVE = 5
+CONNECT = 6
+DISCONNECT = 7
+ERROR = 8
+NONE = 9
 
 
 
@@ -211,15 +221,15 @@ _MSG_COLUMNS = descriptor.Descriptor(
       options=None),
     descriptor.FieldDescriptor(
       name='tags', full_name='message.Msg.Columns.tags', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      number=5, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
       name='scripts_ids', full_name='message.Msg.Columns.scripts_ids', index=5,
-      number=6, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
+      number=6, type=13, cpp_type=3, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -291,47 +301,6 @@ _MSG_PROJECTS = descriptor.Descriptor(
   serialized_end=664,
 )
 
-_MSG_CARDS_COMMENT = descriptor.Descriptor(
-  name='Comment',
-  full_name='message.Msg.Cards.Comment',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    descriptor.FieldDescriptor(
-      name='id', full_name='message.Msg.Cards.Comment.id', index=0,
-      number=1, type=13, cpp_type=3, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    descriptor.FieldDescriptor(
-      name='content', full_name='message.Msg.Cards.Comment.content', index=1,
-      number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    descriptor.FieldDescriptor(
-      name='author_id', full_name='message.Msg.Cards.Comment.author_id', index=2,
-      number=3, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=unicode("", "utf-8"),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  serialized_start=869,
-  serialized_end=926,
-)
-
 _MSG_CARDS = descriptor.Descriptor(
   name='Cards',
   full_name='message.Msg.Cards',
@@ -368,42 +337,35 @@ _MSG_CARDS = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='comments', full_name='message.Msg.Cards.comments', index=4,
-      number=5, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    descriptor.FieldDescriptor(
-      name='desc', full_name='message.Msg.Cards.desc', index=5,
+      name='desc', full_name='message.Msg.Cards.desc', index=4,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='tags', full_name='message.Msg.Cards.tags', index=6,
-      number=7, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      name='tags', full_name='message.Msg.Cards.tags', index=5,
+      number=7, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='users_id', full_name='message.Msg.Cards.users_id', index=7,
+      name='user_id', full_name='message.Msg.Cards.user_id', index=6,
       number=8, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='scripts_ids', full_name='message.Msg.Cards.scripts_ids', index=8,
-      number=9, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
+      name='scripts_ids', full_name='message.Msg.Cards.scripts_ids', index=7,
+      number=9, type=13, cpp_type=3, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='write', full_name='message.Msg.Cards.write', index=9,
+      name='write', full_name='message.Msg.Cards.write', index=8,
       number=10, type=13, cpp_type=3, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -412,14 +374,117 @@ _MSG_CARDS = descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_MSG_CARDS_COMMENT, ],
+  nested_types=[],
   enum_types=[
   ],
   options=None,
   is_extendable=False,
   extension_ranges=[],
   serialized_start=667,
-  serialized_end=926,
+  serialized_end=820,
+)
+
+_MSG_COMMENT = descriptor.Descriptor(
+  name='Comment',
+  full_name='message.Msg.Comment',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='id', full_name='message.Msg.Comment.id', index=0,
+      number=1, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='content', full_name='message.Msg.Comment.content', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='author_id', full_name='message.Msg.Comment.author_id', index=2,
+      number=3, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='timestamp', full_name='message.Msg.Comment.timestamp', index=3,
+      number=4, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='card_id', full_name='message.Msg.Comment.card_id', index=4,
+      number=5, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=822,
+  serialized_end=915,
+)
+
+_MSG_METADATA = descriptor.Descriptor(
+  name='Metadata',
+  full_name='message.Msg.Metadata',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='object_type', full_name='message.Msg.Metadata.object_type', index=0,
+      number=1, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='object_id', full_name='message.Msg.Metadata.object_id', index=1,
+      number=2, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='data_key', full_name='message.Msg.Metadata.data_key', index=2,
+      number=3, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='data_value', full_name='message.Msg.Metadata.data_value', index=3,
+      number=4, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=917,
+  serialized_end=1005,
 )
 
 _MSG_IDENT = descriptor.Descriptor(
@@ -437,8 +502,8 @@ _MSG_IDENT = descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     descriptor.FieldDescriptor(
-      name='hash', full_name='message.Msg.Ident.hash', index=1,
-      number=2, type=9, cpp_type=9, label=2,
+      name='password', full_name='message.Msg.Ident.password', index=1,
+      number=2, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=unicode("", "utf-8"),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -452,8 +517,8 @@ _MSG_IDENT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=928,
-  serialized_end=964,
+  serialized_start=1007,
+  serialized_end=1047,
 )
 
 _MSG_ERROR = descriptor.Descriptor(
@@ -479,8 +544,8 @@ _MSG_ERROR = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=966,
-  serialized_end=991,
+  serialized_start=1049,
+  serialized_end=1074,
 )
 
 _MSG_NOTIF = descriptor.Descriptor(
@@ -506,8 +571,8 @@ _MSG_NOTIF = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=993,
-  serialized_end=1013,
+  serialized_start=1076,
+  serialized_end=1096,
 )
 
 _MSG = descriptor.Descriptor(
@@ -597,22 +662,22 @@ _MSG = descriptor.Descriptor(
   ],
   extensions=[
   ],
-  nested_types=[_MSG_USERS, _MSG_COLUMNS, _MSG_PROJECTS, _MSG_CARDS, _MSG_IDENT, _MSG_ERROR, _MSG_NOTIF, ],
+  nested_types=[_MSG_USERS, _MSG_COLUMNS, _MSG_PROJECTS, _MSG_CARDS, _MSG_COMMENT, _MSG_METADATA, _MSG_IDENT, _MSG_ERROR, _MSG_NOTIF, ],
   enum_types=[
   ],
   options=None,
   is_extendable=False,
   extension_ranges=[],
   serialized_start=27,
-  serialized_end=1013,
+  serialized_end=1096,
 )
 
 _MSG_USERS.containing_type = _MSG;
 _MSG_COLUMNS.containing_type = _MSG;
 _MSG_PROJECTS.containing_type = _MSG;
-_MSG_CARDS_COMMENT.containing_type = _MSG_CARDS;
-_MSG_CARDS.fields_by_name['comments'].message_type = _MSG_CARDS_COMMENT
 _MSG_CARDS.containing_type = _MSG;
+_MSG_COMMENT.containing_type = _MSG;
+_MSG_METADATA.containing_type = _MSG;
 _MSG_IDENT.containing_type = _MSG;
 _MSG_ERROR.containing_type = _MSG;
 _MSG_NOTIF.containing_type = _MSG;
@@ -650,15 +715,21 @@ class Msg(message.Message):
   
   class Cards(message.Message):
     __metaclass__ = reflection.GeneratedProtocolMessageType
-    
-    class Comment(message.Message):
-      __metaclass__ = reflection.GeneratedProtocolMessageType
-      DESCRIPTOR = _MSG_CARDS_COMMENT
-      
-      # @@protoc_insertion_point(class_scope:message.Msg.Cards.Comment)
     DESCRIPTOR = _MSG_CARDS
     
     # @@protoc_insertion_point(class_scope:message.Msg.Cards)
+  
+  class Comment(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    DESCRIPTOR = _MSG_COMMENT
+    
+    # @@protoc_insertion_point(class_scope:message.Msg.Comment)
+  
+  class Metadata(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    DESCRIPTOR = _MSG_METADATA
+    
+    # @@protoc_insertion_point(class_scope:message.Msg.Metadata)
   
   class Ident(message.Message):
     __metaclass__ = reflection.GeneratedProtocolMessageType
