@@ -7,3 +7,13 @@ Reload postgresql with:
 /etc/init.d/postgresql restart
 
 And just execute initdb.sh with the user postgres.
+
+
+Client side:
+
+Before launch main.py, you must have Flask and Flask-SQLAlchemy on your system,
+
+on GNU/linux, you can use pip to get these packages:
+
+# pip install Flask
+# pip install Flask-SQLAlchemy
