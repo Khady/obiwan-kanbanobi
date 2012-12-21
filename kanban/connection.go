@@ -30,6 +30,12 @@ func read_int32(data []byte) (ret int32) {
 	return
 }
 
+func write_int32(nb int32) []byte {
+	buf := new(bytes.Buffer)
+	binary.Write(buf, binary.BigEndian, nb)
+	return buf.Bytes()
+}
+
 func testReponse(conn net.Conn) {
 	test := &message.Msg{
 		Target:    message.TARGET_IDENT.Enum(),
@@ -41,7 +47,8 @@ func testReponse(conn net.Conn) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Fprintf(conn, "%d%s", len(data), data)
+	conn.Write(write_int32(int32(len(data))))
+	fmt.Fprintf(conn, "%s", data)
 }
 
 func readMsg(conn net.Conn, msg []byte, length int) {
