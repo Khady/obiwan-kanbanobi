@@ -2,10 +2,12 @@ package main
 
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/protocole"
+	"bytes"
 	"code.google.com/p/goprotobuf/proto"
+	"encoding/binary"
 	"fmt"
+	"io"
 	"net"
-	"strconv"
 )
 
 func (c *connectionList) addConnection(conn net.Conn) {
@@ -22,22 +24,31 @@ func (c *connectionList) delConnection(conn net.Conn) {
 	}
 }
 
-func readMsg(msg []byte, length int) {
-	// test := &message.Msg{
-	// Target:    message.TARGET_IDENT.Enum(),
-	// Command:   message.CMD_CONNECT.Enum(),
-	// AuthorId:  proto.Uint32(0),
-	// SessionId: proto.String(""),
-	// }
-	// data, err := proto.Marshal(test)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Fprintf(conn, "%d%s", len(data), data)
+func read_int32(data []byte) (ret int32) {
+	buf := bytes.NewBuffer(data)
+	binary.Read(buf, binary.BigEndian, &ret)
+	return
+}
+
+func testReponse(conn net.Conn) {
+	test := &message.Msg{
+		Target:    message.TARGET_IDENT.Enum(),
+		Command:   message.CMD_CONNECT.Enum(),
+		AuthorId:  proto.Uint32(1),
+		SessionId: proto.String("superchainedesession"),
+	}
+	data, err := proto.Marshal(test)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Fprintf(conn, "%d%s", len(data), data)
+}
+
+func readMsg(conn net.Conn, msg []byte, length int) {
 	data := &message.Msg{}
 	err := proto.Unmarshal(msg[0:length], data)
 	if err != nil {
-		LOGGER.Print("Impossible to unmarshal the message", msg)
+		LOGGER.Print("Impossible to unmarshal the message", msg[0:length])
 		return
 	}
 	switch *data.Target {
@@ -53,6 +64,7 @@ func readMsg(msg []byte, length int) {
 		LOGGER.Print("read TARGET_ADMIN message")
 	case message.TARGET_IDENT:
 		LOGGER.Print("read TARGET_IDENT message")
+		testReponse(conn)
 	case message.TARGET_NOTIF:
 		LOGGER.Print("read TARGET_NOTIF message")
 	case message.TARGET_METADATA:
@@ -71,20 +83,22 @@ func handleConnection(conn net.Conn) {
 	defer LOGGER.Print("Connection close")
 	for {
 		if header {
-			buf = make([]byte, 8)
+			buf = make([]byte, 4)
 		} else {
 			buf = make([]byte, size)
 		}
 		n, err := conn.Read(buf[0:])
-		if err != nil {
-			LOGGER.Print("get client data error: ", err)
+		if err == io.EOF {
 			return
 		}
+		if err != nil {
+			LOGGER.Print("get client data error: ", err)
+		}
 		if header {
-			size, _ = strconv.Atoi(string(buf[0 : n-1]))
+			size = int(read_int32(buf))
 			header = false
 		} else {
-			readMsg(buf, n)
+			readMsg(conn, buf, n)
 			header = true
 		}
 	}
