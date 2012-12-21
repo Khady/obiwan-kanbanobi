@@ -22,6 +22,46 @@ func (c *connectionList) delConnection(conn net.Conn) {
 	}
 }
 
+func readMsg(msg []byte, length int) {
+	// test := &message.Msg{
+	// Target:    message.TARGET_IDENT.Enum(),
+	// Command:   message.CMD_CONNECT.Enum(),
+	// AuthorId:  proto.Uint32(0),
+	// SessionId: proto.String(""),
+	// }
+	// data, err := proto.Marshal(test)
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// fmt.Fprintf(conn, "%d%s", len(data), data)
+	data := &message.Msg{}
+	err := proto.Unmarshal(msg[0:length], data)
+	if err != nil {
+		LOGGER.Print("Impossible to unmarshal the message", msg)
+		return
+	}
+	switch *data.Target {
+	case message.TARGET_USERS:
+		LOGGER.Print("read TARGET_USERS message")
+	case message.TARGET_COLUMNS:
+		LOGGER.Print("read TARGET_COLUMNS message")
+	case message.TARGET_PROJECTS:
+		LOGGER.Print("read TARGET_PROJECTS message")
+	case message.TARGET_CARDS:
+		LOGGER.Print("read TARGET_CARDS message")
+	case message.TARGET_ADMIN:
+		LOGGER.Print("read TARGET_ADMIN message")
+	case message.TARGET_IDENT:
+		LOGGER.Print("read TARGET_IDENT message")
+	case message.TARGET_NOTIF:
+		LOGGER.Print("read TARGET_NOTIF message")
+	case message.TARGET_METADATA:
+		LOGGER.Print("read TARGET_METADATA message")
+	default:
+		LOGGER.Print("Invalid TARGET")
+	}
+}
+
 func handleConnection(conn net.Conn) {
 	header := true
 	var size int
@@ -42,27 +82,11 @@ func handleConnection(conn net.Conn) {
 		}
 		if header {
 			size, _ = strconv.Atoi(string(buf[0 : n-1]))
-			fmt.Println("taille recup", size)
-			// size, _ = strconv.Atoi(string(buf[0:n]))
-			// fmt.Println("et donc ca fait une size de", size)
 			header = false
 		} else {
-			test := &message.Msg{
-				Target:    message.TARGET_IDENT.Enum(),
-				Command:   message.CMD_CONNECT.Enum(),
-				AuthorId:  proto.Uint32(0),
-				SessionId: proto.String(""),
-			}
-			data, err := proto.Marshal(test)
-			if err != nil {
-				fmt.Println(err)
-			}
-			// constituer une eventuelle reponse
-			fmt.Fprintf(conn, "%d%s", len(data), data)
+			readMsg(buf, n)
 			header = true
 		}
-		fmt.Println("size", size, ", len", n)
-		fmt.Printf("%#v\n", buf[0:n])
 	}
 }
 
