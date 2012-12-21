@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"net"
 	"os"
 	"runtime"
 )
@@ -19,6 +20,10 @@ var VERBOSE = flag.Bool("v", false, "Verbose mode")
 
 var LOGGER *log.Logger
 var LOG_FLAGS = log.LstdFlags
+
+type connectionList []net.Conn
+
+var CONNECTION_LIST connectionList
 
 var (
 	info_connect_bdd string // postgres://kanban:mdp@127.0.0.1:5432/kanban
