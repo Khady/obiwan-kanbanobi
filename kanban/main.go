@@ -66,7 +66,7 @@ func main() {
 		fmt.Println("Error with the configuration file:", err)
 		return
 	}
-	f, err := os.OpenFile(*LOG_FILE, os.O_CREATE | os.O_WRONLY | os.O_APPEND, 0644)
+	f, err := os.OpenFile(*LOG_FILE, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		fmt.Println("Impossible to open log file")
 		return
