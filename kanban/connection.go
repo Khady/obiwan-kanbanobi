@@ -2,7 +2,7 @@ package main
 
 import (
 	"code.google.com/p/goprotobuf/proto"
-	"obi-wan-kanbanobi/protocole"
+	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/protocole"
 	"fmt"
 	"net"
 	"strconv"
