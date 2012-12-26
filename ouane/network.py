@@ -24,7 +24,7 @@ class Network(threading.Thread):
         self.connection = self.s
         self.readStack = []
         self.writeStack = []
-        self.readSize = 4096
+        self.readSize = 0
 
     def getReadedStack():
         return self.readStack
@@ -34,7 +34,6 @@ class Network(threading.Thread):
 
     def send(self):
         for l in self.writeStack:
-            print len(l)
             self.connection.send(struct.pack("!I", len(l)))
             self.connection.send(l)
         self.writeStack = []
@@ -45,6 +44,7 @@ class Network(threading.Thread):
             print self.readSize
         else:
             self.readStack.append(self.connection.recv(self.readSize))
+            print self.readStack
 
     def run(self):
         while 1:
