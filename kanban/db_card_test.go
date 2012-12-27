@@ -18,9 +18,9 @@ func Test_UpdateCard(t *testing.T) {
 		2,
 		2,
 		[]string{"tag1", "tag2", "tag3"},
-		[]int{1, 2, 3},
 		1,
-		[]int{7, 8, 9},
+		[]uint32{1, 2, 3},
+		[]uint32{7, 8, 9},
 	}
 	if err := card.Add(dbPool); err != nil {
 		t.Error(err)
