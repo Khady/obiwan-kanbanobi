@@ -8,7 +8,7 @@ CREATE TABLE cards (
     column_id integer NOT NULL,
     project_id integer NOT NULL,
     tags text NOT NULL,
-    user_id text NOT NULL,
+    user_id integer NOT NULL,
     scripts_id text NOT NULL,
     write text NOT NULL
 );

@@ -344,7 +344,7 @@ type Msg_Cards struct {
 	Name             *string  `protobuf:"bytes,4,req,name=name" json:"name,omitempty"`
 	Desc             *string  `protobuf:"bytes,6,opt,name=desc" json:"desc,omitempty"`
 	Tags             []string `protobuf:"bytes,7,rep,name=tags" json:"tags,omitempty"`
-	UserId           *string  `protobuf:"bytes,8,opt,name=user_id" json:"user_id,omitempty"`
+	UserId           *uint32  `protobuf:"varint,8,opt,name=user_id" json:"user_id,omitempty"`
 	ScriptsIds       []uint32 `protobuf:"varint,9,rep,name=scripts_ids" json:"scripts_ids,omitempty"`
 	Write            []uint32 `protobuf:"varint,10,rep,name=write" json:"write,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
@@ -389,11 +389,11 @@ func (this *Msg_Cards) GetDesc() string {
 	return ""
 }
 
-func (this *Msg_Cards) GetUserId() string {
+func (this *Msg_Cards) GetUserId() uint32 {
 	if this != nil && this.UserId != nil {
 		return *this.UserId
 	}
-	return ""
+	return 0
 }
 
 type Msg_Comment struct {

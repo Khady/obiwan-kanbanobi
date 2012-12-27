@@ -4,18 +4,20 @@ import (
 	"strconv"
 )
 
-func SString_of_SInt(s []int) []string {
+func SString_of_SUInt32(s []uint32) []string {
 	sstring := make([]string, len(s))
 	for index, elem := range s {
-		sstring[index] = strconv.Itoa(elem)
+		sstring[index] = strconv.FormatUint(uint64(elem), 10)
 	}
 	return sstring
 }
 
-func SInt_of_SString(s []string) []int {
-	sint := make([]int, len(s))
+func SUInt32_of_SString(s []string) []uint32 {
+	suint := make([]uint32, len(s))
+	var res uint64
 	for index, elem := range s {
-		sint[index], _ = strconv.Atoi(elem)
+		res, _ = strconv.ParseUint(elem, 10, 0)
+		suint[index] = uint32(res)
 	}
-	return sint
+	return suint
 }

@@ -3,9 +3,9 @@ package main
 type Column struct {
 	Id         int
 	Name       string
-	Project_id int
+	Project_id uint32
 	Content    string
 	Tags       []string
-	Scripts_id []int
-	Write      []int
+	Scripts_id []uint32
+	Write      []uint32
 }

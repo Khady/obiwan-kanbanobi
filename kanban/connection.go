@@ -36,18 +36,26 @@ func write_int32(nb int32) []byte {
 	return buf.Bytes()
 }
 
-func testReponse(conn net.Conn) {
+// Cette fonction doit gerer l'identification d'un utilisateur (verifier qu'il n'est pas deja identifie,
+// que son nom et son mdp sont valides...)
+// Pour le moment, un message bateau est envoye pour dire que tout s'est bien passe
+// Il faudrait que cette fonction mette aussi a jour un tableau avec des duo user/connexion pour les moments ou il
+// faudra envoyer des messages a tout le monde
+func MsgIdent(conn net.Conn, msg *message.Msg) {
 	test := &message.Msg{
 		Target:    message.TARGET_IDENT.Enum(),
 		Command:   message.CMD_CONNECT.Enum(),
 		AuthorId:  proto.Uint32(1),
 		SessionId: proto.String("superchainedesession"),
+		Ident: &message.Msg_Ident{
+			Login: proto.String(*msg.Ident.Login),
+		},
 	}
 	data, err := proto.Marshal(test)
 	if err != nil {
 		fmt.Println(err)
 	}
-	LOGGER.Print("Testreponse", len(data), data)
+	LOGGER.Print("MsgIdent", len(data), data)
 	conn.Write(write_int32(int32(len(data))))
 	conn.Write(data)
 }
@@ -68,11 +76,12 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		LOGGER.Print("read TARGET_PROJECTS message")
 	case message.TARGET_CARDS:
 		LOGGER.Print("read TARGET_CARDS message")
+		MsgCard(conn, data)
 	case message.TARGET_ADMIN:
 		LOGGER.Print("read TARGET_ADMIN message")
 	case message.TARGET_IDENT:
 		LOGGER.Print("read TARGET_IDENT message")
-		testReponse(conn)
+		MsgIdent(conn, data)
 	case message.TARGET_NOTIF:
 		LOGGER.Print("read TARGET_NOTIF message")
 	case message.TARGET_METADATA:

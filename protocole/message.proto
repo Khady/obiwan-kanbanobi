@@ -63,7 +63,7 @@ message Msg {
     // repeated Comment	comments = 5; // repeated = dynamically sized array of Comments
     optional string	desc = 6;
     repeated string	tags = 7;
-    optional string	user_id = 8; // ID of the card author
+    optional uint32	user_id = 8; // ID of the card author
     repeated uint32	scripts_ids = 9; // IDs of the scripts attached to the card
     repeated uint32	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
   }

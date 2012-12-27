@@ -11,12 +11,11 @@ func (c *Card) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	tags := strings.Join(c.Tags, " ")
-	uid := strings.Join(SString_of_SInt(c.User_id), " ")
-	sid := strings.Join(SString_of_SInt(c.Scripts_id), " ")
-	write := strings.Join(SString_of_SInt(c.Write), " ")
+	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), " ")
+	write := strings.Join(SString_of_SUInt32(c.Write), " ")
 	_, err := db.Exec(`INSERT INTO cards(name, content, column_id, project_id, tags, user_id, scripts_id, write)
 VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
-		c.Name, c.Content, c.Column_id, c.Project_id, tags, uid, sid, write)
+		c.Name, c.Content, c.Column_id, c.Project_id, tags, c.User_id, sid, write)
 	return err
 }
 
@@ -31,12 +30,11 @@ func (c *Card) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	tags := strings.Join(c.Tags, " ")
-	uid := strings.Join(SString_of_SInt(c.User_id), " ")
-	sid := strings.Join(SString_of_SInt(c.Scripts_id), " ")
-	write := strings.Join(SString_of_SInt(c.Write), " ")
+	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), " ")
+	write := strings.Join(SString_of_SUInt32(c.Write), " ")
 	_, err := db.Exec(`update cards set name = $1, content = $2, column_id = $3, project_id = $4,
 tags = $5, user_id = $6, scripts_id = $7, write = $8 where id = $9`,
-		c.Name, c.Content, c.Column_id, c.Project_id, tags, uid, sid, write, c.Id)
+		c.Name, c.Content, c.Column_id, c.Project_id, tags, c.User_id, sid, write, c.Id)
 	return err
 }
 
@@ -76,45 +74,45 @@ func (c *Card) GetTags(p *ConnectionPoolWrapper) ([]string, error) {
 	return getStringSliceCell(p, "cards", "tags", c.Id)
 }
 
-func (c *Card) UpdateWrite(p *ConnectionPoolWrapper, write []int) error {
-	return updateIntSliceCell(p, "cards", "write", write, c.Id)
+func (c *Card) UpdateWrite(p *ConnectionPoolWrapper, write []uint32) error {
+	return updateUInt32SliceCell(p, "cards", "write", write, c.Id)
 }
 
-func (c *Card) GetWrite(p *ConnectionPoolWrapper) ([]int, error) {
-	return getIntSliceCell(p, "cards", "write", c.Id)
+func (c *Card) GetWrite(p *ConnectionPoolWrapper) ([]uint32, error) {
+	return getUInt32SliceCell(p, "cards", "write", c.Id)
 }
 
-func (c *Card) UpdateScript(p *ConnectionPoolWrapper, script []int) error {
-	return updateIntSliceCell(p, "cards", "scripts_id", script, c.Id)
+func (c *Card) UpdateScript(p *ConnectionPoolWrapper, script []uint32) error {
+	return updateUInt32SliceCell(p, "cards", "scripts_id", script, c.Id)
 }
 
-func (c *Card) GetScript(p *ConnectionPoolWrapper) ([]int, error) {
-	return getIntSliceCell(p, "cards", "scripts_id", c.Id)
+func (c *Card) GetScript(p *ConnectionPoolWrapper) ([]uint32, error) {
+	return getUInt32SliceCell(p, "cards", "scripts_id", c.Id)
 }
 
 // Ajoute des droits de modifications sur la carte a une personne.
 // Modifie la chaine deja existante pour y ajouer l'utilisateur correctement
 // Creation de la chaine si elle n'existait pas deja
-func (c *Card) AddWrite(p *ConnectionPoolWrapper, id int) error {
+func (c *Card) AddWrite(p *ConnectionPoolWrapper, id uint32) error {
 	return addIdInCell(p, id, c.Id, "cards", "write")
 }
 
 // Suppression d'un utilisateur de la chaine de write
 // Ne renvoie pas d'erreur si l'utilisateur n'etait pas present
-func (c *Card) DelWrite(p *ConnectionPoolWrapper, id int) error {
+func (c *Card) DelWrite(p *ConnectionPoolWrapper, id uint32) error {
 	return delIdInCell(p, id, c.Id, "cards", "write")
 }
 
 // Ajoute un script sur la carte.
 // Modifie la chaine deja existante pour y ajouer le script correctement
 // Creation de la chaine si elle n'existait pas deja
-func (c *Card) AddScript(p *ConnectionPoolWrapper, id int) error {
+func (c *Card) AddScript(p *ConnectionPoolWrapper, id uint32) error {
 	return addIdInCell(p, id, c.Id, "cards", "scripts_id")
 }
 
 // Suppression d'un script de la chaine de write
 // Ne renvoie pas d'erreur si l'script n'etait pas present
-func (c *Card) DelScript(p *ConnectionPoolWrapper, id int) error {
+func (c *Card) DelScript(p *ConnectionPoolWrapper, id uint32) error {
 	return delIdInCell(p, id, c.Id, "cards", "scripts_id")
 
 }
