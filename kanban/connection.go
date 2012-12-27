@@ -1,7 +1,7 @@
 package main
 
 import (
-	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/protocole"
+	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
 	"bytes"
 	"code.google.com/p/goprotobuf/proto"
 	"encoding/binary"
@@ -24,9 +24,9 @@ func (c *connectionList) delConnection(conn net.Conn) {
 	}
 }
 
-func read_int32(data []byte) (ret int32) {
+func read_int32(data []byte) (ret int32, err error) {
 	buf := bytes.NewBuffer(data)
-	binary.Read(buf, binary.BigEndian, &ret)
+	err = binary.Read(buf, binary.BigEndian, &ret)
 	return
 }
 
@@ -47,8 +47,9 @@ func testReponse(conn net.Conn) {
 	if err != nil {
 		fmt.Println(err)
 	}
+	LOGGER.Print("Testreponse", len(data), data)
 	conn.Write(write_int32(int32(len(data))))
-	fmt.Fprintf(conn, "%s", data)
+	conn.Write(data)
 }
 
 func readMsg(conn net.Conn, msg []byte, length int) {
@@ -102,7 +103,12 @@ func handleConnection(conn net.Conn) {
 			LOGGER.Print("get client data error: ", err)
 		}
 		if header {
-			size = int(read_int32(buf))
+			tmp_size, err := read_int32(buf)
+			if err != nil {
+				LOGGER.Print("Impossible to read size", err)
+				continue
+			}
+			size = int(tmp_size) // I should put a check on the size here to raise an error if the size is huge
 			header = false
 		} else {
 			readMsg(conn, buf, n)
