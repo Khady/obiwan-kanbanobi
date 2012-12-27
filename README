@@ -4,13 +4,13 @@ Master Kanban
 Build Requirements
 ==================
 
- * Go >= 1.0 <http://golang.org>
- * Goprotobuf <http://code.google.com/p/goprotobuf/>
- * pq <http://github.com/bmizerany/pq>
- * goconfig <http://github.com/kless/goconfig>
+ * Go >= 1.0        <http://golang.org>
+ * Goprotobuf       <http://code.google.com/p/goprotobuf/>
+ * pq               <http://github.com/bmizerany/pq>
+ * goconfig         <http://github.com/kless/goconfig>
 
- * Python <http://python.org>
- * Flask <http://flask.pocoo.org/>
+ * Python           <http://python.org>
+ * Flask            <http://flask.pocoo.org/>
  * Flask-SQLAlchemy <http://packages.python.org/Flask-SQLAlchemy/>
 
 Run Requirements
