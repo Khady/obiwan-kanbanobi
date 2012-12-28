@@ -20,7 +20,8 @@ enum CMD {
   CONNECT       = 6;
   DISCONNECT    = 7;
   ERROR		= 8;
-  NONE          = 9;
+  SUCCES        = 9;
+  NONE          = 10;
 };
 
 message Msg {

@@ -2,9 +2,7 @@ package main
 
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
-	"bytes"
 	"code.google.com/p/goprotobuf/proto"
-	"encoding/binary"
 	"fmt"
 	"io"
 	"net"
@@ -22,18 +20,6 @@ func (c *connectionList) delConnection(conn net.Conn) {
 			CONNECTION_LIST = CONNECTION_LIST[:len(CONNECTION_LIST)-1]
 		}
 	}
-}
-
-func read_int32(data []byte) (ret int32, err error) {
-	buf := bytes.NewBuffer(data)
-	err = binary.Read(buf, binary.BigEndian, &ret)
-	return
-}
-
-func write_int32(nb int32) []byte {
-	buf := new(bytes.Buffer)
-	binary.Write(buf, binary.BigEndian, nb)
-	return buf.Bytes()
 }
 
 // Cette fonction doit gerer l'identification d'un utilisateur (verifier qu'il n'est pas deja identifie,

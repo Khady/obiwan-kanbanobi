@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/binary"
 	"strconv"
 )
 
@@ -20,4 +22,18 @@ func SUInt32_of_SString(s []string) []uint32 {
 		suint[index] = uint32(res)
 	}
 	return suint
+}
+
+// Lecture d'un int32 depuis du binaire. Permet de recuperer la taille de la structure a lire sur le reseau
+func read_int32(data []byte) (ret int32, err error) {
+	buf := bytes.NewBuffer(data)
+	err = binary.Read(buf, binary.BigEndian, &ret)
+	return
+}
+
+// Ecriture binaire d'un int32 pour l'envoyer sur le reseau.
+func write_int32(nb int32) []byte {
+	buf := new(bytes.Buffer)
+	binary.Write(buf, binary.BigEndian, nb)
+	return buf.Bytes()
 }

@@ -78,19 +78,21 @@ const (
 	CMD_CONNECT    CMD = 6
 	CMD_DISCONNECT CMD = 7
 	CMD_ERROR      CMD = 8
-	CMD_NONE       CMD = 9
+	CMD_SUCCES     CMD = 9
+	CMD_NONE       CMD = 10
 )
 
 var CMD_name = map[int32]string{
-	1: "CREATE",
-	2: "MODIFY",
-	3: "DELETE",
-	4: "GET",
-	5: "MOVE",
-	6: "CONNECT",
-	7: "DISCONNECT",
-	8: "ERROR",
-	9: "NONE",
+	1:  "CREATE",
+	2:  "MODIFY",
+	3:  "DELETE",
+	4:  "GET",
+	5:  "MOVE",
+	6:  "CONNECT",
+	7:  "DISCONNECT",
+	8:  "ERROR",
+	9:  "SUCCES",
+	10: "NONE",
 }
 var CMD_value = map[string]int32{
 	"CREATE":     1,
@@ -101,7 +103,8 @@ var CMD_value = map[string]int32{
 	"CONNECT":    6,
 	"DISCONNECT": 7,
 	"ERROR":      8,
-	"NONE":       9,
+	"SUCCES":     9,
+	"NONE":       10,
 }
 
 func (x CMD) Enum() *CMD {
