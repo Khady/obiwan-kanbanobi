@@ -121,6 +121,9 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			},
 		}
 	} else {
 		// Envoyer un message de succes ici
@@ -129,9 +132,6 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-			},
 		}
 	}
 	data, err := proto.Marshal(answer)
@@ -155,6 +155,9 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			},
 		}
 	} else {
 		// Envoyer un message de succes ici
@@ -164,7 +167,7 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Cards: &message.Msg_Cards{
-				Id:         proto.Uint32(card.Id), // remplacer par le vrai code d'erreur ici
+				Id:         proto.Uint32(card.Id),
 				ProjectId:  proto.Uint32(card.Project_id),
 				ColumnId:   proto.Uint32(card.Column_id),
 				Name:       proto.String(card.Name),
