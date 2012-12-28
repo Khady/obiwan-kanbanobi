@@ -15,7 +15,7 @@ func db_open(url string) (*sql.DB, error) {
 	return sql.Open("postgres", conn_str)
 }
 
-func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, id int) ([]uint32, error) {
+func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, id uint32) ([]uint32, error) {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	var cell string
@@ -28,7 +28,7 @@ func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	return cell_ids, nil
 }
 
-func updateUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []uint32, id int) error {
+func updateUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []uint32, id uint32) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	new_cell := strings.Join(SString_of_SUInt32(cell), " ")
@@ -36,7 +36,7 @@ func updateUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_na
 	return err
 }
 
-func getStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, id int) ([]string, error) {
+func getStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, id uint32) ([]string, error) {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	var cell string
@@ -49,7 +49,7 @@ func getStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	return cell_ids, nil
 }
 
-func updateStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []string, id int) error {
+func updateStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []string, id uint32) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	new_cell := strings.Join(cell, " ")
@@ -57,7 +57,7 @@ func updateStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_na
 	return err
 }
 
-func addIdInCell(p *ConnectionPoolWrapper, id uint32, elem_id int, table string, column string) error {
+func addIdInCell(p *ConnectionPoolWrapper, id uint32, elem_id uint32, table string, column string) error {
 	cell_ids, err := getUInt32SliceCell(p, table, column, elem_id)
 	if err != nil {
 		return err
@@ -70,7 +70,7 @@ func addIdInCell(p *ConnectionPoolWrapper, id uint32, elem_id int, table string,
 	return err
 }
 
-func delIdInCell(p *ConnectionPoolWrapper, id uint32, elem_id int, table string, column string) error {
+func delIdInCell(p *ConnectionPoolWrapper, id uint32, elem_id uint32, table string, column string) error {
 	cell_ids, err := getUInt32SliceCell(p, table, column, elem_id)
 	if err != nil {
 		return err

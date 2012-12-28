@@ -38,6 +38,19 @@ tags = $5, user_id = $6, scripts_id = $7, write = $8 where id = $9`,
 	return err
 }
 
+func (c *Card) Get(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	var tags, scripts, write string
+	row := db.QueryRow("select * from cards where id = $1", c.Id)
+	err := row.Scan(&c.Id, &c.Name, &c.Content, &c.Column_id, &c.Project_id, &tags, &c.User_id,
+		&scripts, &write)
+	c.Tags = strings.Split(tags, " ")
+	c.Scripts_id = SUInt32_of_SString(strings.Split(scripts, " "))
+	c.Write = SUInt32_of_SString(strings.Split(write, " "))
+	return err
+}
+
 func (c *Card) ChangeColumn_id(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
