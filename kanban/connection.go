@@ -58,6 +58,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		LOGGER.Print("read TARGET_USERS message")
 	case message.TARGET_COLUMNS:
 		LOGGER.Print("read TARGET_COLUMNS message")
+		MsgColumn(conn, data)
 	case message.TARGET_PROJECTS:
 		LOGGER.Print("read TARGET_PROJECTS message")
 	case message.TARGET_CARDS:

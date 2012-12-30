@@ -41,6 +41,18 @@ func (c *Column) Update(p *ConnectionPoolWrapper) error {
 	return err
 }
 
+func (c *Column) Get(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	var tags, scripts, write string
+	row := db.QueryRow("select * from columns where id = $1", c.Id)
+	err := row.Scan(&c.Id, &c.Name, &c.Project_id, &c.Content, &tags, &scripts, &write)
+	c.Tags = strings.Split(tags, " ")
+	c.Scripts_id = SUInt32_of_SString(strings.Split(scripts, " "))
+	c.Write = SUInt32_of_SString(strings.Split(write, " "))
+	return err
+}
+
 func (c *Column) AddScript(p *ConnectionPoolWrapper) error {
 	return nil
 }

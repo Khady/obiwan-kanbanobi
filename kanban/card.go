@@ -69,7 +69,7 @@ func MsgCardCreate(conn net.Conn, msg *message.Msg) {
 
 func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 	card := &Card{
-		0,
+		*msg.Cards.Id,
 		*msg.Cards.Name,
 		*msg.Cards.Desc,
 		*msg.Cards.ColumnId,
@@ -111,7 +111,7 @@ func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 
 func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 	card := &Card{
-		Id: 0,
+		Id: *msg.Cards.Id,
 	}
 	var answer *message.Msg
 	if err := card.Del(dbPool); err != nil {
@@ -145,7 +145,7 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 
 func MsgCardGet(conn net.Conn, msg *message.Msg) {
 	card := &Card{
-		Id: 0,
+		Id: *msg.Cards.Id,
 	}
 	var answer *message.Msg
 	if err := card.Get(dbPool); err != nil {
@@ -201,9 +201,6 @@ func MsgCard(conn net.Conn, msg *message.Msg) {
 	case message.CMD_GET:
 		MsgCardGet(conn, msg)
 	case message.CMD_MOVE:
-	case message.CMD_CONNECT:
-	case message.CMD_DISCONNECT:
-	case message.CMD_ERROR:
-	case message.CMD_NONE:
+		MsgCardUpdate(conn, msg)
 	}
 }
