@@ -50,7 +50,8 @@
   <div class="section" id="protocole">
 <span id="id1"></span><h1>Protocole<a class="headerlink" href="#protocole" title="Permalink to this headline">¶</a></h1>
 <p>Ceci est le protocole utilisé pour faire communiquer notre serveur et notre client.</p>
-<p>Ce protocole utilise les <a class="reference external" href="http://code.google.com/p/protobuf/">Protobuf</a> pour communiquer.</p>
+<p>Ce protocole utilise les <a class="reference external" href="http://code.google.com/p/protobuf/">Protobuf</a> pour communiquer. Il le fait sur des sockets en tcp.</p>
+<p>Chaque client ouvre une socket pour communiquer mais peut parler au nom de plusieurs utilisateurs. Ce qui permet par exemple a un client web de se connecter une seule fois au serveur, mais de gerer plusieurs utilisateurs qui se connectent en parallele.</p>
 <div class="section" id="informations-de-base">
 <h2>Informations de base<a class="headerlink" href="#informations-de-base" title="Permalink to this headline">¶</a></h2>
 <p>Chaque message est précédé d&#8217;un int décrivant la taille du message à lire.</p>
@@ -100,6 +101,47 @@
 </li>
 </ul>
 </div>
+<div class="section" id="description-des-communications">
+<h2>Description des communications<a class="headerlink" href="#description-des-communications" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="authentification">
+<h3>Authentification<a class="headerlink" href="#authentification" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Message initial</li>
+</ol>
+<p>Le premier message attendu de la part d&#8217;un utilisateur est le message d&#8217;authentification. Tous les messages du client avant authentification sont ignores.</p>
+<p>Le message a envoyer doit etre de type Msg et contenir un message de type Ident. Les variables target et command doivent avoir les valeurs IDENT et CONNECT.</p>
+<p>L&#8217;author_id et le session_id sont inconnus a ce moment la puisque c&#8217;est le serveur qui les attribue. Leurs valeurs sont ignorees.</p>
+<p>Le message Ident doit contenir le login et le password de l&#8217;utilisateur. Le password est envoye en clair sur le reseau, mais il est stocke de maniere chiffre et n&#8217;est pas garde en memoire une fois l&#8217;authentification realisee.</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">IDENT</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">CONNECT</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span>    <span class="n">Message</span> <span class="n">Ident</span> <span class="p">{</span>
+    <span class="na">login</span> <span class="o">=</span> <span class="n">pseudo</span><span class="p">;</span>
+    <span class="na">password</span> <span class="o">=</span> <span class="n">password</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Reponse positive</li>
+<li>Erreur</li>
+</ol>
+<p>Cette erreur est renvoye sur une mauvaise authentification ou quand un message est envoye par une personne non authentifie.</p>
+</div>
+<div class="section" id="cartes">
+<h3>Cartes<a class="headerlink" href="#cartes" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="colonnes">
+<h3>Colonnes<a class="headerlink" href="#colonnes" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="erreurs">
+<h3>Erreurs<a class="headerlink" href="#erreurs" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 </div>
 
 
@@ -112,6 +154,13 @@
   <ul>
 <li><a class="reference internal" href="#">Protocole</a><ul>
 <li><a class="reference internal" href="#informations-de-base">Informations de base</a></li>
+<li><a class="reference internal" href="#description-des-communications">Description des communications</a><ul>
+<li><a class="reference internal" href="#authentification">Authentification</a></li>
+<li><a class="reference internal" href="#cartes">Cartes</a></li>
+<li><a class="reference internal" href="#colonnes">Colonnes</a></li>
+<li><a class="reference internal" href="#erreurs">Erreurs</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

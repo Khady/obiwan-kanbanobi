@@ -1,16 +1,19 @@
-.. highlight:: c
+.. highlight:: rest
 
 .. _protocole:
 
+=========
 Protocole
 =========
 
 Ceci est le protocole utilisé pour faire communiquer notre serveur et notre client.
 
-Ce protocole utilise les Protobuf_ pour communiquer.
+Ce protocole utilise les Protobuf_ pour communiquer. Il le fait sur des sockets en tcp.
+
+Chaque client ouvre une socket pour communiquer mais peut parler au nom de plusieurs utilisateurs. Ce qui permet par exemple a un client web de se connecter une seule fois au serveur, mais de gerer plusieurs utilisateurs qui se connectent en parallele.
 
 Informations de base
---------------------
+====================
 
 Chaque message est précédé d'un int décrivant la taille du message à lire.
 
@@ -56,26 +59,47 @@ Tous les messages entre le serveur et les clients sont de type Msg et doivent co
           required string	session_id	= 4;	// id de session pour valider l'auth, fourni par le serveur
        }
 
-.. Ouverture d'une socket par client (client logiciel).
-.. Chaque client peut parler au nom de plusieurs utilisateurs (ou author).
+Description des communications
+==============================
 
-.. Tout message est precede d'un unsigned int pour preciser la taille du message qui va suivre.
+Authentification
+----------------
+
+1. Message initial
+
+Le premier message attendu de la part d'un utilisateur est le message d'authentification. Tous les messages du client avant authentification sont ignores.
+
+Le message a envoyer doit etre de type Msg et contenir un message de type Ident. Les variables target et command doivent avoir les valeurs IDENT et CONNECT.
+
+L'author_id et le session_id sont inconnus a ce moment la puisque c'est le serveur qui les attribue. Leurs valeurs sont ignorees.
+
+Le message Ident doit contenir le login et le password de l'utilisateur. Le password est envoye en clair sur le reseau, mais il est stocke de maniere chiffre et n'est pas garde en memoire une fois l'authentification realisee.
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = IDENT;
+           command = CONNECT;
+           author_id = -1
+           session_id = "";
+           Message Ident {
+           login = pseudo;
+           password = password;
+           }
+       }
+
+2. Reponse positive
+
+3. Erreur
+
+Cette erreur est renvoye sur une mauvaise authentification ou quand un message est envoye par une personne non authentifie.
 
 .. - Identitifaction
 .. Client -> Premier message d'identification a la connexion
 .. Le author_id n'est pas connu au moment de l'identification, il importe donc peu
 .. Idem pour le session_id
 .. le login et le password sont en clair
-.. Msg {
-..     target = IDENT;
-..     command = CONNECT;
-..     author_id = -1
-..     session_id = "";
-..     Message Ident {
-..     login = pseudo;
-..     password = password;
-..     }
-.. }
 
 .. Serveur -> Deux reponses possibles selon la validite de l'ident
 .. En cas d'erreur:
@@ -96,6 +120,21 @@ Tous les messages entre le serveur et les clients sont de type Msg et doivent co
 ..     author_id = id calcule par le serveur
 ..     session_id = session_id calcule par le serveur
 .. }
+
+
+Cartes
+------
+
+Colonnes
+--------
+
+Erreurs
+-------
+
+
+
+
+.. Tout message est precede d'un unsigned int pour preciser la taille du message qui va suivre.
 
 .. - Creation de compte
 ..   target = IDENT;

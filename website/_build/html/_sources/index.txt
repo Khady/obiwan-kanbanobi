@@ -24,7 +24,7 @@ La communication entre le client et le serveur se fait avec des Protobuf_ en tcp
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    protocole.rst
 
