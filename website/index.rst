@@ -28,13 +28,6 @@ Contents:
 
    protocole.rst
 
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
 .. _Kanban: http://fr.wikipedia.org/wiki/Kanban
 .. _Go: http://golang.org
 .. _Postgresql: http://www.postgresql.org/

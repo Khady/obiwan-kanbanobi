@@ -91,9 +91,24 @@ Le message Ident doit contenir le login et le password de l'utilisateur. Le pass
 
 2. Reponse positive
 
+
+
 3. Erreur
 
 Cette erreur est renvoye sur une mauvaise authentification ou quand un message est envoye par une personne non authentifie.
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = ERROR;
+           command = CONNECT;
+           author_id = -1
+           session_id = "";
+           Message Error {
+               error_id = error_connexion_id; // Cette erreur provient de la l'enum decrit dans cette page
+           }
+       }
 
 .. - Identitifaction
 .. Client -> Premier message d'identification a la connexion
@@ -103,15 +118,7 @@ Cette erreur est renvoye sur une mauvaise authentification ou quand un message e
 
 .. Serveur -> Deux reponses possibles selon la validite de l'ident
 .. En cas d'erreur:
-.. Msg {
-..     target = ERROR;
-..     command = CONNECT;
-..     author_id = -1
-..     session_id = "";
-..     Message Error {
-..     error_id = error_connexion_id;
-..     }
-.. }
+
 
 .. En cas de reussite:
 .. Msg {

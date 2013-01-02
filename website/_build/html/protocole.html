@@ -131,6 +131,19 @@
 <li>Erreur</li>
 </ol>
 <p>Cette erreur est renvoye sur une mauvaise authentification ou quand un message est envoye par une personne non authentifie.</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">ERROR</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">CONNECT</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+</span>    <span class="n">Message</span> <span class="n">Error</span> <span class="p">{</span>
+        <span class="na">error_id</span> <span class="o">=</span> <span class="n">error_connexion_id</span><span class="p">;</span> <span class="c1">// Cette erreur provient de la l&#39;enum decrit dans cette page</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="cartes">
 <h3>Cartes<a class="headerlink" href="#cartes" title="Permalink to this headline">¶</a></h3>
