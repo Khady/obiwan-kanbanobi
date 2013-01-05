@@ -107,8 +107,9 @@ Cette erreur est renvoye sur une mauvaise authentification ou quand un message e
            session_id = "";
            Message Error {
                error_id = error_connexion_id; // Cette erreur provient de la l'enum decrit dans cette page
-           }
-       }
+            }
+        }
+
 
 .. - Identitifaction
 .. Client -> Premier message d'identification a la connexion
@@ -138,6 +139,120 @@ Colonnes
 Erreurs
 -------
 
+
+message.proto
+=============
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       package message;
+       
+       enum TARGET {
+         USERS		= 1;
+         COLUMNS	= 2;
+         PROJECTS	= 3;
+         CARDS		= 4;
+         ADMIN		= 5;
+         IDENT		= 6;
+         NOTIF		= 7;
+         METADATA      = 8;
+       };
+       
+       enum CMD {
+         CREATE	= 1;
+         MODIFY	= 2;
+         DELETE	= 3;
+         GET		= 4;
+         MOVE		= 5;
+         CONNECT       = 6;
+         DISCONNECT    = 7;
+         ERROR		= 8;
+         SUCCES        = 9;
+         NONE          = 10;
+       };
+       
+       message Msg {
+         required TARGET	target = 1;
+         required CMD		command = 2;
+         required uint32	author_id = 3; // contains author id (who is speaking) in reception and addressee msg in sending
+         required string	session_id = 4;
+       
+         message Users {
+           required uint32	id = 1;
+           required string	name = 2;
+           required string	password = 3;
+           required bool	admin = 4; // is SUPERadmin or not
+           optional string	mail = 5;
+         }
+       
+         message Columns {
+           required uint32	project_id = 1;
+           required uint32	id = 2;
+           required string	name = 3;
+           optional string	desc = 4;
+           repeated string	tags = 5;
+           repeated uint32	scripts_ids = 6; // IDs of the scripts attached to the column
+           repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
+         }
+       
+         message Projects {
+           required uint32	id = 1;
+           required string	name = 2;
+           repeated uint32	admins_id = 3; // list of the administrator users of the projects
+           repeated uint32	read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
+         }
+       
+         message Cards {
+           // Comments struct
+           required uint32	id = 1;
+           required uint32	project_id = 2;
+           required uint32	column_id = 3;
+           required string	name = 4;
+           // repeated Comment	comments = 5; // repeated = dynamically sized array of Comments
+           optional string	desc = 6;
+           repeated string	tags = 7;
+           optional uint32	user_id = 8; // ID of the card author
+           repeated uint32	scripts_ids = 9; // IDs of the scripts attached to the card
+           repeated uint32	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+         }
+       
+         message Comment {
+           required uint32	id = 1;
+           required string	content = 2;
+           required string	author_id = 3;
+           required uint32     timestamp = 4;
+           required uint32     card_id = 5;
+         }
+       
+         message Metadata {
+           required uint32     object_type = 1;
+           required uint32     object_id = 2;
+           optional string     data_key = 3;
+           optional uint32     data_value = 4;
+         }
+       
+         message Ident {
+           required string	login = 1;
+           optional string	password = 2;
+         }
+       
+         message Error {
+           required uint32	error_id = 1;
+         }
+       
+         message Notif {
+           optional string	msg = 1;
+         }
+       
+         optional Users	users = 5;
+         optional Columns	columns = 6;
+         optional Projects	projects = 7;
+         optional Cards	cards = 8;
+         optional Ident	ident = 9;
+         optional Error	error = 10;
+         optional Notif	notif = 11;
+       }
 
 
 
