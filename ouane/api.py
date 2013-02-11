@@ -69,6 +69,17 @@ class Api(threading.Thread):
         msg.users.id = user_id
         self.network.setWriteStack(msg.SerializeToString())
         
+    def createColumns(self, author_id, session_id, project_id, id = 0, name = "", desc = "", tags = [], scripts_ids = [], write = []):
+        msg = Msg()
+        msg.target = message_pb2.COLUMNS
+        msg.command = message_pb2.CREATE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.columns.project_id = project_id
+        msg.columns.id = id
+        msg.columns.name = name
+        self.network.setWriteStack(msg.SerializeToString())
+
     def sendLogin(self, login, password):
         msg = Msg()
         msg.author_id = 0
