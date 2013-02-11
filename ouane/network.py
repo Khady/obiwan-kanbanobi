@@ -3,12 +3,10 @@ import OpenSSL
 import sys
 import struct
 import select
-import threading
 
-class Network(threading.Thread):
+class Network( ):
     def __init__(self, host, port):
         #self.context = OpenSSL.SSL.Context(OpenSSL.SSL.TLSv1_METHOD)
-        threading.Thread.__init__(self)
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 #s.settimeout(5)
         #self.connection = OpenSSL.SSL.Connection(self.context, self.s)
@@ -26,8 +24,11 @@ class Network(threading.Thread):
         self.writeStack = []
         self.readSize = 0
 
-    def getReadedStack():
+    def getReadedStack(self):
         return self.readStack
+
+    def getReadedMessage(self):
+        return self.readStack.pop()
 
     def setWriteStack(self, msg):
         self.writeStack.append(msg)
@@ -41,17 +42,14 @@ class Network(threading.Thread):
     def recv(self):
         if self.readSize == 0:
             self.readSize = struct.unpack("!I", self.connection.recv(4))[0]
-            print self.readSize
         else:
             self.readStack.append(self.connection.recv(self.readSize))
-            print self.readStack
 
     def run(self):
-        while 1:
-            inputs = [self.s]
-            outputs = [self.s]
-            readable, writable, exceptional = select.select(inputs, outputs, inputs)
-            if len(writable) != 0:
-                self.send()
-            if len(readable) != 0:
-                self.recv()
+        inputs = [self.s]
+        outputs = [self.s]
+        readable, writable, exceptional = select.select(inputs, outputs, inputs, 60)
+        if len(writable) != 0:
+            self.send()
+        if len(readable) != 0:
+            self.recv()

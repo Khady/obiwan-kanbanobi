@@ -1,11 +1,14 @@
 from network import Network
 from message_pb2 import Msg
 import message_pb2
+import threading
+from dbUtils import app, db, Cards, Columns, Users, Projects, Comments, Metadata
 
-class Api:
+class Api(threading.Thread):
     def __init__(self, host, port):
+        threading.Thread.__init__(self)
         self.network = Network(host, port)
-        self.network.start()
+        db.create_all()
 
     def getAllProjetList(self, author_id, session_id):
         msg = Msg()
@@ -77,3 +80,21 @@ class Api:
         msg.ident.login = login
         msg.ident.password = password
         self.network.setWriteStack(msg.SerializeToString())
+
+    def run(self):
+        while 1:
+            self.network.run()
+            if len(self.network.getReadedStack()) != 0:
+                msg = Msg()
+                msg.ParseFromString(self.network.getReadedMessage())
+                if (msg.target == message_pb2.CARDS):
+                    c = Card(msg.cards.id, msg.cards.name, msg.cards.column_id, msg.cards.project_id, msg.cards.tags,
+                             msg.cards.user_id, msg.cards.scripts_id, msg.cards.write)
+                    db.session.add(c)
+                    db.session.commit()
+                if (msg.target == message_pb2.COLUMNS):
+                    c = Columns(msg.columns.id, msg.cards.name, msg.columns.column_id, msg.columns.project_id, msg.columns.tags,
+                                msg.columns.scripts_id, msg.columns.write)
+                    db.session.add(c)
+                    db.session.commit()
+                
