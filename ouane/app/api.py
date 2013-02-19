@@ -2,7 +2,8 @@ from network import Network
 from message_pb2 import Msg
 import message_pb2
 import threading
-from dbUtils import app, db, Cards, Columns, Users, Projects, Comments, Metadata
+from dbUtils import db, Cards, Columns, Users, Projects, Comments, Metadata
+from app import app
 
 class Api(threading.Thread):
     def __init__(self, host, port):
@@ -97,7 +98,10 @@ class Api(threading.Thread):
             self.network.run()
             if len(self.network.getReadedStack()) != 0:
                 msg = Msg()
-                msg.ParseFromString(self.network.getReadedMessage())
+                data = self.network.getReadedMessage()
+                if (data != ""):
+                    print ">>>>>>" + data
+                msg.ParseFromString(data)
                 if (msg.target == message_pb2.CARDS):
                     c = Card(msg.cards.id, msg.cards.name, msg.cards.column_id, msg.cards.project_id, msg.cards.tags,
                              msg.cards.user_id, msg.cards.scripts_id, msg.cards.write)

@@ -3,27 +3,21 @@
 from flask import render_template
 # from flask.ext.sqlalchemy import SQLAlchemy
 from api import Api
-from dbUtils import app, db, Cards, Columns, Users, Projects, Comments, Metadata
 import sys
-from network import Network
+
+from app import app
 
 # app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://test.db'
 # db = SQLAlchemy(app)
 
-@app.route("/")
-def main():
-    try:
-        data = Users.query.all()
-    except:
-        data = []
-    return render_template('index.html', data=data)
+ 
 
 if __name__ == "__main__":
     f = Api(sys.argv[1], int(sys.argv[2]))
     f.start()
     f.sendLogin("toto", "tata")
-    f.createColumns(0, "aa", 0, 0, "lol")
+    # f.createColumns(0, "aa", 0, 0, "lol")
     # c = Cards(1, "test", "salut je suis un test", 1, 1, "jerox;test;", 1, 0, 1)
     # co = Columns(4, "test", 1, "test contenu", "jerox;test;", 1, 1)
     # u = Users(12, "test", True, "motdepasse", "contact@email.com", True)
@@ -43,6 +37,6 @@ if __name__ == "__main__":
     # print p
     # print com
     # print m
-    app.run()
+    app.run(debug=True)
     # n = Network("127.0.0.1", 4242)
     # n.start()
