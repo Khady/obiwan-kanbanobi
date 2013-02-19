@@ -2,8 +2,8 @@ from network import Network
 from message_pb2 import Msg
 import message_pb2
 import threading
-from dbUtils import db, Cards, Columns, Users, Projects, Comments, Metadata
-from app import app
+from dbUtils import Cards, Columns, Users, Projects, Comments, Metadata
+from app import app, db
 
 class Api(threading.Thread):
     def __init__(self, host, port):

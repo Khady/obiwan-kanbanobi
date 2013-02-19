@@ -1,22 +1,15 @@
 #!/usr/bin/python
 
-from flask import render_template
+from flask import g
 # from flask.ext.sqlalchemy import SQLAlchemy
-from api import Api
 import sys
-
 from app import app
 
 # app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://test.db'
-# db = SQLAlchemy(app)
-
- 
+# db = SQLAlchemy(app) 
 
 if __name__ == "__main__":
-    f = Api(sys.argv[1], int(sys.argv[2]))
-    f.start()
-    f.sendLogin("toto", "tata")
     # f.createColumns(0, "aa", 0, 0, "lol")
     # c = Cards(1, "test", "salut je suis un test", 1, 1, "jerox;test;", 1, 0, 1)
     # co = Columns(4, "test", 1, "test contenu", "jerox;test;", 1, 1)
