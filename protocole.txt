@@ -5,6 +5,7 @@ Chaque client peut parler au nom de plusieurs utilisateurs (ou author).
 
 Tout message est precede d'un unsigned int pour preciser la taille du message qui va suivre.
 
+------------------------------------------------------------------------------------------
 - Identitifaction
 Client -> Premier message d'identification a la connexion
 Le author_id n'est pas connu au moment de l'identification, il importe donc peu
@@ -41,11 +42,17 @@ Msg {
     session_id = session_id calcule par le serveur
 }
 
+------------------------------------------------------------------------------------------
+- Cartes
+
+
+------------------------------------------------------------------------------------------
 - Creation de compte
   target = IDENT;
   command = CREATE;
   author_id = id
   session_id = session_id;
+
 
 ------------------------------------------------------------------------------------------
 erreurs:

@@ -103,6 +103,7 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 	conn.Write(data)
 }
 
+// Il faut rajouter un traitement ici pour se debarasser des cartes qui sont dans la column qu'on delete
 func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 	column := &Column{
 		Id: *msg.Columns.Id,

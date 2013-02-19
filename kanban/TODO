@@ -1,0 +1,8 @@
+- Tests unitaires sur ce qui existe
+- Gestion des utilisateurs
+- Gestion des metadata
+- Gestion des projets
+- Gestion des Admin
+- Gestion des notifs
+- Dans l'auth des users, generer correctement la chaine de session
+- Gestion du kick si l'utilisateur n'est pas auth
