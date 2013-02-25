@@ -71,7 +71,9 @@ CREATE TABLE metadata (
     data_value text NOT NULL
 );
 
--- CREATE TABLE sessions {
---     id SERIAL PRIMARY KEY,
---     -- 
--- };
+CREATE TABLE sessions (
+    id SERIAL PRIMARY KEY,
+    user_id integer NOT NULL,
+    ident_date timestamp NOT NULL,
+    session_key text NOT NULL
+);
