@@ -8,6 +8,7 @@ Build Requirements
  * Goprotobuf       <http://code.google.com/p/goprotobuf/>
  * pq               <http://github.com/bmizerany/pq>
  * goconfig         <http://github.com/kless/goconfig>
+ * uniuri           <http://github.com/dchest/uniuri>
 
  * Python           <http://python.org>
  * Flask            <http://flask.pocoo.org/>

@@ -3,16 +3,17 @@ package main
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
 	"code.google.com/p/goprotobuf/proto"
+	"github.com/dchest/uniuri"
 	"fmt"
 	"net"
 	"time"
 )
 
-type Column struct {
+type Session struct {
 	Id          uint32
 	User_id     uint32
-	ident_date  time.Time
-	session_key string
+	Ident_date  time.Time
+	Session_key string
 }
 
 // Cette fonction doit gerer l'identification d'un utilisateur (verifier qu'il n'est pas deja identifie,
@@ -21,11 +22,12 @@ type Column struct {
 // Il faudrait que cette fonction mette aussi a jour un tableau avec des duo user/connexion pour les moments ou il
 // faudra envoyer des messages a tout le monde
 func MsgIdent(conn net.Conn, msg *message.Msg) {
+	sessionId := uniuri.New()
 	test := &message.Msg{
 		Target:    message.TARGET_IDENT.Enum(),
 		Command:   message.CMD_SUCCES.Enum(),
 		AuthorId:  proto.Uint32(1),
-		SessionId: proto.String("superchainedesession"),
+		SessionId: proto.String(sessionId),
 		Ident: &message.Msg_Ident{
 			Login: proto.String(*msg.Ident.Login),
 		},
