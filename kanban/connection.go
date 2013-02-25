@@ -30,7 +30,7 @@ func (c *connectionList) delConnection(conn net.Conn) {
 func MsgIdent(conn net.Conn, msg *message.Msg) {
 	test := &message.Msg{
 		Target:    message.TARGET_IDENT.Enum(),
-		Command:   message.CMD_CONNECT.Enum(),
+		Command:   message.CMD_SUCCES.Enum(),
 		AuthorId:  proto.Uint32(1),
 		SessionId: proto.String("superchainedesession"),
 		Ident: &message.Msg_Ident{
