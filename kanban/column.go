@@ -182,7 +182,7 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 	}
 	data, err := proto.Marshal(answer)
 	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgColumnUpdate", err, answer)
+		LOGGER.Print("Impossible to marshal msg in MsgColumnDelete", err, answer)
 		return
 	}
 	conn.Write(write_int32(int32(len(data))))
