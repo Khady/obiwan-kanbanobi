@@ -48,8 +48,8 @@ class Network( ):
     def run(self):
         inputs = [self.s]
         outputs = [self.s]
-        readable, writable, exceptional = select.select(inputs, outputs, inputs, 60)
-        if len(writable) != 0:
-            self.send()
+        readable, writable, exceptional = select.select(inputs, [], inputs, 1)
+        #if len(writable) != 0:
+        self.send()
         if len(readable) != 0:
             self.recv()

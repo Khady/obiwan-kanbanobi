@@ -10,6 +10,7 @@ class Api(threading.Thread):
         threading.Thread.__init__(self)
         self.network = Network(host, port)
         db.create_all()
+        self.userLogin = {}
 
     def getAllProjetList(self, author_id, session_id):
         msg = Msg()
@@ -99,8 +100,8 @@ class Api(threading.Thread):
             if len(self.network.getReadedStack()) != 0:
                 msg = Msg()
                 data = self.network.getReadedMessage()
-                if (data != ""):
-                    print ">>>>>>" + data
+                # if (data != ""):
+                #     print ">>>>>>" + data
                 msg.ParseFromString(data)
                 if (msg.target == message_pb2.CARDS):
                     c = Card(msg.cards.id, msg.cards.name, msg.cards.column_id, msg.cards.project_id, msg.cards.tags,
@@ -113,4 +114,11 @@ class Api(threading.Thread):
                     db.session.add(c)
                     db.session.commit()
                 if (msg.target == message_pb2.IDENT):
-                    print msg.command
+                    # print msg.target
+                    # print msg.command
+                    # print msg.author_id
+                    # print msg.session_id
+                    # print msg.ident.login
+                    user = {"author_id": msg.author_id, "session_id": msg.session_id}
+                    self.userLogin[msg.ident.login] = user
+                    print self.userLogin
