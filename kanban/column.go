@@ -68,6 +68,7 @@ func MsgColumnCheckDefaultWrite(write *[]uint32) *[]uint32 {
 // msg.Columns.UserId est utilise par defaut pour le moment. Mais c'est un champ optionnel.
 // Il faudrait faire un test pour savoir si c'est le author_id ou lui qui est utilise.
 func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
+	LOGGER.Print("New TARGET_COLUMN msg, CMD = CREATE")
 	description := MsgColumnCheckDefaultDesc(msg.Columns.Desc)
 	tags := MsgColumnCheckDefaultTags(&msg.Columns.Tags)
 	scriptsid := MsgColumnCheckDefaultScriptsId(&msg.Columns.ScriptsIds)
@@ -86,6 +87,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 	}
 	var answer *message.Msg
 	if err := column.Add(dbPool); err != nil {
+		LOGGER.Print("Impossible to create new column", err)
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -97,6 +99,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	} else {
+		LOGGER.Print("New column")
 		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
