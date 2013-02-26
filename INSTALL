@@ -6,8 +6,12 @@ Reload postgresql with:
 
 /etc/init.d/postgresql restart
 
-And just execute initdb.sh with the user postgres.
 
+And just execute initdb.sh with the user postgres :
+sudo -i -u postgres
+cd /path/to/project
+./initdb.sh
+exit
 
 Client side:
 

@@ -1,13 +1,13 @@
 package main
 
-func changeStateUser(p *ConnectionPoolWrapper, id int, state bool) error {
+func changeStateUser(p *ConnectionPoolWrapper, id uint32, state bool) error {
 	db := p.GetConnection()
 	_, err := db.Exec("update users set active = $1 where id = $2", state, id)
 	p.ReleaseConnection(db)
 	return err
 }
 
-func changeAdminUser(p *ConnectionPoolWrapper, id int, state bool) error {
+func changeAdminUser(p *ConnectionPoolWrapper, id uint32, state bool) error {
 	db := p.GetConnection()
 	_, err := db.Exec("update users set admin = $1 where id = $2", state, id)
 	p.ReleaseConnection(db)
@@ -26,8 +26,8 @@ func GetNbUsers(p *ConnectionPoolWrapper) (int, error) {
 func (u *User) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",
-		u.Name, u.Admin, u.Password, u.Mail, u.Active)
+	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",				  
+	u.Name, u.Admin, u.Password, u.Mail, u.Active)
 	return err
 }
 
@@ -41,8 +41,8 @@ func (u *User) Del(p *ConnectionPoolWrapper) error {
 func (u *User) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("update users set name = $1, admin = $2, password = $3, mail = $4, active = $5 where id = $6",
-		u.Name, u.Admin, u.Password, u.Mail, u.Active, u.Id)
+	_, err := db.Exec("update users set name = $1, admin = $2, mail = $4, active = $5 where id = $6",
+		u.Name, u.Admin, u.Mail, u.Active, u.Id)
 	return err
 }
 
