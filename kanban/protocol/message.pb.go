@@ -271,6 +271,38 @@ func (this *Msg_Users) GetMail() string {
 	return ""
 }
 
+type Msg_Password struct {
+	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	Oldpassword      *string `protobuf:"bytes,2,req,name=oldpassword" json:"oldpassword,omitempty"`
+	Newpassword      *string `protobuf:"bytes,3,req,name=newpassword" json:"newpassword,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (this *Msg_Password) Reset()         { *this = Msg_Password{} }
+func (this *Msg_Password) String() string { return proto.CompactTextString(this) }
+func (*Msg_Password) ProtoMessage()       {}
+
+func (this *Msg_Password) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
+	}
+	return 0
+}
+
+func (this *Msg_Password) GetOldpassword() string {
+	if this != nil && this.Oldpassword != nil {
+		return *this.Oldpassword
+	}
+	return ""
+}
+
+func (this *Msg_Password) GetNewpassword() string {
+	if this != nil && this.Newpassword != nil {
+		return *this.Newpassword
+	}
+	return ""
+}
+
 type Msg_Columns struct {
 	ProjectId        *uint32  `protobuf:"varint,1,req,name=project_id" json:"project_id,omitempty"`
 	Id               *uint32  `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
