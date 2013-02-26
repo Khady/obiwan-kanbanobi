@@ -80,6 +80,7 @@ const (
 	CMD_ERROR      CMD = 8
 	CMD_SUCCES     CMD = 9
 	CMD_NONE       CMD = 10
+	CMD_PASSWORD   CMD = 11
 )
 
 var CMD_name = map[int32]string{
@@ -93,6 +94,7 @@ var CMD_name = map[int32]string{
 	8:  "ERROR",
 	9:  "SUCCES",
 	10: "NONE",
+	11: "PASSWORD",
 }
 var CMD_value = map[string]int32{
 	"CREATE":     1,
@@ -105,6 +107,7 @@ var CMD_value = map[string]int32{
 	"ERROR":      8,
 	"SUCCES":     9,
 	"NONE":       10,
+	"PASSWORD":   11,
 }
 
 func (x CMD) Enum() *CMD {
@@ -139,6 +142,7 @@ type Msg struct {
 	Ident            *Msg_Ident    `protobuf:"bytes,9,opt,name=ident" json:"ident,omitempty"`
 	Error            *Msg_Error    `protobuf:"bytes,10,opt,name=error" json:"error,omitempty"`
 	Notif            *Msg_Notif    `protobuf:"bytes,11,opt,name=notif" json:"notif,omitempty"`
+	Password         *Msg_Password `protobuf:"bytes,12,opt,name=password" json:"password,omitempty"`
 	XXX_unrecognized []byte        `json:"-"`
 }
 
@@ -219,6 +223,13 @@ func (this *Msg) GetError() *Msg_Error {
 func (this *Msg) GetNotif() *Msg_Notif {
 	if this != nil {
 		return this.Notif
+	}
+	return nil
+}
+
+func (this *Msg) GetPassword() *Msg_Password {
+	if this != nil {
+		return this.Password
 	}
 	return nil
 }
