@@ -22,6 +22,7 @@ enum CMD {
   ERROR		= 8;
   SUCCES        = 9;
   NONE          = 10;
+  PASSWORD      = 11;
 };
 
 message Msg {
@@ -110,4 +111,5 @@ message Msg {
   optional Ident	ident = 9;
   optional Error	error = 10;
   optional Notif	notif = 11;
+  optional Password     password = 12;
 }
