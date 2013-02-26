@@ -8,9 +8,9 @@ import (
 	"time"
 )
 
-type Column struct {
+type Session struct {
 	Id          uint32
-	User_id     uint32
+	User_id     string
 	ident_date  time.Time
 	session_key string
 }
