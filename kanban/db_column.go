@@ -5,14 +5,18 @@ import (
 )
 
 func (c *Column) Add(p *ConnectionPoolWrapper) error {
+	LOGGER.Print("db -> column add")
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
+	LOGGER.Print("db -> column add -> get connection")
 	tags := strings.Join(c.Tags, " ")
 	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), " ")
 	write := strings.Join(SString_of_SUInt32(c.Write), " ")
+	LOGGER.Print("db -> column add -> convert values")
 	_, err := db.Exec(`INSERT INTO columns(name, project_id, content, tags, scripts_id, write)
 VALUES($1, $2, $3, $4, $5, $6);`,
 		c.Name, c.Project_id, c.Content, tags, sid, write)
+	LOGGER.Print("db -> column add -> done")
 	return err
 }
 
