@@ -38,6 +38,12 @@ message Msg {
     optional string	mail = 5;
   }
 
+  message Password {
+    required uint32	id = 1;
+    required string	oldpassword = 2;
+    required string	newpassword = 3;
+  }
+
   message Columns {
     required uint32	project_id = 1;
     required uint32	id = 2;
