@@ -21,17 +21,68 @@ type Column struct {
 // commune pour renvoyer le bon code d'erreur (verifier que l'ID d'une carte
 // existe avant de faire un delete par exemple)
 
+func MsgColumnCheckDefaultDesc(desc *string) *string {
+	var finalDesc *string
+	defaultDesc := "New column"
+	if desc != nil {
+		finalDesc = desc
+	} else {
+		finalDesc = &defaultDesc
+	}
+	return finalDesc
+}
+
+func MsgColumnCheckDefaultTags(tags *[]string) *[]string {
+	var finalTags *[]string
+	defaultTags := []string{}
+	if tags != nil {
+		finalTags = tags
+	} else {
+		finalTags = &defaultTags
+	}
+	return finalTags
+}
+
+func MsgColumnCheckDefaultScriptsId(scriptsId *[]uint32) *[]uint32 {
+	var finalScriptsId *[]uint32
+	defaultScriptsId := []uint32{}
+	if scriptsId != nil {
+		finalScriptsId = scriptsId
+	} else {
+		finalScriptsId = &defaultScriptsId
+	}
+	return finalScriptsId
+}
+
+func MsgColumnCheckDefaultWrite(write *[]uint32) *[]uint32 {
+	var finalWrite *[]uint32
+	defaultWrite := []uint32{}
+	if write != nil {
+		finalWrite = write
+	} else {
+		finalWrite = &defaultWrite
+	}
+	return finalWrite
+}
+
 // msg.Columns.UserId est utilise par defaut pour le moment. Mais c'est un champ optionnel.
 // Il faudrait faire un test pour savoir si c'est le author_id ou lui qui est utilise.
 func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
+	description := MsgColumnCheckDefaultDesc(msg.Columns.Desc)
+	tags := MsgColumnCheckDefaultTags(&msg.Columns.Tags)
+	scriptsid := MsgColumnCheckDefaultScriptsId(&msg.Columns.ScriptsIds)
+	write := MsgColumnCheckDefaultWrite(&msg.Columns.Write)
 	column := &Column{
 		0,
 		*msg.Columns.Name,
 		*msg.Columns.ProjectId,
-		*msg.Columns.Desc,
-		msg.Columns.Tags,
-		msg.Columns.ScriptsIds,
-		msg.Columns.Write,
+		*description,
+		*tags,
+		*scriptsid,
+		*write,
+		// msg.Columns.Tags,
+		// msg.Columns.ScriptsIds,
+		// msg.Columns.Write,
 	}
 	var answer *message.Msg
 	if err := column.Add(dbPool); err != nil {
