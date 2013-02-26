@@ -11,5 +11,5 @@ app.config.from_object('config')
 from api import Api
 a = Api(sys.argv[1], int(sys.argv[2]))
 a.start()
-
+a.createColumns(1,"1",1)
 from app import views

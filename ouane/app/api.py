@@ -79,6 +79,8 @@ class Api(threading.Thread):
         msg.columns.project_id = project_id
         msg.columns.id = id
         msg.columns.name = name
+        for elem in write:
+            msg.columns.write.add(elem)
         self.network.setWriteStack(msg.SerializeToString())
 
     def sendLogin(self, login, password):
@@ -87,8 +89,6 @@ class Api(threading.Thread):
         msg.session_id = ""
         msg.target = message_pb2.IDENT
         msg.command = message_pb2.CONNECT
-        # msg.target = message_pb2._TARGET.values_by_name["IDENT"]
-        # msg.command = message_pb2._CMD.values_by_name["CONNECT"]
         msg.ident.login = login
         msg.ident.password = password
         self.network.setWriteStack(msg.SerializeToString())
@@ -112,4 +112,5 @@ class Api(threading.Thread):
                                 msg.columns.scripts_id, msg.columns.write)
                     db.session.add(c)
                     db.session.commit()
-                
+                if (msg.target == message_pb2.IDENT):
+                    print msg.command
