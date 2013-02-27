@@ -94,6 +94,11 @@ class Api(threading.Thread):
         msg.ident.password = password
         self.network.setWriteStack(msg.SerializeToString())
 
+    def checkIfConnected(self, name):
+        if name in self.userLogin:
+            return True
+        return False
+
     def run(self):
         while 1:
             self.network.run()
@@ -121,4 +126,3 @@ class Api(threading.Thread):
                     # print msg.ident.login
                     user = {"author_id": msg.author_id, "session_id": msg.session_id}
                     self.userLogin[msg.ident.login] = user
-                    print self.userLogin

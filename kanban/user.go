@@ -203,8 +203,8 @@ func MsgUser(conn net.Conn, msg *message.Msg) {
 		MsgUserCreate(conn, msg)
 	case message.CMD_MODIFY:
 		MsgUserUpdate(conn, msg)
-//	case message.CMD_PASSWORD:
-//		MsgUserPassword(conn, msg)
+	case message.CMD_PASSWORD:
+//	 	MsgUserPassword(conn, msg)
 	case message.CMD_DELETE:
 		MsgUserDelete(conn, msg)
 	}
