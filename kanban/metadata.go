@@ -1,9 +1,9 @@
 package main
 
 type Metadata struct {
-	id          int
-	object_type int
-	object_id   int
-	data_key    string
-	data_value  string
+	Id          int
+	Object_type int
+	Object_id   int
+	Data_key    string
+	Data_value  string
 }
