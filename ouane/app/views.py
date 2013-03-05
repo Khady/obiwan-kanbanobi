@@ -43,6 +43,12 @@ def checklogin(name = None):
         else:
             return "KO"
 
+@app.route('/project', methods = ['GET', 'POST'])
+@app.route("/project/<name>", methods = ['GET', 'POST'])
+@login_required
+def project(name = ""):
+    return render_template('project.html')
+
 @app.route("/")
 @app.route("/index")
 @login_required
