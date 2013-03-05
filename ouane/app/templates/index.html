@@ -1,8 +1,7 @@
-<!doctype html>
-<title>Ouane</title>
-<div class=page>
+{% extends "layout.html" %}
+{% block body %}
   <h1>Raw data</h1>
   {% for message in data %}
     <p>{{ message }}</p>
   {% endfor %}
-</div>
+{% endblock %}
