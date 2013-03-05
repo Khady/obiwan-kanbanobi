@@ -4,12 +4,12 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-        return render_template('index.html')
+        return render_template('index2.html')
 
-@app.route('/echo/', methods=['GET'])
-def echo():
-    ret_data = {"value": request.args.get('echoValue')}
-    return jsonify(ret_data)
+# @app.route('/echo/', methods=['GET'])
+# def echo():
+#     ret_data = {"value": request.args.get('echoValue')}
+#     return jsonify(ret_data)
 
 if __name__ == '__main__':
     app.run(port=8080, debug=True)
