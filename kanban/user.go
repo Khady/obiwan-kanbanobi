@@ -77,7 +77,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 		true,
 	}
         var answer *message.Msg
-	if admin, err := (user.GetAdminById(dbPool, *msg.AuthorId); err != nil {
+	if admin, err := user.GetAdminById(dbPool, *msg.AuthorId); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
