@@ -32,6 +32,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 	switch *data.Target {
 	case message.TARGET_USERS:
 		LOGGER.Print("read TARGET_USERS message")
+		MsgUser(conn, data)
 	case message.TARGET_COLUMNS:
 		LOGGER.Print("read TARGET_COLUMNS message")
 		MsgColumn(conn, data)
@@ -42,6 +43,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		MsgCard(conn, data)
 	case message.TARGET_ADMIN:
 		LOGGER.Print("read TARGET_ADMIN message")
+		MsgAdmin(conn, data)
 	case message.TARGET_IDENT:
 		LOGGER.Print("read TARGET_IDENT message")
 		MsgIdent(conn, data)

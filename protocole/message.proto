@@ -34,7 +34,7 @@ message Msg {
   message Users {
     required uint32	id = 1;
     required string	name = 2;
-    required string	password = 3;
+    optional string	password = 3;
     required bool	admin = 4; // is SUPERadmin or not
     optional string	mail = 5;
   }

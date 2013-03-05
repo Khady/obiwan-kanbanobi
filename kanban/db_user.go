@@ -41,8 +41,8 @@ func (u *User) Del(p *ConnectionPoolWrapper) error {
 func (u *User) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("update users set name = $1, admin = $2, mail = $4, active = $5 where id = $6",
-		u.Name, u.Admin, u.Mail, u.Active, u.Id)
+	_, err := db.Exec("update users set name = $1, mail = $2, active = $3 where id = $4",
+		u.Name, u.Mail, u.Active, u.Id)
 	return err
 }
 
@@ -113,4 +113,14 @@ func (u *User) PutAdmin(p *ConnectionPoolWrapper) error {
 
 func (u *User) Unadmin(p *ConnectionPoolWrapper) error {
 	return changeAdminUser(p, u.Id, false)
+}
+
+func (u *User) GetAdminById(p *ConnectionPoolWrapper, id uint32) (bool, error) {
+	var admin bool
+
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	row := db.QueryRow("select admin from users where id = $1", id)
+	err := row.Scan(&admin)
+	return admin, err
 }
