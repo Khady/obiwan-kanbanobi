@@ -25,6 +25,7 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 	sessionId := uniuri.New()
 	u:= User{Name: *msg.Ident.Login}
 	var err error
+	var checkPassword bool
 	if err = u.GetByName(dbPool); err == nil {
 		session := &Session{
 			Id: 0,
@@ -32,7 +33,10 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 			Ident_date: time.Now(),
 			Session_key: sessionId,
 		}
-		err = session.Add(dbPool)
+		checkPassword, err = u.CheckPassword(dbPool, *msg.Ident.Password)
+		if err == nil && checkPassword == true {
+			err = session.Add(dbPool)
+		}
 	}
 	var answer *message.Msg
 	if err != nil {
@@ -66,16 +70,13 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 }
 
 func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
-	session := Session{User_id: msg.Ident.Login}
-
+	u:= User{Name: *msg.Ident.Login}
+	var err error
 	if err = u.GetByName(dbPool); err == nil {
 		session := &Session{
-			Id: 0,
 			User_id: *msg.Ident.Login,
-			Ident_date: time.Now(),
-			Session_key: sessionId,
 		}
-		err = session.Add(dbPool)
+		err = session.DelByUserName(dbPool)
 	}
 	var answer *message.Msg
 	if err != nil {
@@ -93,7 +94,7 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 			Target:    message.TARGET_IDENT.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(u.Id),
-			SessionId: proto.String(sessionId),
+			SessionId: proto.String(*msg.SessionId),
 			Ident: &message.Msg_Ident{
 				Login: proto.String(*msg.Ident.Login),
 			},
