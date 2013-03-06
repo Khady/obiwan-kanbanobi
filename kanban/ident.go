@@ -60,35 +60,52 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	LOGGER.Print("MsgIdent", len(data), data)
+	LOGGER.Print("MsgIdent Connect", len(data), data)
 	conn.Write(write_int32(int32(len(data))))
 	conn.Write(data)
 }
 
 func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
-	// sessionId := uniuri.New()
-	// test := &message.Msg{
-	// 	Target:    message.TARGET_IDENT.Enum(),
-	// 	Command:   message.CMD_SUCCES.Enum(),
-	// 	AuthorId:  proto.Uint32(1),
-	// 	SessionId: proto.String(sessionId),
-	// 	Ident: &message.Msg_Ident{
-	// 		Login: proto.String(*msg.Ident.Login),
-	// 	},
-	// }
-	// data, err := proto.Marshal(test)
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// LOGGER.Print("MsgIdent", len(data), data)
-	// conn.Write(write_int32(int32(len(data))))
-	// conn.Write(data)
-	// session := &Session{
-	// 	Id: 0,
-	// 	User_id: *msg.Ident.Login,
-	// 	Ident_date: time.Now(),
-	// 	Session_key: sessionId,
-	// }
+	session := Session{User_id: msg.Ident.Login}
+
+	if err = u.GetByName(dbPool); err == nil {
+		session := &Session{
+			Id: 0,
+			User_id: *msg.Ident.Login,
+			Ident_date: time.Now(),
+			Session_key: sessionId,
+		}
+		err = session.Add(dbPool)
+	}
+	var answer *message.Msg
+	if err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_IDENT.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(0),
+			SessionId: proto.String(*msg.Ident.Login),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else {
+		answer = &message.Msg{
+			Target:    message.TARGET_IDENT.Enum(),
+			Command:   message.CMD_SUCCES.Enum(),
+			AuthorId:  proto.Uint32(u.Id),
+			SessionId: proto.String(sessionId),
+			Ident: &message.Msg_Ident{
+				Login: proto.String(*msg.Ident.Login),
+			},
+		}
+	}
+	data, err := proto.Marshal(answer)
+	if err != nil {
+		fmt.Println(err)
+	}
+	LOGGER.Print("MsgIdent Disconnect", len(data), data)
+	conn.Write(write_int32(int32(len(data))))
+	conn.Write(data)
 }
 
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)
