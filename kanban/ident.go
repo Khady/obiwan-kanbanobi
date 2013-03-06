@@ -3,8 +3,8 @@ package main
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
 	"code.google.com/p/goprotobuf/proto"
-	"github.com/dchest/uniuri"
 	"fmt"
+	"github.com/dchest/uniuri"
 	"net"
 	"time"
 )
@@ -23,14 +23,14 @@ type Session struct {
 // faudra envoyer des messages a tout le monde
 func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 	sessionId := uniuri.New()
-	u:= User{Name: *msg.Ident.Login}
+	u := User{Name: *msg.Ident.Login}
 	var err error
 	var checkPassword bool
 	if err = u.GetByName(dbPool); err == nil {
 		session := &Session{
-			Id: 0,
-			User_id: *msg.Ident.Login,
-			Ident_date: time.Now(),
+			Id:          0,
+			User_id:     *msg.Ident.Login,
+			Ident_date:  time.Now(),
 			Session_key: sessionId,
 		}
 		checkPassword, err = u.CheckPassword(dbPool, *msg.Ident.Password)
@@ -70,7 +70,7 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 }
 
 func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
-	u:= User{Name: *msg.Ident.Login}
+	u := User{Name: *msg.Ident.Login}
 	var err error
 	if err = u.GetByName(dbPool); err == nil {
 		session := &Session{
@@ -107,6 +107,14 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 	LOGGER.Print("MsgIdent Disconnect", len(data), data)
 	conn.Write(write_int32(int32(len(data))))
 	conn.Write(data)
+}
+
+func MsgIdentIsUnidentified(conn net.Conn, msg *message.Msg) bool {
+	s := Session{Session_key: *msg.SessionId}
+	if err := s.GetUserSessionBySessionId(dbPool); err != nil {
+		return false
+	}
+	return true
 }
 
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)

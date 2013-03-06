@@ -27,7 +27,7 @@ func (u *User) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",
-	u.Name, u.Admin, u.Password, u.Mail, u.Active)
+		u.Name, u.Admin, u.Password, u.Mail, u.Active)
 	return err
 }
 
