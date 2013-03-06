@@ -73,7 +73,7 @@ CREATE TABLE metadata (
 
 CREATE TABLE sessions (
     id SERIAL PRIMARY KEY,
-    user_id text NOT NULL,
+    user_id integer NOT NULL,
     ident_date timestamp NOT NULL,
     session_key text NOT NULL
 );
