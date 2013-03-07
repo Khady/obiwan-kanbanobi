@@ -494,7 +494,7 @@ type Msg_Metadata struct {
 	ObjectType       *uint32 `protobuf:"varint,1,req,name=object_type" json:"object_type,omitempty"`
 	ObjectId         *uint32 `protobuf:"varint,2,req,name=object_id" json:"object_id,omitempty"`
 	DataKey          *string `protobuf:"bytes,3,opt,name=data_key" json:"data_key,omitempty"`
-	DataValue        *uint32 `protobuf:"varint,4,opt,name=data_value" json:"data_value,omitempty"`
+	DataValue        *string `protobuf:"bytes,4,opt,name=data_value" json:"data_value,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -510,7 +510,7 @@ func (this *Msg_Metadata) GetObjectType() uint32 {
 }
 
 func (this *Msg_Metadata) GetObjectId() uint32 {
-	if this != nil && this.ObjectId != nil {
+    if this != nil && this.ObjectId != nil {
 		return *this.ObjectId
 	}
 	return 0
