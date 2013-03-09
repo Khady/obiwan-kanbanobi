@@ -38,7 +38,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 				},
 			}
 		} else {
-			// Envoyer un message de succes ici        
+			// Envoyer un message de succes ici
 			answer = &message.Msg{
 				Target:    message.TARGET_COLUMNS.Enum(),
 				Command:   message.CMD_SUCCES.Enum(),
@@ -57,13 +57,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgUserCreate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
@@ -109,7 +103,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici                                             
+		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
@@ -117,13 +111,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgUserUpdate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 // verifier que ca marche.
@@ -163,7 +151,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 					},
 				}
 			} else {
-				// Envoyer un message de succes ici                                             
+				// Envoyer un message de succes ici
 				answer = &message.Msg{
 					Target:    message.TARGET_USERS.Enum(),
 					Command:   message.CMD_SUCCES.Enum(),
@@ -217,13 +205,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 			}
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgUserPassword", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgUserDelete(conn net.Conn, msg *message.Msg) {
@@ -239,18 +221,18 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 
 	var answer *message.Msg
 	if err := user.Del(dbPool); err != nil {
-		// Envoyer un message d'erreur ici                                               
+		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici                                                                                             
+				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici                                              
+		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
@@ -258,13 +240,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgUserDelete", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgUser(conn net.Conn, msg *message.Msg) {

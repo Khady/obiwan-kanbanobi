@@ -22,6 +22,17 @@ func (c *connectionList) delConnection(conn net.Conn) {
 	}
 }
 
+func sendKanbanMsg(conn net.Conn, msg *message.Msg) error {
+	data, err := proto.Marshal(msg)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	conn.Write(write_int32(int32(len(data))))
+	conn.Write(data)
+	return nil
+}
+
 func unidentifiedUser(conn net.Conn, msg *message.Msg) {
 	LOGGER.Print("unidentifiedUser")
 	answer := &message.Msg{
@@ -33,12 +44,7 @@ func unidentifiedUser(conn net.Conn, msg *message.Msg) {
 			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
 		},
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		fmt.Println(err)
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func readMsg(conn net.Conn, msg []byte, length int) {

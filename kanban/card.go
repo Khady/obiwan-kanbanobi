@@ -58,13 +58,7 @@ func MsgCardCreate(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgCardCreate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
@@ -100,13 +94,7 @@ func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgCardUpdate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgCardDelete(conn net.Conn, msg *message.Msg) {
@@ -134,13 +122,7 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgCardUpdate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgCardGet(conn net.Conn, msg *message.Msg) {
@@ -179,13 +161,7 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgCardUpdate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)

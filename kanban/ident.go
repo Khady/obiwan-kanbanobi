@@ -3,7 +3,6 @@ package main
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
 	"code.google.com/p/goprotobuf/proto"
-	"fmt"
 	"github.com/dchest/uniuri"
 	"net"
 	"time"
@@ -60,13 +59,7 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		fmt.Println(err)
-	}
-	LOGGER.Print("MsgIdent Connect", len(data), data)
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
@@ -100,13 +93,7 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		fmt.Println(err)
-	}
-	LOGGER.Print("MsgIdent Disconnect", len(data), data)
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgIdentIsUnidentified(conn net.Conn, msg *message.Msg) bool {
