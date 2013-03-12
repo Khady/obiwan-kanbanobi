@@ -31,9 +31,11 @@
 
     var dragCheck = false;
 
+    $("#column").droppable();
+
     $( "#drg" )
     .draggable({
-	revert: 'invalid',
+	revert: 'invalid'/*,
     drag: function() {
     // On drag set that flag to true
 	dragCheck = true;
@@ -41,9 +43,9 @@
     stop: function() {
     // On stop of dragging reset the flag back to false
 	dragCheck = false;
-    }
+    }*/
     })
-    .bind('mouseup', function() {
+/*    .bind('mouseup', function() {
     if (dragCheck == false) {
     // do the click action here...
 	$("#dialog").dialog("open");
@@ -54,17 +56,18 @@
     },
     function () {
 	$(this).css('cursor','auto');
-    })
+    })*/
 
 
     $( "button" ).button().click(function() {
-    $( "<li>Colonne<hr></li>" ).droppable().appendTo( "#drplist" );
+    $( "<li><div class=\"column\">Colonne<hr></div></li>" )
+    .droppable().appendTo( "#drplist" );
     })
 
     });
   </script>
   
-  <style type="text/css">    
+  <style type="text/css">
     #drg
     {
     background: white;
@@ -103,7 +106,7 @@
 
 <ul id="drplist">
   <li>
-    <div class="column">
+    <div id="column">
       Colonne
       <hr>
     </div>

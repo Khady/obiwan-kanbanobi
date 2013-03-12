@@ -108,13 +108,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgColumnCreate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
@@ -148,13 +142,7 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgColumnUpdate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 // Il faut rajouter un traitement ici pour se debarasser des cartes qui sont dans la column qu'on delete
@@ -183,13 +171,7 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgColumnDelete", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgColumnGet(conn net.Conn, msg *message.Msg) {
@@ -226,13 +208,7 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	}
-	data, err := proto.Marshal(answer)
-	if err != nil {
-		LOGGER.Print("Impossible to marshal msg in MsgColumnUpdate", err, answer)
-		return
-	}
-	conn.Write(write_int32(int32(len(data))))
-	conn.Write(data)
+	sendKanbanMsg(conn, answer)
 }
 
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)

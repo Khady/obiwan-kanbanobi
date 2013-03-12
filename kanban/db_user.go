@@ -26,8 +26,8 @@ func GetNbUsers(p *ConnectionPoolWrapper) (int, error) {
 func (u *User) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",				  
-	u.Name, u.Admin, u.Password, u.Mail, u.Active)
+	_, err := db.Exec("INSERT INTO users(name, admin, password, mail, active) VALUES($1, $2, $3, $4, $5);",
+		u.Name, u.Admin, u.Password, u.Mail, u.Active)
 	return err
 }
 
@@ -41,8 +41,8 @@ func (u *User) Del(p *ConnectionPoolWrapper) error {
 func (u *User) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("update users set name = $1, admin = $2, mail = $4, active = $5 where id = $6",
-		u.Name, u.Admin, u.Mail, u.Active, u.Id)
+	_, err := db.Exec("update users set name = $1, mail = $2, active = $3 where id = $4",
+		u.Name, u.Mail, u.Active, u.Id)
 	return err
 }
 
@@ -54,6 +54,8 @@ func (u *User) ChangePassword(p *ConnectionPoolWrapper, password string) error {
 	return err
 }
 
+// Pourquoi passer un password en argument alors qu'il serait possible d'utiliser le password de l'User sur lequel
+// la methode est appliquee ?
 func (u *User) CheckPassword(p *ConnectionPoolWrapper, new_password string) (bool, error) {
 	var password string
 	var check bool
@@ -113,4 +115,14 @@ func (u *User) PutAdmin(p *ConnectionPoolWrapper) error {
 
 func (u *User) Unadmin(p *ConnectionPoolWrapper) error {
 	return changeAdminUser(p, u.Id, false)
+}
+
+func (u *User) GetAdminById(p *ConnectionPoolWrapper, id uint32) (bool, error) {
+	var admin bool
+
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	row := db.QueryRow("select admin from users where id = $1", id)
+	err := row.Scan(&admin)
+	return admin, err
 }

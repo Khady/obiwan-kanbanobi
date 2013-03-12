@@ -22,6 +22,31 @@ func (c *connectionList) delConnection(conn net.Conn) {
 	}
 }
 
+func sendKanbanMsg(conn net.Conn, msg *message.Msg) error {
+	data, err := proto.Marshal(msg)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+	conn.Write(write_int32(int32(len(data))))
+	conn.Write(data)
+	return nil
+}
+
+func unidentifiedUser(conn net.Conn, msg *message.Msg) {
+	LOGGER.Print("unidentifiedUser")
+	answer := &message.Msg{
+		Target:    message.TARGET_IDENT.Enum(),
+		Command:   message.CMD_ERROR.Enum(),
+		AuthorId:  proto.Uint32(*msg.AuthorId),
+		SessionId: proto.String(*msg.SessionId),
+		Error: &message.Msg_Error{
+			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+		},
+	}
+	sendKanbanMsg(conn, answer)
+}
+
 func readMsg(conn net.Conn, msg []byte, length int) {
 	data := &message.Msg{}
 	err := proto.Unmarshal(msg[0:length], data)
@@ -29,9 +54,14 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		LOGGER.Print("Impossible to unmarshal the message", msg[0:length])
 		return
 	}
+	if *data.Target != message.TARGET_IDENT && MsgIdentIsUnidentified(conn, data) == false {
+		unidentifiedUser(conn, data)
+		return
+	}
 	switch *data.Target {
 	case message.TARGET_USERS:
 		LOGGER.Print("read TARGET_USERS message")
+		MsgUser(conn, data)
 	case message.TARGET_COLUMNS:
 		LOGGER.Print("read TARGET_COLUMNS message")
 		MsgColumn(conn, data)
@@ -42,6 +72,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		MsgCard(conn, data)
 	case message.TARGET_ADMIN:
 		LOGGER.Print("read TARGET_ADMIN message")
+		//		MsgAdmin(conn, data)
 	case message.TARGET_IDENT:
 		LOGGER.Print("read TARGET_IDENT message")
 		MsgIdent(conn, data)

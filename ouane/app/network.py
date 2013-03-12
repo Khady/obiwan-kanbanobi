@@ -44,6 +44,7 @@ class Network( ):
             self.readSize = struct.unpack("!I", self.connection.recv(4))[0]
         else:
             self.readStack.append(self.connection.recv(self.readSize))
+            self.readSize = 0
 
     def run(self):
         inputs = [self.s]

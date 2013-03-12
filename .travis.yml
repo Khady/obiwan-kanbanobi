@@ -9,3 +9,4 @@ install:
   - go get code.google.com/p/goconf/conf
   - go get code.google.com/p/goprotobuf/proto
   - go get bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol
+  - go get github.com/dchest/uniuri

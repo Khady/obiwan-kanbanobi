@@ -1,0 +1,69 @@
+.cardsList {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.postit {
+	width: 95%;
+	min-height: 30px;
+	height: auto;
+	padding: 5px;
+	font-size: 90%;
+}
+
+.column {
+	width: 250px;
+	height: auto;
+	padding: 0.2em 0.2em 0.2em 0.2em;
+	float: left;
+	margin: 10px;
+	background-color: #E0E0E0;
+	font-weight: bold;
+}
+
+#columnsList {
+	width: auto;
+	height: auto;
+	/* padding: 0.2em 0.2em 0.2em 0.2em; */
+	/* float: left; */
+	/* margin: 10px; */
+	/* background-color: #E0E0E0; */
+}
+
+.columnTitle
+{
+	width: 100%;
+	height: 30px;
+	font-weight: bold;
+	font-size: 90%;
+	text-align: left;
+}
+
+.cardsSpace
+{
+	width: 100%;
+	height: auto;
+	min-height: 105px;
+}
+
+.cardsList
+{
+    	width: 100%;
+	height: auto;
+	min-height: 105px;
+}
+
+.addCard
+{
+	width: 100%;
+	height: 20px;
+	margin:0;
+	padding:0;
+	text-align:center;
+	font-size: 75%;
+}
+
+/*.ui-state-highlight { width: 195px; height: 30px; line-height: 1.2em; }*/
+

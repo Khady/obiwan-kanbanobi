@@ -11,7 +11,7 @@ from google.protobuf import descriptor_pb2
 DESCRIPTOR = descriptor.FileDescriptor(
   name='message.proto',
   package='message',
-  serialized_pb='\n\rmessage.proto\x12\x07message\"\xad\x08\n\x03Msg\x12\x1f\n\x06target\x18\x01 \x02(\x0e\x32\x0f.message.TARGET\x12\x1d\n\x07\x63ommand\x18\x02 \x02(\x0e\x32\x0c.message.CMD\x12\x11\n\tauthor_id\x18\x03 \x02(\r\x12\x12\n\nsession_id\x18\x04 \x02(\t\x12!\n\x05users\x18\x05 \x01(\x0b\x32\x12.message.Msg.Users\x12%\n\x07\x63olumns\x18\x06 \x01(\x0b\x32\x14.message.Msg.Columns\x12\'\n\x08projects\x18\x07 \x01(\x0b\x32\x15.message.Msg.Projects\x12!\n\x05\x63\x61rds\x18\x08 \x01(\x0b\x32\x12.message.Msg.Cards\x12!\n\x05ident\x18\t \x01(\x0b\x32\x12.message.Msg.Ident\x12!\n\x05\x65rror\x18\n \x01(\x0b\x32\x12.message.Msg.Error\x12!\n\x05notif\x18\x0b \x01(\x0b\x32\x12.message.Msg.Notif\x1aP\n\x05Users\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x10\n\x08password\x18\x03 \x02(\t\x12\r\n\x05\x61\x64min\x18\x04 \x02(\x08\x12\x0c\n\x04mail\x18\x05 \x01(\t\x1aw\n\x07\x43olumns\x12\x12\n\nproject_id\x18\x01 \x02(\r\x12\n\n\x02id\x18\x02 \x02(\r\x12\x0c\n\x04name\x18\x03 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x04 \x01(\t\x12\x0c\n\x04tags\x18\x05 \x03(\t\x12\x13\n\x0bscripts_ids\x18\x06 \x03(\r\x12\r\n\x05write\x18\x07 \x03(\r\x1a\x45\n\x08Projects\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x11\n\tadmins_id\x18\x03 \x03(\r\x12\x0c\n\x04read\x18\x04 \x03(\r\x1a\x99\x01\n\x05\x43\x61rds\x12\n\n\x02id\x18\x01 \x02(\r\x12\x12\n\nproject_id\x18\x02 \x02(\r\x12\x11\n\tcolumn_id\x18\x03 \x02(\r\x12\x0c\n\x04name\x18\x04 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x06 \x01(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x0f\n\x07user_id\x18\x08 \x01(\t\x12\x13\n\x0bscripts_ids\x18\t \x03(\r\x12\r\n\x05write\x18\n \x03(\r\x1a]\n\x07\x43omment\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0f\n\x07\x63ontent\x18\x02 \x02(\t\x12\x11\n\tauthor_id\x18\x03 \x02(\t\x12\x11\n\ttimestamp\x18\x04 \x02(\r\x12\x0f\n\x07\x63\x61rd_id\x18\x05 \x02(\r\x1aX\n\x08Metadata\x12\x13\n\x0bobject_type\x18\x01 \x02(\r\x12\x11\n\tobject_id\x18\x02 \x02(\r\x12\x10\n\x08\x64\x61ta_key\x18\x03 \x01(\t\x12\x12\n\ndata_value\x18\x04 \x01(\r\x1a(\n\x05Ident\x12\r\n\x05login\x18\x01 \x02(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x1a\x19\n\x05\x45rror\x12\x10\n\x08\x65rror_id\x18\x01 \x02(\r\x1a\x14\n\x05Notif\x12\x0b\n\x03msg\x18\x01 \x01(\t*h\n\x06TARGET\x12\t\n\x05USERS\x10\x01\x12\x0b\n\x07\x43OLUMNS\x10\x02\x12\x0c\n\x08PROJECTS\x10\x03\x12\t\n\x05\x43\x41RDS\x10\x04\x12\t\n\x05\x41\x44MIN\x10\x05\x12\t\n\x05IDENT\x10\x06\x12\t\n\x05NOTIF\x10\x07\x12\x0c\n\x08METADATA\x10\x08*n\n\x03\x43MD\x12\n\n\x06\x43REATE\x10\x01\x12\n\n\x06MODIFY\x10\x02\x12\n\n\x06\x44\x45LETE\x10\x03\x12\x07\n\x03GET\x10\x04\x12\x08\n\x04MOVE\x10\x05\x12\x0b\n\x07\x43ONNECT\x10\x06\x12\x0e\n\nDISCONNECT\x10\x07\x12\t\n\x05\x45RROR\x10\x08\x12\x08\n\x04NONE\x10\t')
+  serialized_pb='\n\rmessage.proto\x12\x07message\"\x98\t\n\x03Msg\x12\x1f\n\x06target\x18\x01 \x02(\x0e\x32\x0f.message.TARGET\x12\x1d\n\x07\x63ommand\x18\x02 \x02(\x0e\x32\x0c.message.CMD\x12\x11\n\tauthor_id\x18\x03 \x02(\r\x12\x12\n\nsession_id\x18\x04 \x02(\t\x12!\n\x05users\x18\x05 \x01(\x0b\x32\x12.message.Msg.Users\x12%\n\x07\x63olumns\x18\x06 \x01(\x0b\x32\x14.message.Msg.Columns\x12\'\n\x08projects\x18\x07 \x01(\x0b\x32\x15.message.Msg.Projects\x12!\n\x05\x63\x61rds\x18\x08 \x01(\x0b\x32\x12.message.Msg.Cards\x12!\n\x05ident\x18\t \x01(\x0b\x32\x12.message.Msg.Ident\x12!\n\x05\x65rror\x18\n \x01(\x0b\x32\x12.message.Msg.Error\x12!\n\x05notif\x18\x0b \x01(\x0b\x32\x12.message.Msg.Notif\x12\'\n\x08password\x18\x0c \x01(\x0b\x32\x15.message.Msg.Password\x1aP\n\x05Users\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x10\n\x08password\x18\x03 \x02(\t\x12\r\n\x05\x61\x64min\x18\x04 \x02(\x08\x12\x0c\n\x04mail\x18\x05 \x01(\t\x1a@\n\x08Password\x12\n\n\x02id\x18\x01 \x02(\r\x12\x13\n\x0boldpassword\x18\x02 \x02(\t\x12\x13\n\x0bnewpassword\x18\x03 \x02(\t\x1aw\n\x07\x43olumns\x12\x12\n\nproject_id\x18\x01 \x02(\r\x12\n\n\x02id\x18\x02 \x02(\r\x12\x0c\n\x04name\x18\x03 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x04 \x01(\t\x12\x0c\n\x04tags\x18\x05 \x03(\t\x12\x13\n\x0bscripts_ids\x18\x06 \x03(\r\x12\r\n\x05write\x18\x07 \x03(\r\x1a\x45\n\x08Projects\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0c\n\x04name\x18\x02 \x02(\t\x12\x11\n\tadmins_id\x18\x03 \x03(\r\x12\x0c\n\x04read\x18\x04 \x03(\r\x1a\x99\x01\n\x05\x43\x61rds\x12\n\n\x02id\x18\x01 \x02(\r\x12\x12\n\nproject_id\x18\x02 \x02(\r\x12\x11\n\tcolumn_id\x18\x03 \x02(\r\x12\x0c\n\x04name\x18\x04 \x02(\t\x12\x0c\n\x04\x64\x65sc\x18\x06 \x01(\t\x12\x0c\n\x04tags\x18\x07 \x03(\t\x12\x0f\n\x07user_id\x18\x08 \x01(\r\x12\x13\n\x0bscripts_ids\x18\t \x03(\r\x12\r\n\x05write\x18\n \x03(\r\x1a]\n\x07\x43omment\x12\n\n\x02id\x18\x01 \x02(\r\x12\x0f\n\x07\x63ontent\x18\x02 \x02(\t\x12\x11\n\tauthor_id\x18\x03 \x02(\t\x12\x11\n\ttimestamp\x18\x04 \x02(\r\x12\x0f\n\x07\x63\x61rd_id\x18\x05 \x02(\r\x1aX\n\x08Metadata\x12\x13\n\x0bobject_type\x18\x01 \x02(\r\x12\x11\n\tobject_id\x18\x02 \x02(\r\x12\x10\n\x08\x64\x61ta_key\x18\x03 \x01(\t\x12\x12\n\ndata_value\x18\x04 \x01(\r\x1a(\n\x05Ident\x12\r\n\x05login\x18\x01 \x02(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x1a\x19\n\x05\x45rror\x12\x10\n\x08\x65rror_id\x18\x01 \x02(\r\x1a\x14\n\x05Notif\x12\x0b\n\x03msg\x18\x01 \x01(\t*h\n\x06TARGET\x12\t\n\x05USERS\x10\x01\x12\x0b\n\x07\x43OLUMNS\x10\x02\x12\x0c\n\x08PROJECTS\x10\x03\x12\t\n\x05\x43\x41RDS\x10\x04\x12\t\n\x05\x41\x44MIN\x10\x05\x12\t\n\x05IDENT\x10\x06\x12\t\n\x05NOTIF\x10\x07\x12\x0c\n\x08METADATA\x10\x08*\x88\x01\n\x03\x43MD\x12\n\n\x06\x43REATE\x10\x01\x12\n\n\x06MODIFY\x10\x02\x12\n\n\x06\x44\x45LETE\x10\x03\x12\x07\n\x03GET\x10\x04\x12\x08\n\x04MOVE\x10\x05\x12\x0b\n\x07\x43ONNECT\x10\x06\x12\x0e\n\nDISCONNECT\x10\x07\x12\t\n\x05\x45RROR\x10\x08\x12\n\n\x06SUCCES\x10\t\x12\x08\n\x04NONE\x10\n\x12\x0c\n\x08PASSWORD\x10\x0b')
 
 _TARGET = descriptor.EnumDescriptor(
   name='TARGET',
@@ -54,8 +54,8 @@ _TARGET = descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1098,
-  serialized_end=1202,
+  serialized_start=1205,
+  serialized_end=1309,
 )
 
 
@@ -98,14 +98,22 @@ _CMD = descriptor.EnumDescriptor(
       options=None,
       type=None),
     descriptor.EnumValueDescriptor(
-      name='NONE', index=8, number=9,
+      name='SUCCES', index=8, number=9,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='NONE', index=9, number=10,
+      options=None,
+      type=None),
+    descriptor.EnumValueDescriptor(
+      name='PASSWORD', index=10, number=11,
       options=None,
       type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=1204,
-  serialized_end=1314,
+  serialized_start=1312,
+  serialized_end=1448,
 )
 
 
@@ -125,7 +133,9 @@ MOVE = 5
 CONNECT = 6
 DISCONNECT = 7
 ERROR = 8
-NONE = 9
+SUCCES = 9
+NONE = 10
+PASSWORD = 11
 
 
 
@@ -180,8 +190,49 @@ _MSG_USERS = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=392,
-  serialized_end=472,
+  serialized_start=433,
+  serialized_end=513,
+)
+
+_MSG_PASSWORD = descriptor.Descriptor(
+  name='Password',
+  full_name='message.Msg.Password',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    descriptor.FieldDescriptor(
+      name='id', full_name='message.Msg.Password.id', index=0,
+      number=1, type=13, cpp_type=3, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='oldpassword', full_name='message.Msg.Password.oldpassword', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    descriptor.FieldDescriptor(
+      name='newpassword', full_name='message.Msg.Password.newpassword', index=2,
+      number=3, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=unicode("", "utf-8"),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=515,
+  serialized_end=579,
 )
 
 _MSG_COLUMNS = descriptor.Descriptor(
@@ -249,8 +300,8 @@ _MSG_COLUMNS = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=474,
-  serialized_end=593,
+  serialized_start=581,
+  serialized_end=700,
 )
 
 _MSG_PROJECTS = descriptor.Descriptor(
@@ -297,8 +348,8 @@ _MSG_PROJECTS = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=595,
-  serialized_end=664,
+  serialized_start=702,
+  serialized_end=771,
 )
 
 _MSG_CARDS = descriptor.Descriptor(
@@ -352,8 +403,8 @@ _MSG_CARDS = descriptor.Descriptor(
       options=None),
     descriptor.FieldDescriptor(
       name='user_id', full_name='message.Msg.Cards.user_id', index=6,
-      number=8, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=unicode("", "utf-8"),
+      number=8, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -380,8 +431,8 @@ _MSG_CARDS = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=667,
-  serialized_end=820,
+  serialized_start=774,
+  serialized_end=927,
 )
 
 _MSG_COMMENT = descriptor.Descriptor(
@@ -435,8 +486,8 @@ _MSG_COMMENT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=822,
-  serialized_end=915,
+  serialized_start=929,
+  serialized_end=1022,
 )
 
 _MSG_METADATA = descriptor.Descriptor(
@@ -483,8 +534,8 @@ _MSG_METADATA = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=917,
-  serialized_end=1005,
+  serialized_start=1024,
+  serialized_end=1112,
 )
 
 _MSG_IDENT = descriptor.Descriptor(
@@ -517,8 +568,8 @@ _MSG_IDENT = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1007,
-  serialized_end=1047,
+  serialized_start=1114,
+  serialized_end=1154,
 )
 
 _MSG_ERROR = descriptor.Descriptor(
@@ -544,8 +595,8 @@ _MSG_ERROR = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1049,
-  serialized_end=1074,
+  serialized_start=1156,
+  serialized_end=1181,
 )
 
 _MSG_NOTIF = descriptor.Descriptor(
@@ -571,8 +622,8 @@ _MSG_NOTIF = descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1076,
-  serialized_end=1096,
+  serialized_start=1183,
+  serialized_end=1203,
 )
 
 _MSG = descriptor.Descriptor(
@@ -659,20 +710,28 @@ _MSG = descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    descriptor.FieldDescriptor(
+      name='password', full_name='message.Msg.password', index=11,
+      number=12, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
-  nested_types=[_MSG_USERS, _MSG_COLUMNS, _MSG_PROJECTS, _MSG_CARDS, _MSG_COMMENT, _MSG_METADATA, _MSG_IDENT, _MSG_ERROR, _MSG_NOTIF, ],
+  nested_types=[_MSG_USERS, _MSG_PASSWORD, _MSG_COLUMNS, _MSG_PROJECTS, _MSG_CARDS, _MSG_COMMENT, _MSG_METADATA, _MSG_IDENT, _MSG_ERROR, _MSG_NOTIF, ],
   enum_types=[
   ],
   options=None,
   is_extendable=False,
   extension_ranges=[],
   serialized_start=27,
-  serialized_end=1096,
+  serialized_end=1203,
 )
 
 _MSG_USERS.containing_type = _MSG;
+_MSG_PASSWORD.containing_type = _MSG;
 _MSG_COLUMNS.containing_type = _MSG;
 _MSG_PROJECTS.containing_type = _MSG;
 _MSG_CARDS.containing_type = _MSG;
@@ -690,6 +749,7 @@ _MSG.fields_by_name['cards'].message_type = _MSG_CARDS
 _MSG.fields_by_name['ident'].message_type = _MSG_IDENT
 _MSG.fields_by_name['error'].message_type = _MSG_ERROR
 _MSG.fields_by_name['notif'].message_type = _MSG_NOTIF
+_MSG.fields_by_name['password'].message_type = _MSG_PASSWORD
 DESCRIPTOR.message_types_by_name['Msg'] = _MSG
 
 class Msg(message.Message):
@@ -700,6 +760,12 @@ class Msg(message.Message):
     DESCRIPTOR = _MSG_USERS
     
     # @@protoc_insertion_point(class_scope:message.Msg.Users)
+  
+  class Password(message.Message):
+    __metaclass__ = reflection.GeneratedProtocolMessageType
+    DESCRIPTOR = _MSG_PASSWORD
+    
+    # @@protoc_insertion_point(class_scope:message.Msg.Password)
   
   class Columns(message.Message):
     __metaclass__ = reflection.GeneratedProtocolMessageType
