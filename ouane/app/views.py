@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session
 from app  import app, a
-from forms import LoginForm
+from forms import LoginForm, AddProjectForm
 from functools import wraps
 
 # index view function suppressed for brevity
@@ -8,7 +8,8 @@ from functools import wraps
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if 'logged_in' not in  session:
+        if 'logged_in' not in  session or a.checkIfConnected(session['user_login']) == False:
+            session.pop('logged_in', None)
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -49,12 +50,18 @@ def checklogin(name = None):
 def project(name = ""):
     return render_template('project.html')
 
-@app.route("/")
-@app.route("/index")
+@app.route("/", methods = ['GET', 'POST'])
+@app.route("/index", methods = ['GET', 'POST'])
 @login_required
 def index():
     try:
-        data = Users.query.all()
+        data = Project.query.all()
     except:
         data = []
-    return render_template('index.html', data=data)
+    form = AddProjectForm()
+    if form.validate_on_submit():
+        print form.name.data
+        print form.description.data
+        connection = a.getUserConnectionData(session['user_login'])
+        a.createProject(connection['author_id'], connection['session_id'], form.name.data, form.description.data)
+    return render_template('index.html', data=data, form=form)
