@@ -65,5 +65,31 @@
 	font-size: 75%;
 }
 
+.columnCreation
+{
+	margin: 10px;
+}
+
 /*.ui-state-highlight { width: 195px; height: 30px; line-height: 1.2em; }*/
 
+.newProject
+{
+    width:auto;
+    height:auto;
+    border:1px solid gray;
+    position:relative;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 10px;
+    box-shadow: 6px 6px 9px gray
+}
+
+div.newProject input
+{
+    min-width:400px;
+}
+
+div.newProject textarea
+{
+    min-width:400px;
+}

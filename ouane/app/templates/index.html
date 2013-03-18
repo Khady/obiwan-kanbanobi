@@ -1,7 +1,38 @@
 {% extends "layout.html" %}
 {% block body %}
-  <h1>Raw data</h1>
+<script>
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + 
+                                                $(window).scrollTop()) + "px");
+    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + 
+                                                $(window).scrollLeft()) + "px");
+    return this;
+}
+$(function() {
+$( ".addProject" ).button().click(function() {
+$( ".newProject" ).center();
+$( ".newProject" ).show();
+})
+$( ".newProject" ).hide();
+});
+</script>
+  <h1>Project List</h1>
   {% for message in data %}
     <p>{{ message }}</p>
   {% endfor %}
-{% endblock %}
+    <button class="addProject">Add a project</button>
+    <div class="newProject">
+      <h3>Add Project</h3>
+      <form action="" method="post" name="addProject">
+	{{form.hidden_tag()}}
+	<p>
+	  Name:<br>
+	  {{form.name}}<br>
+	  Description:<br>
+	  {{form.description(rows=10)}}<br>
+	  <input type="submit" style="width:100%;" value="Add Project!">
+	</p>
+      </form>
+    </div>
+{%  endblock %}

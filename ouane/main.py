@@ -10,7 +10,7 @@ from app import app
 # db = SQLAlchemy(app) 
 
 if __name__ == "__main__":
-````    # f.createColumns(0, "aa", 0, 0, "lol")
+    # f.createColumns(0, "aa", 0, 0, "lol")
     # c = Cards(1, "test", "salut je suis un test", 1, 1, "jerox;test;", 1, 0, 1)
     # co = Columns(4, "test", 1, "test contenu", "jerox;test;", 1, 1)
     # u = Users(12, "test", True, "motdepasse", "contact@email.com", True)

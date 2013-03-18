@@ -58,8 +58,9 @@ message Msg {
   message Projects {
     required uint32	id = 1;
     required string	name = 2;
-    repeated uint32	admins_id = 3; // list of the administrator users of the projects
-    repeated uint32	read = 4;  // list of the user IDs with read permission on the project (if empty: free for all)
+    required string	content = 3;
+    repeated uint32	admins_id = 4; // list of the administrator users of the projects
+    repeated uint32	read = 5;  // list of the user IDs with read permission on the project (if empty: free for all)
   }
 
   message Cards {

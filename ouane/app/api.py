@@ -71,17 +71,31 @@ class Api(threading.Thread):
         msg.users.id = user_id
         self.network.setWriteStack(msg.SerializeToString())
         
-    def createColumns(self, author_id, session_id, project_id, id = 0, name = "", desc = "", tags = [], scripts_ids = [], write = []):
+    def createColumns(self, author_id, session_id, project_id, name = "", desc = "", tags = [], scripts_ids = [], write = []):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
         msg.command = message_pb2.CREATE
         msg.author_id = author_id
         msg.session_id = session_id
         msg.columns.project_id = project_id
-        msg.columns.id = id
+        msg.columns.id = 0
         msg.columns.name = name
         for elem in write:
             msg.columns.write.add(elem)
+        self.network.setWriteStack(msg.SerializeToString())
+
+    def createProject(self, author_id, session_id, name = "", content = "", read = []):
+        msg = Msg()
+        msg.target = message_pb2.PROJECTS
+        msg.command = message_pb2.CREATE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.projects.admins_id.append(author_id)
+        msg.projects.name = name
+        msg.projects.content = content
+        msg.projects.id = 0
+        for elem in read:
+            msg.projects.read.add(elem)
         self.network.setWriteStack(msg.SerializeToString())
 
     def sendLogin(self, login, password):
@@ -99,6 +113,9 @@ class Api(threading.Thread):
             return True
         return False
 
+    def getUserConnectionData(self, name):
+        return self.userLogin[name]
+
     def run(self):
         while 1:
             self.network.run()
@@ -114,7 +131,7 @@ class Api(threading.Thread):
                     db.session.add(c)
                     db.session.commit()
                 if (msg.target == message_pb2.COLUMNS):
-                    c = Columns(msg.columns.id, msg.cards.name, msg.columns.column_id, msg.columns.project_id, msg.columns.tags,
+                    c = Columns(msg.columns.id, msg.columns.name, msg.columns.column_id, msg.columns.project_id, msg.columns.tags,
                                 msg.columns.scripts_id, msg.columns.write)
                     db.session.add(c)
                     db.session.commit()
@@ -126,3 +143,7 @@ class Api(threading.Thread):
                     # print msg.ident.login
                     user = {"author_id": msg.author_id, "session_id": msg.session_id}
                     self.userLogin[msg.ident.login] = user
+                if (msg.target == message_pb2.PROJECTS):
+                    p = Columns(msg.projects.id, msg.projects.name, msg.projects.admin_id, msg.projects.content, msg.projects.read)
+                    db.session.add(c)
+                    db.session.commit()
