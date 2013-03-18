@@ -237,7 +237,7 @@ func (this *Msg) GetPassword() *Msg_Password {
 type Msg_Users struct {
 	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	Name             *string `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
-	Password         *string `protobuf:"bytes,3,req,name=password" json:"password,omitempty"`
+	Password         *string `protobuf:"bytes,3,opt,name=password" json:"password,omitempty"`
 	Admin            *bool   `protobuf:"varint,4,req,name=admin" json:"admin,omitempty"`
 	Mail             *string `protobuf:"bytes,5,opt,name=mail" json:"mail,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
@@ -360,8 +360,9 @@ func (this *Msg_Columns) GetDesc() string {
 type Msg_Projects struct {
 	Id               *uint32  `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	Name             *string  `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
-	AdminsId         []uint32 `protobuf:"varint,3,rep,name=admins_id" json:"admins_id,omitempty"`
-	Read             []uint32 `protobuf:"varint,4,rep,name=read" json:"read,omitempty"`
+	Content          *string  `protobuf:"bytes,3,req,name=content" json:"content,omitempty"`
+	AdminsId         []uint32 `protobuf:"varint,4,rep,name=admins_id" json:"admins_id,omitempty"`
+	Read             []uint32 `protobuf:"varint,5,rep,name=read" json:"read,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
@@ -379,6 +380,13 @@ func (this *Msg_Projects) GetId() uint32 {
 func (this *Msg_Projects) GetName() string {
 	if this != nil && this.Name != nil {
 		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Projects) GetContent() string {
+	if this != nil && this.Content != nil {
+		return *this.Content
 	}
 	return ""
 }
@@ -494,7 +502,7 @@ type Msg_Metadata struct {
 	ObjectType       *uint32 `protobuf:"varint,1,req,name=object_type" json:"object_type,omitempty"`
 	ObjectId         *uint32 `protobuf:"varint,2,req,name=object_id" json:"object_id,omitempty"`
 	DataKey          *string `protobuf:"bytes,3,opt,name=data_key" json:"data_key,omitempty"`
-	DataValue        *string `protobuf:"bytes,4,opt,name=data_value" json:"data_value,omitempty"`
+	DataValue        *uint32 `protobuf:"varint,4,opt,name=data_value" json:"data_value,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
@@ -510,7 +518,7 @@ func (this *Msg_Metadata) GetObjectType() uint32 {
 }
 
 func (this *Msg_Metadata) GetObjectId() uint32 {
-    if this != nil && this.ObjectId != nil {
+	if this != nil && this.ObjectId != nil {
 		return *this.ObjectId
 	}
 	return 0
