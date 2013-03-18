@@ -15,6 +15,16 @@ type User struct {
 	Active   bool
 }
 
+func (u *User) HaveRight(authorId uint32) bool {
+	if ret, err := u.CheckPassword(dbPool, u.Password); err == nil && ret == true {
+		if admin, err := u.GetAdminById(dbPool, authorId); (err == nil && admin == true) || 
+			authorId == u.Id {
+			return true
+		}
+	}
+	return false
+}
+
 func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 
 	user := &User{
@@ -26,7 +36,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 		true,
 	}
 	var answer *message.Msg
-	if admin, err := user.GetAdminById(dbPool, *msg.AuthorId); err == nil && admin == true {
+	if user.HaveRight((*msg.AuthorId)) {
 		if err := user.Add(dbPool); err != nil {
 			answer = &message.Msg{
 				Target:    message.TARGET_USERS.Enum(),
@@ -71,17 +81,8 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 		true,
 	}
 	var answer *message.Msg
-	if admin, err := user.GetAdminById(dbPool, *msg.AuthorId); err != nil {
-		answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
-			Command:   message.CMD_ERROR.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-			},
-		}
-	} else if ret, err := user.CheckPassword(dbPool, user.Password); err != nil || (*msg.AuthorId) == user.Id && ret != true || (*msg.AuthorId) != user.Id && admin != true {
+
+	if user.HaveRight((*msg.AuthorId)) == false {
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
@@ -124,92 +125,43 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 		"",
 		true,
 	}
+
 	var answer *message.Msg
-	if user.Id == *msg.AuthorId {
-		if ret, err := user.CheckPassword(dbPool, user.Password); err != nil {
-			// Envoyer un message d'erreur ici
-			if err != nil {
-				answer = &message.Msg{
-					Target:    message.TARGET_USERS.Enum(),
-					Command:   message.CMD_ERROR.Enum(),
-					AuthorId:  proto.Uint32(*msg.AuthorId),
-					SessionId: proto.String(*msg.SessionId),
-					Error: &message.Msg_Error{
-						ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-					},
-				}
-			}
-		} else if ret == true {
-			if err := user.ChangePassword(dbPool, *msg.Password.Newpassword); err != nil {
-				answer = &message.Msg{
-					Target:    message.TARGET_USERS.Enum(),
-					Command:   message.CMD_ERROR.Enum(),
-					AuthorId:  proto.Uint32(*msg.AuthorId),
-					SessionId: proto.String(*msg.SessionId),
-					Error: &message.Msg_Error{
-						ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-					},
-				}
-			} else {
-				// Envoyer un message de succes ici
-				answer = &message.Msg{
-					Target:    message.TARGET_USERS.Enum(),
-					Command:   message.CMD_SUCCES.Enum(),
-					AuthorId:  proto.Uint32(*msg.AuthorId),
-					SessionId: proto.String(*msg.SessionId),
-				}
-			}
+	
+	if user.HaveRight((*msg.AuthorId)) == false {
+		// Envoyer un message d'erreur ici
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+		Error: &message.Msg_Error{
+			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := user.ChangePassword(dbPool, *msg.Password.Newpassword); err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+		Error: &message.Msg_Error{
+			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			},
 		}
 	} else {
-		if admin, err := user.GetAdminById(dbPool, *msg.AuthorId); err != nil || admin != true || (*msg.AuthorId) == user.Id {
-			answer = &message.Msg{
-				Target:    message.TARGET_USERS.Enum(),
-				Command:   message.CMD_ERROR.Enum(),
-				AuthorId:  proto.Uint32(*msg.AuthorId),
-				SessionId: proto.String(*msg.SessionId),
-				Error: &message.Msg_Error{
-					ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-				},
-			}
-		} else {
-			if ret, err := user.CheckPassword(dbPool, user.Password); err != nil {
-				// Envoyer un message d'erreur ici
-				if err != nil {
-					answer = &message.Msg{
-						Target:    message.TARGET_USERS.Enum(),
-						Command:   message.CMD_ERROR.Enum(),
-						AuthorId:  proto.Uint32(*msg.AuthorId),
-						SessionId: proto.String(*msg.SessionId),
-						Error: &message.Msg_Error{
-							ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-						},
-					}
-				} else if ret == true {
-					answer = &message.Msg{
-						Target:    message.TARGET_USERS.Enum(),
-						Command:   message.CMD_SUCCES.Enum(),
-						AuthorId:  proto.Uint32(*msg.AuthorId),
-						SessionId: proto.String(*msg.SessionId),
-					}
-				} else {
-					answer = &message.Msg{
-						Target:    message.TARGET_USERS.Enum(),
-						Command:   message.CMD_ERROR.Enum(),
-						AuthorId:  proto.Uint32(*msg.AuthorId),
-						SessionId: proto.String(*msg.SessionId),
-						Error: &message.Msg_Error{
-							ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
-						},
-					}
-				}
-			}
+		// Envoyer un message de succes ici
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_SUCCES.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
 		}
 	}
 	sendKanbanMsg(conn, answer)
 }
 
 func MsgUserDelete(conn net.Conn, msg *message.Msg) {
-	// verif if user is admin or if is deleting self and entered password
 	user := &User{
 		*msg.Users.Id,
 		*msg.Users.Name,
@@ -220,7 +172,17 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 	}
 
 	var answer *message.Msg
-	if err := user.Del(dbPool); err != nil {
+	if user.HaveRight((*msg.AuthorId)) == false {
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := user.Del(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
@@ -250,7 +212,7 @@ func MsgUser(conn net.Conn, msg *message.Msg) {
 	case message.CMD_MODIFY:
 		MsgUserUpdate(conn, msg)
 	case message.CMD_PASSWORD:
-//		MsgUserPassword(conn, msg)
+		MsgUserPassword(conn, msg)
 	case message.CMD_DELETE:
 		MsgUserDelete(conn, msg)
 	}
