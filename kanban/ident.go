@@ -45,7 +45,7 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(0),
 			SessionId: proto.String(*msg.Ident.Login),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(51), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -79,7 +79,7 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(0),
 			SessionId: proto.String(*msg.Ident.Login),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(52), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {

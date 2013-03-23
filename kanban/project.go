@@ -31,7 +31,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(31), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -69,7 +69,7 @@ func MsgProjectUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(32), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -103,7 +103,7 @@ func MsgProjectDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(34), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -137,7 +137,7 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(35), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -148,7 +148,7 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Projects: &message.Msg_Projects{
-			
+
 				Id:         proto.Uint32(proj.Id),
 				Name:       proto.String(proj.Name),
 //				AdminsId:   proto.Uint32(proj.admins_id),

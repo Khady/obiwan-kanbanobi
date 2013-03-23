@@ -93,7 +93,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+		Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(2),
 			},
 		}
@@ -129,7 +129,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 	}
 
 	var answer *message.Msg
-	
+
 	if user.HaveRight((*msg.AuthorId)) == false {
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
@@ -147,7 +147,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(13),
+				ErrorId: proto.Uint32(13),
 			},
 		}
 	} else {
@@ -178,7 +178,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+		Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(2),
 			},
 		}
@@ -188,7 +188,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+		Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(14),
 			},
 		}
