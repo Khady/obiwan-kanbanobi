@@ -17,7 +17,7 @@ type User struct {
 
 func (u *User) HaveRight(authorId uint32) bool {
 	if ret, err := u.CheckPassword(dbPool, u.Password); err == nil && ret == true {
-		if admin, err := u.GetAdminById(dbPool, authorId); (err == nil && admin == true) || 
+		if admin, err := u.GetAdminById(dbPool, authorId); (err == nil && admin == true) ||
 			authorId == u.Id {
 			return true
 		}
@@ -44,7 +44,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
 				Error: &message.Msg_Error{
-					ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+					ErrorId: proto.Uint32(11), // remplacer par le vrai code d'erreur ici
 				},
 			}
 		} else {
@@ -63,7 +63,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(11), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	}
@@ -89,7 +89,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(12), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else if err := user.Update(dbPool); err != nil {
@@ -100,7 +100,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(12), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -127,7 +127,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 	}
 
 	var answer *message.Msg
-	
+
 	if user.HaveRight((*msg.AuthorId)) == false {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
@@ -136,7 +136,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			ErrorId: proto.Uint32(13), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else if err := user.ChangePassword(dbPool, *msg.Password.Newpassword); err != nil {
@@ -146,7 +146,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			ErrorId: proto.Uint32(13), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -179,7 +179,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(14), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else if err := user.Del(dbPool); err != nil {
@@ -190,7 +190,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(14), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
