@@ -23,7 +23,7 @@ func MsgAdminCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId: proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
                 Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici    
+			ErrorId: proto.Uint32(2),
                         },
                 }
 	} else if err:= user.PutAdmin(dbPool); err != nil {
@@ -33,7 +33,7 @@ func MsgAdminCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId: proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
                 Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici    
+			ErrorId: proto.Uint32(17),
                         },
                 }
 	} else {
@@ -65,7 +65,7 @@ func MsgAdminDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId: proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
                 Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici    
+			ErrorId: proto.Uint32(2),
                         },
                 }
 	} else if err:= user.Unadmin(dbPool); err != nil {
@@ -75,7 +75,7 @@ func MsgAdminDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId: proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
                 Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici    
+			ErrorId: proto.Uint32(18),
                         },
                 }
 	} else {
@@ -109,7 +109,7 @@ func MsgAdminGet(conn net.Conn, msg *message.Msg) {
 				AuthorId: proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici    
+				ErrorId: proto.Uint32(15),
 				},
 			}
 		} else {
@@ -134,7 +134,7 @@ func MsgAdminGet(conn net.Conn, msg *message.Msg) {
 				AuthorId: proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(15),
 				},
 			}
 		} else {

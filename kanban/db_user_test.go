@@ -2,6 +2,8 @@ package main
 
 import (
 	"testing"
+	"fmt"
+	"strconv"
 )
 
 func Test_GetNbUsers(t *testing.T) {
@@ -31,6 +33,32 @@ func Test_GetUsersByName(t *testing.T) {
 		t.Error("Mauvais name")
 	}
 	db.Exec("delete from users where name = $1", "super test")
+}
+
+
+func Test_GetProjecByUserId(t *testing.T) {
+	readConf(TEST_CONF_FILE)
+	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
+		t.Error("fail dans l'initpool", err)
+	}
+	db := dbPool.GetConnection()
+	defer dbPool.ReleaseConnection(db)
+	db.Exec(`INSERT INTO users(name, admin, password, mail, active)
+		 VALUES('super test', 'false', 'pass', 'user@world.com', 'true');`)
+	u := &User{1, "super test", false, "pass", "user@world.com", true}
+	u.GetByName(dbPool)
+	str := `INSERT INTO projects(name, content, admins_id, read) VALUES('super projet', 'nothing', '', ',` + strconv.FormatUint(uint64(u.Id), 10) + `,');`
+	db.Exec(str)
+	tab, err := u.GetProjectByUserId(dbPool)
+	if (err != nil) {
+		t.Error("could not get User project")
+	}
+	fmt.Println(tab[0].Name)
+	if len(tab) != 1 {
+		t.Error("mauvais nombre de projet pour l'utilisateur")
+	}
+	db.Exec("delete from users where name = $1", "super test")
+	db.Exec("delete from projects where name = $1", "super projet")
 }
 
 func Test_GetUserById(t *testing.T) {

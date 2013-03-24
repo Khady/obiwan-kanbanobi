@@ -1,5 +1,7 @@
 package main
 
+import "strconv"
+
 func changeStateUser(p *ConnectionPoolWrapper, id uint32, state bool) error {
 	db := p.GetConnection()
 	_, err := db.Exec("update users set active = $1 where id = $2", state, id)
@@ -54,7 +56,7 @@ func (u *User) ChangePassword(p *ConnectionPoolWrapper, password string) error {
 	return err
 }
 
-// Pourquoi passer un password en argument alors qu'il serait possible d'utiliser le password de l'User sur lequel
+// Pourquoi passer un password en argument alors qu'il serait possible d'utiliser le password de l'User sur lequel -> surement pour pouvoir faire la verif que le password a bien changer par rapport a l'ancien (row scan -> if).
 // la methode est appliquee ?
 func (u *User) CheckPassword(p *ConnectionPoolWrapper, new_password string) (bool, error) {
 	var password string
@@ -115,6 +117,27 @@ func (u *User) PutAdmin(p *ConnectionPoolWrapper) error {
 
 func (u *User) Unadmin(p *ConnectionPoolWrapper) error {
 	return changeAdminUser(p, u.Id, false)
+}
+
+func (u *User)GetProjectByUserId(p *ConnectionPoolWrapper) ([]Project, error) {
+	var tab []Project
+	var t Project
+
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	row, err := db.Query("SELECT id, name, content FROM projects WHERE read LIKE '%," + strconv.FormatUint(uint64(u.Id), 10) + ",%'")
+	if (err != nil) {
+		return tab, err
+	}
+	for row.Next() {
+		err = row.Scan(&t.Id, &t.Name, &t.Content)
+		if (err != nil) {
+			return tab, err
+		}
+		tab = append(tab, t)
+	}
+
+	return tab, nil
 }
 
 func (u *User) GetAdminById(p *ConnectionPoolWrapper, id uint32) (bool, error) {
