@@ -119,19 +119,19 @@ func (u *User) Unadmin(p *ConnectionPoolWrapper) error {
 	return changeAdminUser(p, u.Id, false)
 }
 
-func (u *User)GetProjectByUserId(p *ConnectionPoolWrapper) ([]Project, error) {
+func (u *User) GetProjectByUserId(p *ConnectionPoolWrapper) ([]Project, error) {
 	var tab []Project
 	var t Project
 
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row, err := db.Query("SELECT id, name, content FROM projects WHERE read LIKE '%," + strconv.FormatUint(uint64(u.Id), 10) + ",%'")
-	if (err != nil) {
+	if err != nil {
 		return tab, err
 	}
 	for row.Next() {
 		err = row.Scan(&t.Id, &t.Name, &t.Content)
-		if (err != nil) {
+		if err != nil {
 			return tab, err
 		}
 		tab = append(tab, t)

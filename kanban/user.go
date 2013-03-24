@@ -21,7 +21,7 @@ func (u *User) HaveRight(authorId uint32) bool {
 		u.Id = authorId
 	}
 	if ret, err := u.CheckPassword(dbPool, u.Password); err == nil && ret == true {
-		if admin, err := u.GetAdminById(dbPool, authorId); (err == nil && admin == true) || 
+		if admin, err := u.GetAdminById(dbPool, authorId); (err == nil && admin == true) ||
 			authorId == sId {
 			u.Id = sId
 			return true
@@ -93,7 +93,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(2),
 			},
 		}
@@ -136,8 +136,8 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(2),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2),
 			},
 		}
 	} else if err := user.ChangePassword(dbPool, *msg.Password.Newpassword); err != nil {
@@ -146,7 +146,7 @@ func MsgUserPassword(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(13),
 			},
 		}
@@ -178,7 +178,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(2),
 			},
 		}
@@ -188,7 +188,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(14),
 			},
 		}
@@ -204,117 +204,117 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 }
 
 func MsgUserGet(conn net.Conn, msg *message.Msg) {
-        user := &User{
-                *msg.Users.Id,
-                *msg.Users.Name,
-                *msg.Users.Admin,
-                *msg.Users.Password,
-                *msg.Users.Mail,
-                true,
-        }
+	user := &User{
+		*msg.Users.Id,
+		*msg.Users.Name,
+		*msg.Users.Admin,
+		*msg.Users.Password,
+		*msg.Users.Mail,
+		true,
+	}
 
-        var answer *message.Msg
+	var answer *message.Msg
 
-        if user.Id != 0 {
-                if err:= user.GetById(dbPool); err != nil {
-                        answer = &message.Msg{
-				Target: message.TARGET_USERS.Enum(),
-				Command: message.CMD_ERROR.Enum(),
-				AuthorId: proto.Uint32(*msg.AuthorId),
+	if user.Id != 0 {
+		if err := user.GetById(dbPool); err != nil {
+			answer = &message.Msg{
+				Target:    message.TARGET_USERS.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-                        Error: &message.Msg_Error{
+				Error: &message.Msg_Error{
 					ErrorId: proto.Uint32(15),
-                                },
-                        }
-                } else {
-                        answer = &message.Msg{
+				},
+			}
+		} else {
+			answer = &message.Msg{
 				Target:    message.TARGET_USERS.Enum(),
 				Command:   message.CMD_SUCCES.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-                        Users: &message.Msg_Users{
-					Id: proto.Uint32(user.Id),
-					Name: &user.Name,
+				Users: &message.Msg_Users{
+					Id:    proto.Uint32(user.Id),
+					Name:  &user.Name,
 					Admin: &user.Admin,
-					Mail: &user.Mail,
-                                },
-                        }
-                }
-        } else {
-                if err := user.GetByName(dbPool); err != nil {
-                        answer = &message.Msg{
-				Target: message.TARGET_USERS.Enum(),
-				Command: message.CMD_ERROR.Enum(),
-				AuthorId: proto.Uint32(*msg.AuthorId),
+					Mail:  &user.Mail,
+				},
+			}
+		}
+	} else {
+		if err := user.GetByName(dbPool); err != nil {
+			answer = &message.Msg{
+				Target:    message.TARGET_USERS.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-                        Error: &message.Msg_Error{
+				Error: &message.Msg_Error{
 					ErrorId: proto.Uint32(15),
-                                },
-                        }
-                } else {
-                        answer = &message.Msg{
+				},
+			}
+		} else {
+			answer = &message.Msg{
 				Target:    message.TARGET_USERS.Enum(),
 				Command:   message.CMD_SUCCES.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-                        Users: &message.Msg_Users{
-					Id: proto.Uint32(user.Id),
-					Name: &user.Name,
+				Users: &message.Msg_Users{
+					Id:    proto.Uint32(user.Id),
+					Name:  &user.Name,
 					Admin: &user.Admin,
-					Mail: &user.Mail,
-                                },
-                        }
-                }
-        }
-        sendKanbanMsg(conn, answer)
+					Mail:  &user.Mail,
+				},
+			}
+		}
+	}
+	sendKanbanMsg(conn, answer)
 }
 
 func MsgUserGetBoard(conn net.Conn, msg *message.Msg) {
-        user := &User{
-                *msg.Users.Id,
-                *msg.Users.Name,
-                *msg.Users.Admin,
-                *msg.Users.Password,
-                *msg.Users.Mail,
-                true,
-        }	
-        var answer *message.Msg
+	user := &User{
+		*msg.Users.Id,
+		*msg.Users.Name,
+		*msg.Users.Admin,
+		*msg.Users.Password,
+		*msg.Users.Mail,
+		true,
+	}
+	var answer *message.Msg
 
-	if board, err:= user.GetProjectByUserId(dbPool); err != nil {
-                answer = &message.Msg{
-			Target: message.TARGET_USERS.Enum(),
-			Command: message.CMD_ERROR.Enum(),
-			AuthorId: proto.Uint32(*msg.AuthorId),
+	if board, err := user.GetProjectByUserId(dbPool); err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(15),
-                        },
-                }			
+			},
+		}
 	} else {
 		answer = &message.Msg{
 			Target:    message.TARGET_USERS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Users: &message.Msg_Users{
-				Id: proto.Uint32(user.Id),
-				Name: &user.Name,
-				Admin: &user.Admin,
-				Mail: &user.Mail,
+			Users: &message.Msg_Users{
+				Id:          proto.Uint32(user.Id),
+				Name:        &user.Name,
+				Admin:       &user.Admin,
+				Mail:        &user.Mail,
 				UserProject: ConvertTabOfProjectToMessage(board),
-                        },
-                }
+			},
+		}
 	}
 	sendKanbanMsg(conn, answer)
 }
 
-func ConvertTabOfProjectToMessage(p []Project) []*message.Msg_Projects{
+func ConvertTabOfProjectToMessage(p []Project) []*message.Msg_Projects {
 	var ret []*message.Msg_Projects
 
-	for n := 0;n < len(p);n++ {
+	for n := 0; n < len(p); n++ {
 		ret = append(ret, &message.Msg_Projects{
-			Id: proto.Uint32(p[n].Id),
-			Name: proto.String(p[n].Name),
+			Id:      proto.Uint32(p[n].Id),
+			Name:    proto.String(p[n].Name),
 			Content: proto.String(p[n].Content),
 		})
 	}

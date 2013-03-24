@@ -1,9 +1,9 @@
 package main
 
 import (
-        "bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
-        "code.google.com/p/goprotobuf/proto"
-        "net"
+	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
+	"code.google.com/p/goprotobuf/proto"
+	"net"
 )
 
 func MsgAdminCreate(conn net.Conn, msg *message.Msg) {
@@ -18,31 +18,31 @@ func MsgAdminCreate(conn net.Conn, msg *message.Msg) {
 	var answer *message.Msg
 	if user.HaveRight((*msg.AuthorId)) {
 		answer = &message.Msg{
-			Target: message.TARGET_ADMIN.Enum(),
-			Command: message.CMD_ERROR.Enum(),
-			AuthorId: proto.Uint32(*msg.AuthorId),
+			Target:    message.TARGET_ADMIN.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(2),
-                        },
-                }
-	} else if err:= user.PutAdmin(dbPool); err != nil {
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2),
+			},
+		}
+	} else if err := user.PutAdmin(dbPool); err != nil {
 		answer = &message.Msg{
-			Target: message.TARGET_ADMIN.Enum(),
-			Command: message.CMD_ERROR.Enum(),
-			AuthorId: proto.Uint32(*msg.AuthorId),
+			Target:    message.TARGET_ADMIN.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(17),
-                        },
-                }
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(17),
+			},
+		}
 	} else {
 		answer = &message.Msg{
 			Target:    message.TARGET_ADMIN.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                }
+		}
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -60,31 +60,31 @@ func MsgAdminDelete(conn net.Conn, msg *message.Msg) {
 
 	if user.HaveRight((*msg.AuthorId)) {
 		answer = &message.Msg{
-			Target: message.TARGET_ADMIN.Enum(),
-			Command: message.CMD_ERROR.Enum(),
-			AuthorId: proto.Uint32(*msg.AuthorId),
+			Target:    message.TARGET_ADMIN.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(2),
-                        },
-                }
-	} else if err:= user.Unadmin(dbPool); err != nil {
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2),
+			},
+		}
+	} else if err := user.Unadmin(dbPool); err != nil {
 		answer = &message.Msg{
-			Target: message.TARGET_ADMIN.Enum(),
-			Command: message.CMD_ERROR.Enum(),
-			AuthorId: proto.Uint32(*msg.AuthorId),
+			Target:    message.TARGET_ADMIN.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(18),
-                        },
-                }
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(18),
+			},
+		}
 	} else {
 		answer = &message.Msg{
 			Target:    message.TARGET_ADMIN.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                }
+		}
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -102,39 +102,14 @@ func MsgAdminGet(conn net.Conn, msg *message.Msg) {
 	var answer *message.Msg
 
 	if user.Id != 0 {
-		if err:= user.GetById(dbPool); err != nil {
+		if err := user.GetById(dbPool); err != nil {
 			answer = &message.Msg{
-				Target: message.TARGET_ADMIN.Enum(),
-				Command: message.CMD_ERROR.Enum(),
-				AuthorId: proto.Uint32(*msg.AuthorId),
+				Target:    message.TARGET_ADMIN.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(15),
-				},
-			}
-		} else {
-			answer = &message.Msg{
-			Target:    message.TARGET_ADMIN.Enum(),
-			Command:   message.CMD_SUCCES.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
-			Users: &message.Msg_Users{
-					Id: proto.Uint32(user.Id),
-					Name: &user.Name,
-					Admin: &user.Admin,
-					Mail: &user.Mail,
-				},
-			}
-		}
-	} else {
-		if err := user.GetByName(dbPool); err != nil {
-			answer = &message.Msg{
-				Target: message.TARGET_ADMIN.Enum(),
-				Command: message.CMD_ERROR.Enum(),
-				AuthorId: proto.Uint32(*msg.AuthorId),
-				SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(15),
+				Error: &message.Msg_Error{
+					ErrorId: proto.Uint32(15),
 				},
 			}
 		} else {
@@ -143,11 +118,36 @@ func MsgAdminGet(conn net.Conn, msg *message.Msg) {
 				Command:   message.CMD_SUCCES.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Users: &message.Msg_Users{
-					Id: proto.Uint32(user.Id),
-					Name: &user.Name,
+				Users: &message.Msg_Users{
+					Id:    proto.Uint32(user.Id),
+					Name:  &user.Name,
 					Admin: &user.Admin,
-					Mail: &user.Mail,
+					Mail:  &user.Mail,
+				},
+			}
+		}
+	} else {
+		if err := user.GetByName(dbPool); err != nil {
+			answer = &message.Msg{
+				Target:    message.TARGET_ADMIN.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
+				SessionId: proto.String(*msg.SessionId),
+				Error: &message.Msg_Error{
+					ErrorId: proto.Uint32(15),
+				},
+			}
+		} else {
+			answer = &message.Msg{
+				Target:    message.TARGET_ADMIN.Enum(),
+				Command:   message.CMD_SUCCES.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
+				SessionId: proto.String(*msg.SessionId),
+				Users: &message.Msg_Users{
+					Id:    proto.Uint32(user.Id),
+					Name:  &user.Name,
+					Admin: &user.Admin,
+					Mail:  &user.Mail,
 				},
 			}
 		}
