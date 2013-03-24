@@ -48,7 +48,6 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 				ErrorId: proto.Uint32(51), // remplacer par le vrai code d'erreur ici
 			},
 		}
-
 	} else {
 		answer = &message.Msg{
 			Target:    message.TARGET_IDENT.Enum(),
@@ -59,6 +58,7 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 				Login: proto.String(*msg.Ident.Login),
 			},
 		}
+		CONNECTION_LIST.add(u.Id, *msg.Ident.Login, conn)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -93,6 +93,7 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 				Login: proto.String(*msg.Ident.Login),
 			},
 		}
+		CONNECTION_LIST.del(u.Id)
 	}
 	sendKanbanMsg(conn, answer)
 	// CONNECTION_LIST.del(*msg.AuthorId)

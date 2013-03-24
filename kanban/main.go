@@ -26,7 +26,6 @@ type Connection struct {
 	uid    uint32
 	ulogin string
 }
-
 type connectionList struct {
 	ids   map[uint32]Connection
 	conns map[net.Conn][]uint32
