@@ -48,6 +48,7 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 				ErrorId: proto.Uint32(51), // remplacer par le vrai code d'erreur ici
 			},
 		}
+
 	} else {
 		answer = &message.Msg{
 			Target:    message.TARGET_IDENT.Enum(),
@@ -94,6 +95,7 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 		}
 	}
 	sendKanbanMsg(conn, answer)
+	// CONNECTION_LIST.del(*msg.AuthorId)
 }
 
 func MsgIdentIsUnidentified(conn net.Conn, msg *message.Msg) bool {

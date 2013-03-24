@@ -20,7 +20,7 @@ func GetNbProjects(p *ConnectionPoolWrapper) (int, error) {
 func (u *Project) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-    _, err := db.Exec("INSERT INTO projects(name, content, admins_id, read) VALUES($1, $2, $3, $4);",
+	_, err := db.Exec("INSERT INTO projects(name, content, admins_id, read) VALUES($1, $2, $3, $4);",
 		u.Name, u.admins_id, u.Read, u.Content)
 	return err
 }
@@ -35,8 +35,8 @@ func (u *Project) Del(p *ConnectionPoolWrapper) error {
 func (u *Project) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-    _, err := db.Exec("update projects set name = $1, admins_id = $2, read = $3, content,  where id = $4",
-	u.Name, u.admins_id, u.Read, u.Content, u.Id)
+	_, err := db.Exec("update projects set name = $1, admins_id = $2, read = $3, content,  where id = $4",
+		u.Name, u.admins_id, u.Read, u.Content, u.Id)
 	return err
 }
 

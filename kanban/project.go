@@ -15,7 +15,7 @@ type Project struct {
 }
 
 func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
-    proj := &Project{
+	proj := &Project{
 		0,
 		*msg.Projects.Name,
 		msg.Projects.AdminsId,
@@ -149,11 +149,11 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 			SessionId: proto.String(*msg.SessionId),
 			Projects: &message.Msg_Projects{
 
-				Id:         proto.Uint32(proj.Id),
-				Name:       proto.String(proj.Name),
-//				AdminsId:   proto.Uint32(proj.admins_id),
-//		:    "",
-	    },
+				Id:   proto.Uint32(proj.Id),
+				Name: proto.String(proj.Name),
+				//				AdminsId:   proto.Uint32(proj.admins_id),
+				//		:    "",
+			},
 		}
 	}
 	data, err := proto.Marshal(answer)

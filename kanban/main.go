@@ -21,9 +21,20 @@ var VERBOSE = flag.Bool("v", false, "Verbose mode")
 var LOGGER *log.Logger
 var LOG_FLAGS = log.LstdFlags
 
-type connectionList []net.Conn
+type Connection struct {
+	c      net.Conn
+	uid    uint32
+	ulogin string
+}
+
+type connectionList struct {
+	ids   map[uint32]Connection
+	conns map[net.Conn][]uint32
+}
+type connectionQueue []net.Conn
 
 var CONNECTION_LIST connectionList
+var CONNECTION_QUEUE connectionQueue
 
 var (
 	info_connect_bdd string // postgres://kanban:mdp@127.0.0.1:5432/kanban

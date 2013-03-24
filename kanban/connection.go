@@ -8,16 +8,55 @@ import (
 	"net"
 )
 
-func (c *connectionList) addConnection(conn net.Conn) {
-	CONNECTION_LIST = append(CONNECTION_LIST, conn)
+func (c *connectionList) add(uid uint32, ulogin string, conn net.Conn) {
+	c.ids[uid] = Connection{
+		conn,
+		uid,
+		ulogin,
+	}
+	_, ok := c.conns[conn]
+	if ok {
+		c.conns[conn] = append(c.conns[conn], uid)
+	} else {
+		c.conns[conn] = []uint32{uid}
+	}
 }
 
-func (c *connectionList) delConnection(conn net.Conn) {
-	for i, value := range CONNECTION_LIST {
+func (c *connectionList) del(uid uint32) {
+	conn, ok := c.ids[uid]
+	if ok {
+		delete(c.ids, uid)
+		tab, ok := c.conns[conn.c]
+		if ok {
+			for i, value := range tab {
+				if value == uid {
+					copy(tab[i:], tab[i+1:])
+					tab = tab[:len(tab)-1]
+				}
+			}
+		}
+	}
+}
+
+func (c *connectionList) delConn(conn net.Conn) {
+	tab, ok := c.conns[conn]
+	if ok {
+		for _, value := range tab {
+			c.del(value)
+		}
+	}
+}
+
+func (c *connectionQueue) add(conn net.Conn) {
+	CONNECTION_QUEUE = append(CONNECTION_QUEUE, conn)
+}
+
+func (c *connectionQueue) del(conn net.Conn) {
+	for i, value := range CONNECTION_QUEUE {
 		if value == conn {
-			copy(CONNECTION_LIST[i:], CONNECTION_LIST[i+1:])
-			CONNECTION_LIST[len(CONNECTION_LIST)-1] = nil
-			CONNECTION_LIST = CONNECTION_LIST[:len(CONNECTION_LIST)-1]
+			copy(CONNECTION_QUEUE[i:], CONNECTION_QUEUE[i+1:])
+			CONNECTION_QUEUE[len(CONNECTION_QUEUE)-1] = nil
+			CONNECTION_QUEUE = CONNECTION_QUEUE[:len(CONNECTION_QUEUE)-1]
 		}
 	}
 }
@@ -41,7 +80,7 @@ func unidentifiedUser(conn net.Conn, msg *message.Msg) {
 		AuthorId:  proto.Uint32(*msg.AuthorId),
 		SessionId: proto.String(*msg.SessionId),
 		Error: &message.Msg_Error{
-			ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+			ErrorId: proto.Uint32(1),
 		},
 	}
 	sendKanbanMsg(conn, answer)
@@ -90,7 +129,7 @@ func handleConnection(conn net.Conn) {
 	var size int
 	var buf []byte
 	defer conn.Close()
-	defer CONNECTION_LIST.delConnection(conn)
+	defer CONNECTION_LIST.delConn(conn)
 	defer LOGGER.Print("Connection close")
 	for {
 		if header {
@@ -142,8 +181,8 @@ func startServer() error {
 			LOGGER.Print("get client connection error: ", err)
 		}
 		LOGGER.Printf("New client connection with ip %s, creating new goroutine", conn.RemoteAddr().String())
-		CONNECTION_LIST.addConnection(conn)
-		fmt.Println(CONNECTION_LIST)
+		CONNECTION_QUEUE.add(conn)
+		fmt.Println(CONNECTION_QUEUE)
 		go handleConnection(conn)
 	}
 	return err
