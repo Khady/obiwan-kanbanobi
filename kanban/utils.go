@@ -4,6 +4,9 @@ import (
 	"bytes"
 	"encoding/binary"
 	"strconv"
+	"net"
+	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
+	"code.google.com/p/goprotobuf/proto"
 )
 
 func SString_of_SUInt32(s []uint32) []string {
@@ -36,4 +39,19 @@ func write_int32(nb int32) []byte {
 	buf := new(bytes.Buffer)
 	binary.Write(buf, binary.BigEndian, nb)
 	return buf.Bytes()
+}
+
+func UnknowCommand(conn net.Conn, msg *message.Msg) {
+	var answer *message.Msg
+
+	answer = &message.Msg{
+		Target:    message.TARGET_USERS.Enum(),
+		Command:   message.CMD_ERROR.Enum(),
+		AuthorId:  proto.Uint32(*msg.AuthorId),
+		SessionId: proto.String(*msg.SessionId),
+        Error: &message.Msg_Error{
+			ErrorId: proto.Uint32(3),
+                },
+        }
+	sendKanbanMsg(conn, answer)
 }

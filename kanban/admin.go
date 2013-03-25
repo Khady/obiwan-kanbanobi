@@ -163,5 +163,7 @@ func MsgAdmin(conn net.Conn, msg *message.Msg) {
 		MsgAdminDelete(conn, msg)
 	case message.CMD_GET:
 		MsgAdminGet(conn, msg)
+        default:
+                UnknowCommand(conn, msg)
 	}
 }

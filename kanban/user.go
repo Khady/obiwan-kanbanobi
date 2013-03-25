@@ -335,5 +335,7 @@ func MsgUser(conn net.Conn, msg *message.Msg) {
 		MsgUserGet(conn, msg)
 	case message.CMD_GETBOARD:
 		MsgUserGetBoard(conn, msg)
+	default:
+		UnknowCommand(conn, msg)
 	}
 }
