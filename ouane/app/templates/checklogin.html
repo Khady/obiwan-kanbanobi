@@ -2,10 +2,11 @@
 <script>
   var anUrl = document.URL+"?login={{name}}";
   var myRequest = new XMLHttpRequest();
-
+  var i = 0;
   callAjax(anUrl);
 
   function callAjax(url) {
+     i = i + 1;
      myRequest.open("GET", url, true);
      myRequest.onreadystatechange = responseAjax;
                  myRequest.setRequestHeader("Cache-Control", "no-cache");
@@ -16,7 +17,7 @@
      if(myRequest.readyState == 4) {
         if(myRequest.status == 200) {
             result = myRequest.responseText;
-	    if (result != "OK")
+	    if (result != "OK" && i < 10)
 		setTimeout(function(){callAjax(anUrl)}, 1000);
 	    else
 		window.location = "{{url_for('index')}}";

@@ -23,7 +23,7 @@ enum CMD {
   SUCCES        = 9;
   NONE          = 10;
   PASSWORD      = 11;
-  GETBOARD	= 12
+  GETBOARD	= 12;
 };
 
 message Msg {

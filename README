@@ -13,6 +13,7 @@ Build Requirements
  * Python           <http://python.org>
  * Flask            <http://flask.pocoo.org/>
  * Flask-SQLAlchemy <http://packages.python.org/Flask-SQLAlchemy/>
+ * Flask-WTF	    <http://pythonhosted.org/Flask-WTF/>
 
 Run Requirements
 ================

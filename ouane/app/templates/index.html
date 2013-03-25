@@ -19,7 +19,7 @@ $( ".newProject" ).hide();
 </script>
   <h1>Project List</h1>
   {% for message in data %}
-    <p>{{ message }}</p>
+    <p>{{ message.name }}</p>
   {% endfor %}
     <button class="addProject">Add a project</button>
     <div class="newProject">

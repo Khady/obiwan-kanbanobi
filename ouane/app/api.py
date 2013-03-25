@@ -60,6 +60,8 @@ class Api(threading.Thread):
         msg.command = message_pb2.GET
         msg.session_id = session_id
         msg.author_id = author_id
+        msg.users.name = ""
+        msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
 
     def getUserById(self, author_id, session_id, user_id):
@@ -69,6 +71,8 @@ class Api(threading.Thread):
         msg.author_id = author_id
         msg.session_id = session_id
         msg.users.id = user_id
+        msg.users.name = ""
+        msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
         
     def createColumns(self, author_id, session_id, project_id, name = "", desc = "", tags = [], scripts_ids = [], write = []):
@@ -96,6 +100,19 @@ class Api(threading.Thread):
         msg.projects.id = 0
         for elem in read:
             msg.projects.read.add(elem)
+        self.network.setWriteStack(msg.SerializeToString())
+
+    def createUser(self, author_id, session_id, login, email, password, admin = False):
+        msg = Msg()
+        msg.target = message_pb2.PROJECTS
+        msg.command = message_pb2.CREATE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.users.id = 0
+        msg.users.name = login
+        msg.users.password = password
+        msg.users.mail = email
+        msg.users.admin = admin
         self.network.setWriteStack(msg.SerializeToString())
 
     def sendLogin(self, login, password):
@@ -142,8 +159,13 @@ class Api(threading.Thread):
                     # print msg.session_id
                     # print msg.ident.login
                     user = {"author_id": msg.author_id, "session_id": msg.session_id}
+                    self.getUserById(msg.author_id, msg.session_id, msg.author_id)
                     self.userLogin[msg.ident.login] = user
                 if (msg.target == message_pb2.PROJECTS):
                     p = Columns(msg.projects.id, msg.projects.name, msg.projects.admin_id, msg.projects.content, msg.projects.read)
                     db.session.add(c)
                     db.session.commit()
+                if (msg.target == message_pb2.ERROR):
+                    print "ERROR"
+                if (msg.target == message_pb2.USERS):
+                    print "USERS"

@@ -15,9 +15,10 @@ exit
 
 Client side:
 
-Before launch main.py, you must have Flask and Flask-SQLAlchemy on your system,
+Before launch main.py, you must have Flask, Flask-SQLAlchemy, Flask-WTF on your system,
 
 on GNU/linux, you can use pip to get these packages:
 
 # pip install Flask
 # pip install Flask-SQLAlchemy
+# pip install Flask-WTF

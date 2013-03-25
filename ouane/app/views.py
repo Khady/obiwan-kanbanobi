@@ -1,7 +1,8 @@
 from flask import render_template, flash, redirect, g, request, url_for, session
-from app  import app, a
-from forms import LoginForm, AddProjectForm
+from app  import app, a#, jug
+from forms import LoginForm, AddProjectForm, AddUserForm
 from functools import wraps
+from dbUtils import Projects
 
 # index view function suppressed for brevity
 
@@ -55,13 +56,26 @@ def project(name = ""):
 @login_required
 def index():
     try:
-        data = Project.query.all()
+        data = Projects.query.all()
+        print data
     except:
         data = []
     form = AddProjectForm()
     if form.validate_on_submit():
         print form.name.data
         print form.description.data
+#        jug.publish('test', form.name.data)
         connection = a.getUserConnectionData(session['user_login'])
         a.createProject(connection['author_id'], connection['session_id'], form.name.data, form.description.data)
     return render_template('index.html', data=data, form=form)
+
+@app.route("/admin", methods = ['GET', 'POST'])
+@login_required
+def admin():
+    form = AddUserForm()
+    if form.validate_on_submit():
+        connection = a.getUserConnectionData(session['user_login'])
+        a.createUser(connection['author_id'], connection['session_id'], form.login.data, form.email.data, form.password.data, False)
+    elif request.method == 'POST' and form.validate() == False:
+        flash("Error during the user creation!")
+    return render_template('admin.html', form=form)

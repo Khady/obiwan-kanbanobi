@@ -4,7 +4,7 @@ from flask import g
 # from flask.ext.sqlalchemy import SQLAlchemy
 import sys
 from app import app
-
+from juggernaut import Juggernaut
 # app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://test.db'
 # db = SQLAlchemy(app) 
