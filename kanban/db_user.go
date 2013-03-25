@@ -65,7 +65,7 @@ func (u *User) CheckPassword(p *ConnectionPoolWrapper, new_password string) (boo
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select password from users where id = $1", u.Id)
 	err := row.Scan(&password)
-	if err != nil && password == new_password {
+	if err == nil && password == new_password {
 		check = true
 	} else {
 		check = false

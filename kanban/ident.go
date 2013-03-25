@@ -3,6 +3,7 @@ package main
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
 	"code.google.com/p/goprotobuf/proto"
+	"errors"
 	"github.com/dchest/uniuri"
 	"net"
 	"time"
@@ -34,7 +35,10 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 		}
 		checkPassword, err = u.CheckPassword(dbPool, *msg.Ident.Password)
 		if err == nil && checkPassword == true {
+			LOGGER.Print(u.Name, " bon password")
 			err = session.Add(dbPool)
+		} else {
+			err = errors.New("error during identification")
 		}
 	}
 	var answer *message.Msg
@@ -102,6 +106,7 @@ func MsgIdentDisconnect(conn net.Conn, msg *message.Msg) {
 func MsgIdentIsUnidentified(conn net.Conn, msg *message.Msg) bool {
 	s := Session{Session_key: *msg.SessionId}
 	if err := s.GetUserSessionBySessionId(dbPool); err != nil {
+		LOGGER.Print(*msg.AuthorId, " isUnidentified -> error ", err)
 		return false
 	}
 	return true
