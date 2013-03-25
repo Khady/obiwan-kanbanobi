@@ -14,55 +14,58 @@ class Api(threading.Thread):
 
     def getAllProjetList(self, author_id, session_id):
         msg = Msg()
-        msg.target = message_pb2.PROJECTS
-        msg.command = message_pb2.GET
+        msg.target = message_pb2.USERS
+        msg.command = message_pb2.GETBOARD
         msg.author_id = author_id
         msg.session_id = session_id
+        msg.users.id = user_id
+        msg.users.name = ""
+        msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
 
     def getColumnsByProjectId(self, author_id, session_id, project_id):
         msg = Msg()
-        msg.target = message_pb2.COLUMNS
-        msg.command = message_pb2.GET
+        msg.target = message_pb2.PROJECTS
+        msg.command = message_pb2.GETBOARD
         msg.author_id = author_id
         msg.session_id = session_id
-        msg.columns.project_id = project_id
+        msg.projects.id = project_id
         self.network.setWriteStack(msg.SerializeToString())
 
-    def getAllColumns(self, author_id, session_id):
+    # def getAllColumns(self, author_id, session_id):
+    #     msg = Msg()
+    #     msg.target = message_pb2.COLUMNS
+    #     msg.command = message_pb2.GET
+    #     msg.author_id = author_id
+    #     msg.session_id = session_id
+    #     self.network.setWriteStack(msg.SerializeToString())
+
+    # def getAllCards(self, author_id, session_id):
+    #     msg = Msg()
+    #     msg.target = message_pb2.CARDS
+    #     msg.command = message_pb2.GET
+    #     msg.author_id = author_id
+    #     msg.session_id = session_id
+    #     self.network.setWriteStack(msg.SerializeToString())
+
+    def getCardsByColumnID(self, author_id, session_id, project_id):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
-        msg.command = message_pb2.GET
+        msg.command = message_pb2.GETBOARD
         msg.author_id = author_id
         msg.session_id = session_id
+        msg.columns.id = project_id
         self.network.setWriteStack(msg.SerializeToString())
 
-    def getAllCards(self, author_id, session_id):
-        msg = Msg()
-        msg.target = message_pb2.CARDS
-        msg.command = message_pb2.GET
-        msg.author_id = author_id
-        msg.session_id = session_id
-        self.network.setWriteStack(msg.SerializeToString())
-
-    def getCardsByProjectID(self, author_id, session_id, project_id):
-        msg = Msg()
-        msg.target = message_pb2.CARDS
-        msg.command = message_pb2.GET
-        msg.author_id = author_id
-        msg.session_id = session_id
-        msg.cards.project_id = project_id
-        self.network.setWriteStack(msg.SerializeToString())
-
-    def getAllUsers(self, author_id, session_id):
-        msg = Msg()
-        msg.target = message_pb2.USERS
-        msg.command = message_pb2.GET
-        msg.session_id = session_id
-        msg.author_id = author_id
-        msg.users.name = ""
-        msg.users.admin = False
-        self.network.setWriteStack(msg.SerializeToString())
+    # def getAllUsers(self, author_id, session_id):
+    #     msg = Msg()
+    #     msg.target = message_pb2.USERS
+    #     msg.command = message_pb2.GET
+    #     msg.session_id = session_id
+    #     msg.author_id = author_id
+    #     msg.users.name = ""
+    #     msg.users.admin = False
+    #     self.network.setWriteStack(msg.SerializeToString())
 
     def getUserById(self, author_id, session_id, user_id):
         msg = Msg()
