@@ -41,6 +41,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 		*msg.Users.Mail,
 		true,
 	}
+	// verif des var non required.
 	var answer *message.Msg
 	if user.HaveRight((*msg.AuthorId)) {
 		user.Password = user.Name
@@ -85,6 +86,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 		*msg.Users.Mail,
 		true,
 	}
+	// verif des var non required.
 	var answer *message.Msg
 
 	if user.HaveRight((*msg.AuthorId)) == false {
@@ -166,8 +168,8 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 		*msg.Users.Id,
 		*msg.Users.Name,
 		*msg.Users.Admin,
-		*msg.Users.Password,
-		*msg.Users.Mail,
+		"",
+		"",
 		true,
 	}
 
@@ -208,8 +210,8 @@ func MsgUserGet(conn net.Conn, msg *message.Msg) {
 		*msg.Users.Id,
 		*msg.Users.Name,
 		*msg.Users.Admin,
-		*msg.Users.Password,
-		*msg.Users.Mail,
+		"",
+		"",
 		true,
 	}
 
@@ -274,8 +276,8 @@ func MsgUserGetBoard(conn net.Conn, msg *message.Msg) {
 		*msg.Users.Id,
 		*msg.Users.Name,
 		*msg.Users.Admin,
-		*msg.Users.Password,
-		*msg.Users.Mail,
+		"",
+		"",
 		true,
 	}
 	var answer *message.Msg
