@@ -5,7 +5,7 @@ from app import app
 from gevent import monkey
 from socketio.server import SocketIOServer
 
-monkey.patch_all()
+#monkey.patch_all(thread=False)
 
 PORT = 5000
 
