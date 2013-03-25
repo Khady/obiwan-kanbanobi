@@ -45,7 +45,7 @@ func UnknowCommand(conn net.Conn, msg *message.Msg) {
 	var answer *message.Msg
 
 	answer = &message.Msg{
-		Target:    message.TARGET_USERS.Enum(),
+		Target:    msg.Target,
 		Command:   message.CMD_ERROR.Enum(),
 		AuthorId:  proto.Uint32(*msg.AuthorId),
 		SessionId: proto.String(*msg.SessionId),
