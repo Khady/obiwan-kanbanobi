@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+{% block body %}
+<script>
+jQuery.fn.center = function () {
+    this.css("position","absolute");
+    this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + 
+                                                $(window).scrollTop()) + "px");
+    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + 
+                                                $(window).scrollLeft()) + "px");
+    return this;
+}
+$(function() {
+$( ".addUser" ).button().click(function() {
+$( ".newProject" ).center();
+$( ".newProject" ).show();
+})
+$( ".newProject" ).hide();
+});
+</script>
+  <h1>Admin</h1>
+    <button class="addUser">Add user</button>
+    <div class="newProject">
+      <h3>Add Users</h3>
+      <form action="" method="post" name="addUsers">
+	{{form.hidden_tag()}}
+	<p>
+	  Login:<br>
+	  {{form.login}}<br>
+	  Email:<br>
+	  {{form.email}}<br>
+	  Password:<br>
+	  {{form.password}}<br>
+	  Confirm Password:<br>
+	  {{form.confirm}}<br>
+	  <input type="submit" style="width:100%;" value="Add Users!">
+	</p>
+      </form>
+    </div>
+{%  endblock %}
