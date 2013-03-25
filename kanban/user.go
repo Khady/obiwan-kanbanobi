@@ -32,27 +32,112 @@ func (u *User) HaveRight(authorId uint32) bool {
 }
 
 func MsgUserCreate(conn net.Conn, msg *message.Msg) {
-
-	user := &User{
-		0,
-		*msg.Users.Name,
-		*msg.Users.Admin,
-		*msg.Users.Password,
-		*msg.Users.Mail,
-		true,
-	}
-	// verif des var non required.
+	
 	var answer *message.Msg
-	if user.HaveRight((*msg.AuthorId)) {
-		user.Password = user.Name
-		if err := user.Add(dbPool); err != nil {
+	if msg.Users.Password == nil || msg.Users.Mail == nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+		Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(11),
+			},
+		}
+	} else {
+		user := &User{
+			0,
+			*msg.Users.Name,
+			*msg.Users.Admin,
+			*msg.Users.Password,
+			*msg.Users.Mail,
+			true,
+		}
+		verifExisting := &User{
+			0,
+			*msg.Users.Name,
+			*msg.Users.Admin,
+			*msg.Users.Password,
+			*msg.Users.Mail,
+			true,
+		}
+		if err := verifExisting.GetByName(dbPool); user.HaveRight((*msg.AuthorId)) &&
+			err == nil && verifExisting.Id == 0 && user.VerifExistingMail(dbPool) == false {
+			user.Password = user.Name
+			if err := user.Add(dbPool); err != nil {
+				answer = &message.Msg{
+					Target:    message.TARGET_USERS.Enum(),
+					Command:   message.CMD_ERROR.Enum(),
+					AuthorId:  proto.Uint32(*msg.AuthorId),
+					SessionId: proto.String(*msg.SessionId),
+				Error: &message.Msg_Error{
+						ErrorId: proto.Uint32(11),
+					},
+				}
+			} else {
+				answer = &message.Msg{
+					Target:    message.TARGET_USERS.Enum(),
+					Command:   message.CMD_SUCCES.Enum(),
+					AuthorId:  proto.Uint32(*msg.AuthorId),
+					SessionId: proto.String(*msg.SessionId),
+				}
+			}
+		} else {
 			answer = &message.Msg{
 				Target:    message.TARGET_USERS.Enum(),
 				Command:   message.CMD_ERROR.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-				Error: &message.Msg_Error{
-					ErrorId: proto.Uint32(11),
+			Error: &message.Msg_Error{
+					ErrorId: proto.Uint32(2),
+				},
+			}
+		}
+	}
+	sendKanbanMsg(conn, answer)
+}
+
+func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
+
+	var answer *message.Msg
+	if msg.Users.Password == nil || msg.Users.Mail == nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_USERS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+		Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(12),
+			},
+		}
+	} else {
+		user := &User{
+			*msg.Users.Id,
+			*msg.Users.Name,
+			*msg.Users.Admin,
+			*msg.Users.Password,
+			*msg.Users.Mail,
+			true,
+		}
+		
+		if user.HaveRight((*msg.AuthorId)) == false {
+			answer = &message.Msg{
+				Target:    message.TARGET_USERS.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
+				SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+					ErrorId: proto.Uint32(2),
+				},
+			}
+		} else if err := user.Update(dbPool); err != nil {
+			answer = &message.Msg{
+				Target:    message.TARGET_USERS.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
+				SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+					ErrorId: proto.Uint32(12),
 				},
 			}
 		} else {
@@ -62,59 +147,6 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
 			}
-		}
-	} else {
-		answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
-			Command:   message.CMD_ERROR.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2),
-			},
-		}
-	}
-	sendKanbanMsg(conn, answer)
-}
-
-func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
-	user := &User{
-		*msg.Users.Id,
-		*msg.Users.Name,
-		*msg.Users.Admin,
-		*msg.Users.Password,
-		*msg.Users.Mail,
-		true,
-	}
-	// verif des var non required.
-	var answer *message.Msg
-
-	if user.HaveRight((*msg.AuthorId)) == false {
-		answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
-			Command:   message.CMD_ERROR.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2),
-			},
-		}
-	} else if err := user.Update(dbPool); err != nil {
-		answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
-			Command:   message.CMD_ERROR.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(12),
-			},
-		}
-	} else {
-		answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
-			Command:   message.CMD_SUCCES.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
 		}
 	}
 	sendKanbanMsg(conn, answer)

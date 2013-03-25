@@ -140,6 +140,18 @@ func (u *User) GetProjectByUserId(p *ConnectionPoolWrapper) ([]Project, error) {
 	return tab, nil
 }
 
+func (u *User) VerifExistingMail(p *ConnectionPoolWrapper) bool {
+	var num int
+	db := p.GetConnection()
+	row := db.QueryRow("SELECT count(*) FROM users WHERE mail=$1", u.Mail)
+	err := row.Scan(&num)
+	p.ReleaseConnection(db)
+	if err != nil || num != 0 {
+		return true
+	}
+	return false
+}
+
 func (u *User) GetAdminById(p *ConnectionPoolWrapper, id uint32) (bool, error) {
 	var admin bool
 
