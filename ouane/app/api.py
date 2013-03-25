@@ -104,7 +104,7 @@ class Api(threading.Thread):
 
     def createUser(self, author_id, session_id, login, email, password, admin = False):
         msg = Msg()
-        msg.target = message_pb2.PROJECTS
+        msg.target = message_pb2.USERS
         msg.command = message_pb2.CREATE
         msg.author_id = author_id
         msg.session_id = session_id
