@@ -163,6 +163,8 @@ func startServer() error {
 	LOGGER.Print("Launching the server...")
 	defer LOGGER.Print("Server quit")
 
+	CONNECTION_LIST.ids = make(map[uint32]Connection)
+	CONNECTION_LIST.conns = make(map[net.Conn][]uint32)
 	server_port := ":" + *SPORT
 	tcpAddr, err := net.ResolveTCPAddr("ip4", server_port)
 	if err != nil {
