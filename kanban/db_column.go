@@ -23,6 +23,7 @@ VALUES($1, $2, $3, $4, $5, $6);`,
 func (c *Column) Del(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
+	c.DelCards(dbPool)
 	_, err := db.Exec("delete from columns where id = $1", c.Id)
 	return err
 }
@@ -30,7 +31,7 @@ func (c *Column) Del(p *ConnectionPoolWrapper) error {
 func (c *Column) DelCards(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("delete from cards where column_id = $1", c.Id)
+	_, err := db.Exec("delete from cards where column_id = $1 && project_id = $2", c.Id, c.Project_id)
 	return err
 }
 

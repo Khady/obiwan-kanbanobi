@@ -32,7 +32,7 @@ func (u *User) HaveRight(authorId uint32) bool {
 }
 
 func MsgUserCreate(conn net.Conn, msg *message.Msg) {
-	
+
 	var answer *message.Msg
 	if msg.Users.Password == nil || msg.Users.Mail == nil {
 		answer = &message.Msg{
@@ -40,7 +40,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(11),
 			},
 		}
@@ -70,7 +70,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 					Command:   message.CMD_ERROR.Enum(),
 					AuthorId:  proto.Uint32(*msg.AuthorId),
 					SessionId: proto.String(*msg.SessionId),
-				Error: &message.Msg_Error{
+					Error: &message.Msg_Error{
 						ErrorId: proto.Uint32(11),
 					},
 				}
@@ -88,7 +88,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 				Command:   message.CMD_ERROR.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+				Error: &message.Msg_Error{
 					ErrorId: proto.Uint32(2),
 				},
 			}
@@ -106,7 +106,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(12),
 			},
 		}
@@ -119,14 +119,14 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 			*msg.Users.Mail,
 			true,
 		}
-		
+
 		if user.HaveRight((*msg.AuthorId)) == false {
 			answer = &message.Msg{
 				Target:    message.TARGET_USERS.Enum(),
 				Command:   message.CMD_ERROR.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+				Error: &message.Msg_Error{
 					ErrorId: proto.Uint32(2),
 				},
 			}
@@ -136,7 +136,7 @@ func MsgUserUpdate(conn net.Conn, msg *message.Msg) {
 				Command:   message.CMD_ERROR.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+				Error: &message.Msg_Error{
 					ErrorId: proto.Uint32(12),
 				},
 			}

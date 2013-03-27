@@ -2,14 +2,10 @@
 
 from flask import g
 from app import app
-from gevent import monkey
-from socketio.server import SocketIOServer
-
-#monkey.patch_all(thread=False)
 
 PORT = 5000
 
 if __name__ == "__main__":
-    #app.run(debug=True)
-    print 'Listening on http://127.0.0.1:%s and on port 10843 (flash policy server)' % PORT
-    SocketIOServer(('', PORT), app, resource="socket.io").serve_forever()
+    app.run(debug=True)
+    # print 'Listening on http://127.0.0.1:%s and on port 10843 (flash policy server)' % PORT
+    # SocketIOServer(('', PORT), app, resource="socket.io").serve_forever()

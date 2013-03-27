@@ -24,14 +24,14 @@ func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	if err := row.Scan(&cell); err != nil {
 		return cell_ids, err
 	}
-	cell_ids = SUInt32_of_SString(strings.Split(cell, " "))
+	cell_ids = SUInt32_of_SString(strings.Split(cell, ","))
 	return cell_ids, nil
 }
 
 func updateUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []uint32, id uint32) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	new_cell := strings.Join(SString_of_SUInt32(cell), " ")
+	new_cell := strings.Join(SString_of_SUInt32(cell), ",")
 	_, err := db.Exec("update $1 set $2 = $3 where id = $4", column_name, base_name, new_cell, id)
 	return err
 }
@@ -45,14 +45,14 @@ func getStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	if err := row.Scan(&cell); err != nil {
 		return cell_ids, err
 	}
-	cell_ids = strings.Split(cell, " ")
+	cell_ids = strings.Split(cell, ",")
 	return cell_ids, nil
 }
 
 func updateStringSliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []string, id uint32) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	new_cell := strings.Join(cell, " ")
+	new_cell := strings.Join(cell, ",")
 	_, err := db.Exec("update $1 set $2 = $3 where id = $4", column_name, base_name, new_cell, id)
 	return err
 }

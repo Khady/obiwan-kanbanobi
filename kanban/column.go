@@ -245,6 +245,6 @@ func MsgColumn(conn net.Conn, msg *message.Msg) {
 	case message.CMD_MOVE:
 		MsgColumnUpdate(conn, msg)
 	default:
-                UnknowCommand(conn, msg)
+		UnknowCommand(conn, msg)
 	}
 }

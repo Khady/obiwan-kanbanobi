@@ -16,6 +16,13 @@ $( ".newProject" ).show();
 })
 $( ".newProject" ).hide();
 });
+function sse() {
+	var source = new EventSource('/stream');
+        source.onmessage = function(e) {
+		alert(e.data);
+	};
+}
+sse();
 </script>
   <h1>Project List</h1>
   {% for message in data %}
