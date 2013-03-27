@@ -211,6 +211,25 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 	sendKanbanMsg(conn, answer)
 }
 
+func ConvertTabOfCardToMessage(p []Project) []*message.Msg_Projects {
+        var ret []*message.Msg_Projects
+
+        for n := 0; n < len(p); n++ {
+                ret = append(ret, &message.Msg_Cards{
+			Id:         proto.Uint32(p[n].Id),
+			ProjectId:  proto.Uint32(p[n].Project_id),
+			ColumnId:   proto.Uint32(p[n].Column_id),
+			Name:       proto.String(p[n].Name),
+			Desc:       proto.String(p[n].Content),
+			Tags:       p[n].Tags,
+			UserId:     proto.Uint32(p[n].User_id),
+			ScriptsIds: p[n].Scripts_id,
+			Write:      p[n].Write,
+                })
+        }
+        return ret
+}
+
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)
 // Il faut faire une pool de worker, un dispacher et lancer l'operation a effectuer dans le dispatch.
 func MsgColumn(conn net.Conn, msg *message.Msg) {

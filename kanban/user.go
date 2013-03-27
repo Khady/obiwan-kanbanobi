@@ -334,7 +334,6 @@ func MsgUserGetBoard(conn net.Conn, msg *message.Msg) {
 				Id:          proto.Uint32(user.Id),
 				Name:        &user.Name,
 				Admin:       &user.Admin,
-				Mail:        &user.Mail,
 				UserProject: ConvertTabOfProjectToMessage(board),
 			},
 		}
