@@ -3,7 +3,7 @@ from message_pb2 import Msg
 import message_pb2
 import threading
 from dbUtils import Cards, Columns, Users, Projects, Comments, Metadata
-from app import app, db
+from app import app, db, red
 
 class Api(threading.Thread):
     def __init__(self, host, port):
@@ -12,7 +12,7 @@ class Api(threading.Thread):
         db.create_all()
         self.userLogin = {}
 
-    def getAllProjetList(self, author_id, session_id):
+    def getAllProjetList(self, author_id, session_id, user_id):
         msg = Msg()
         msg.target = message_pb2.USERS
         msg.command = message_pb2.GETBOARD
@@ -21,6 +21,17 @@ class Api(threading.Thread):
         msg.users.id = user_id
         msg.users.name = ""
         msg.users.admin = False
+        self.network.setWriteStack(msg.SerializeToString())
+
+    def getProjectById(self, author_id, session_id, project_id):
+        msg = Msg()
+        msg.target = message_pb2.PROJECTS
+        msg.command = message_pb2.GET
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.projects.id = project_id
+        msg.projects.content = ""
+        msg.projects.name = ""
         self.network.setWriteStack(msg.SerializeToString())
 
     def getColumnsByProjectId(self, author_id, session_id, project_id):
@@ -150,11 +161,13 @@ class Api(threading.Thread):
                              msg.cards.user_id, msg.cards.scripts_id, msg.cards.write)
                     db.session.add(c)
                     db.session.commit()
+                    red.publish('ouane', u'CARDS')
                 if (msg.target == message_pb2.COLUMNS):
                     c = Columns(msg.columns.id, msg.columns.name, msg.columns.column_id, msg.columns.project_id, msg.columns.tags,
                                 msg.columns.scripts_id, msg.columns.write)
                     db.session.add(c)
                     db.session.commit()
+                    red.publish('ouane', u'COLUMNS')
                 if (msg.target == message_pb2.IDENT):
                     # print msg.target
                     # print msg.command
@@ -163,12 +176,20 @@ class Api(threading.Thread):
                     # print msg.ident.login
                     user = {"author_id": msg.author_id, "session_id": msg.session_id}
                     self.getUserById(msg.author_id, msg.session_id, msg.author_id)
+                    self.getAllProjetList(msg.author_id, msg.session_id, msg.author_id)
                     self.userLogin[msg.ident.login] = user
+                    red.publish('ouane', u'IDENT')
                 if (msg.target == message_pb2.PROJECTS):
                     p = Columns(msg.projects.id, msg.projects.name, msg.projects.admin_id, msg.projects.content, msg.projects.read)
                     db.session.add(c)
                     db.session.commit()
+                    red.publish('ouane', u'PROJECTS')
+                    print "PROJECTS"
                 if (msg.target == message_pb2.ERROR):
+                    red.publish('ouane', u'ERROR')
                     print "ERROR"
                 if (msg.target == message_pb2.USERS):
+                    red.publish('ouane', u'USERS')
                     print "USERS"
+                    for project in msg.users.userProject:
+                        self.getProjectById(msg.author_id, msg.session_id, project.id)
