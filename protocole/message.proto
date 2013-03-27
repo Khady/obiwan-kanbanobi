@@ -59,8 +59,8 @@ message Msg {
     repeated string	tags = 5;
     repeated uint32	scripts_ids = 6; // IDs of the scripts attached to the column
     repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
-	repeated Cards 	ColumnCards = 8;
-	}
+    repeated Cards 	ColumnCards = 8;
+  }
 
   message Projects {
     required uint32	id = 1;
@@ -68,7 +68,7 @@ message Msg {
     required string	content = 3;
     repeated uint32	admins_id = 4; // list of the administrator users of the projects
     repeated uint32	read = 5;  // list of the user IDs with read permission on the project (if empty: free for all)
-	repeated Column	projectColumns = 6; 
+    repeated Columns	projectColumns = 6; 
   }
 
   message Comment {
