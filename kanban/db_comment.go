@@ -31,6 +31,15 @@ func (c *Comment) Get(p *ConnectionPoolWrapper) error {
 	return err
 }
 
+func (c *Comment) GetProjectId(p *ConnectionPoolWrapper) (uint32, error) {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	var id uint32
+	row := db.QueryRow("SELECT project_id FROM cards WHERE id = $1", c.Cards_id)
+	err := row.Scan(&id)
+	return id, err
+}
+
 func (c *Comment) CountForCard(p *ConnectionPoolWrapper) (int, error) {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
