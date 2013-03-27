@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bytes"
-	"encoding/binary"
-	"strconv"
-	"net"
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
+	"bytes"
 	"code.google.com/p/goprotobuf/proto"
+	"encoding/binary"
+	"net"
+	"strconv"
 )
 
 func SString_of_SUInt32(s []uint32) []string {
@@ -49,9 +49,9 @@ func UnknowCommand(conn net.Conn, msg *message.Msg) {
 		Command:   message.CMD_ERROR.Enum(),
 		AuthorId:  proto.Uint32(*msg.AuthorId),
 		SessionId: proto.String(*msg.SessionId),
-        Error: &message.Msg_Error{
+		Error: &message.Msg_Error{
 			ErrorId: proto.Uint32(3),
-                },
-        }
+		},
+	}
 	sendKanbanMsg(conn, answer)
 }

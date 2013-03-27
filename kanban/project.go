@@ -179,7 +179,7 @@ func MsgProject(conn net.Conn, msg *message.Msg) {
 		MsgProjectGet(conn, msg)
 	case message.CMD_MOVE:
 		MsgProjectUpdate(conn, msg)
-        default:
-                UnknowCommand(conn, msg)
+	default:
+		UnknowCommand(conn, msg)
 	}
 }

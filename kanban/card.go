@@ -179,6 +179,6 @@ func MsgCard(conn net.Conn, msg *message.Msg) {
 	case message.CMD_MOVE:
 		MsgCardUpdate(conn, msg)
 	default:
-                UnknowCommand(conn, msg)
+		UnknowCommand(conn, msg)
 	}
 }
