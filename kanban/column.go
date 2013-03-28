@@ -211,8 +211,48 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 	sendKanbanMsg(conn, answer)
 }
 
-func ConvertTabOfCardToMessage(p []Project) []*message.Msg_Projects {
-        var ret []*message.Msg_Projects
+func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
+        col := &Column{
+                *msg.Columns.Id,
+                *msg.Columns.Name,
+		*msg.Columns.ProjectId,
+		"",
+                nil,
+                nil,
+                nil,
+        }
+        var answer *message.Msg
+
+// add verif for read right                                                                                         
+        if board, err := col.GetCardByColumnId(dbPool); err != nil{
+                answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+                Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(36),
+                        },
+                }
+        } else {
+                answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_SUCCES.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+                Columns: &message.Msg_Columns{
+				ProjectId: proto.Uint32(col.Project_id),
+				Id:          proto.Uint32(col.Id),
+				Name:        &col.Name,
+				ColumnCards: ConvertTabOfCardToMessage(board),
+			},
+		}
+	}
+        sendKanbanMsg(conn, answer)
+}
+
+func ConvertTabOfCardToMessage(p []Card) []*message.Msg_Cards {
+        var ret []*message.Msg_Cards
 
         for n := 0; n < len(p); n++ {
                 ret = append(ret, &message.Msg_Cards{
@@ -241,7 +281,9 @@ func MsgColumn(conn net.Conn, msg *message.Msg) {
 	case message.CMD_DELETE:
 		MsgColumnDelete(conn, msg)
 	case message.CMD_GET:
-		// MsgColumnGet(conn, msg)
+		MsgColumnGet(conn, msg)
+	case message.CMD_GETBOARD:
+		MsgColumnGetBoard(conn, msg)
 	case message.CMD_MOVE:
 		MsgColumnUpdate(conn, msg)
 	default:

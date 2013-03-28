@@ -78,3 +78,24 @@ func (u *Project) PutAdmin(p *ConnectionPoolWrapper) error {
 func (u *Project) Unadmin(p *ConnectionPoolWrapper) error {
 	return changeAdminProject(p, u.Id, false)
 }
+
+func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, error) {
+        var tab []Column
+        var t Column
+
+        db := p.GetConnection()
+        defer p.ReleaseConnection(db)
+        row, err := db.Query("SELECT * FROM column WHERE ProjectId = $1", u.Id)
+        if err != nil {
+                return tab, err
+        }
+        for row.Next() {
+                err = row.Scan(&t.Id, &t.Project_id, &t.Name, &t.Content, &t.Tags, &t.Scripts_id, &t.Write)
+                if err != nil {
+                        return tab, err
+                }
+                tab = append(tab, t)
+        }
+
+        return tab, nil
+}

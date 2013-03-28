@@ -162,52 +162,51 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
 		*msg.Projects.Id,
 		*msg.Projects.Name,
-		msg.Projects.AdminsId,
-		msg.Projects.Read,
+		nil,
+		nil,
 		"",
 	}
         var answer *message.Msg
-	
-//        if board, err := user.GetProjectByUserId(dbPool); err != nil{
+
+// add verif for read right
+	if board, err := proj.GetColumnByProjectId(dbPool); err != nil{
                 answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
+			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
                 Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(15),
+				ErrorId: proto.Uint32(36),
 			},
 		}
-//	} else {
+	} else {
 		answer = &message.Msg{
-			Target:    message.TARGET_USERS.Enum(),
+			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Users: &message.Msg_Cards{
+		Projects: &message.Msg_Projects{
 				Id:          proto.Uint32(proj.Id),
-	Name:        &proj.Name,
-				Admin:       &proj.Admin,
-				UserProject: ConvertTabOfCardToMessage(board),
+				Name:        &proj.Name,
+				Content:       &proj.Content,
+				ProjectColumns: ConvertTabOfColumnToMessage(board),
 			},
 		}
-//	}
+	}
 	sendKanbanMsg(conn, answer)
 }
 
 // modifier pour faire des column
-func ConvertTabOfColumnToMessage(p []Column) []*message.Msg_Column {
-        var ret []*message.Msg_Column
+func ConvertTabOfColumnToMessage(p []Column) []*message.Msg_Columns {
+        var ret []*message.Msg_Columns
 	
         for n := 0; n < len(p); n++ {
-                ret = append(ret, &message.Msg_Cards{
+                ret = append(ret, &message.Msg_Columns{
 			Id:         proto.Uint32(p[n].Id),
 			ProjectId:  proto.Uint32(p[n].Project_id),
-			ColumnId:   proto.Uint32(p[n].Column_id),
 			Name:       proto.String(p[n].Name),
 			Desc:       proto.String(p[n].Content),
 			Tags:       p[n].Tags,
-			UserId:     proto.Uint32(p[n].User_id),
 			ScriptsIds: p[n].Scripts_id,
 			Write:      p[n].Write,
                 })
