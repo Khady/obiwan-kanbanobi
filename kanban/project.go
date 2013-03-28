@@ -16,11 +16,10 @@ type Project struct {
 
 func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
-		0,
-		*msg.Projects.Name,
-		msg.Projects.AdminsId,
-		msg.Projects.Read,
-		"",
+	Name: *msg.Projects.Name,
+	admins_id: msg.Projects.AdminsId,
+	Read: msg.Projects.Read,
+	Content: *msg.Projects.Content,
 	}
 	var answer *message.Msg
 	if err := proj.Add(dbPool); err != nil {
@@ -54,26 +53,25 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 
 func MsgProjectUpdate(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
-		0,
-		*msg.Projects.Name,
-		msg.Projects.AdminsId,
-		msg.Projects.Read,
-		"",
+	Id: *msg.Projects.Id,
+	Name: *msg.Projects.Name,
+	admins_id:	msg.Projects.AdminsId,
+	Read:	msg.Projects.Read,
+	Content: *msg.Projects.Content,
 	}
+
 	var answer *message.Msg
 	if err := proj.Update(dbPool); err != nil {
-		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(32), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(32),
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
@@ -96,18 +94,16 @@ func MsgProjectDelete(conn net.Conn, msg *message.Msg) {
 	}
 	var answer *message.Msg
 	if err := proj.Del(dbPool); err != nil {
-		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(34), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(32),
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
@@ -130,8 +126,7 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 	}
 	var answer *message.Msg
 	if err := proj.Get(dbPool); err != nil {
-		// Envoyer un message d'erreur ici
-		answer = &message.Msg{
+	answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
@@ -141,19 +136,17 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
-		answer = &message.Msg{
-			Target:    message.TARGET_PROJECTS.Enum(),
-			Command:   message.CMD_GET.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
-			Projects: &message.Msg_Projects{
-
-				Id:   proto.Uint32(proj.Id),
-				Name: proto.String(proj.Name),
-				//				AdminsId:   proto.Uint32(proj.admins_id),
-				//		:    "",
-			},
+	answer = &message.Msg{
+	    Target:    message.TARGET_PROJECTS.Enum(),
+	    Command:   message.CMD_GET.Enum(),
+	    AuthorId:  proto.Uint32(*msg.AuthorId),
+	    SessionId: proto.String(*msg.SessionId),
+	Projects: &message.Msg_Projects{
+		Id : &proj.Id,
+		Name: &proj.Name,
+		Content: &proj.Content,
+		AdminsId: proj.admins_id,
+		Read: proj.Read,	    },
 		}
 	}
 	data, err := proto.Marshal(answer)
@@ -225,6 +218,7 @@ func ConvertTabOfColumnToMessage(p []Column) []*message.Msg_Column {
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)
 // Il faut faire une pool de worker, un dispacher et lancer l'operation a effectuer dans le dispatch.
 func MsgProject(conn net.Conn, msg *message.Msg) {
+    println("project test")
 	switch *msg.Command {
 	case message.CMD_CREATE:
 		MsgProjectCreate(conn, msg)

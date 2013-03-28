@@ -37,25 +37,6 @@ message Msg {
     required string	oldpassword = 2;
     required string	newpassword = 3;
   }
-
-  message Columns {
-    required uint32	project_id = 1;
-    required uint32	id = 2;
-    required string	name = 3;
-    optional string	desc = 4;
-    repeated string	tags = 5;
-    repeated uint32	scripts_ids = 6; // IDs of the scripts attached to the column
-    repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
-  }
-
-  message Projects {
-    required uint32	id = 1;
-    required string	name = 2;
-    required string	content = 3;
-    repeated uint32	admins_id = 4; // list of the administrator users of the projects
-    repeated uint32	read = 5;  // list of the user IDs with read permission on the project (if empty: free for all)
-  }
-
   message Cards {
     // Comments struct
     required uint32	id = 1;
@@ -68,6 +49,26 @@ message Msg {
     optional uint32	user_id = 8; // ID of the card author
     repeated uint32	scripts_ids = 9; // IDs of the scripts attached to the card
     repeated uint32	write = 10; // // list of the user IDs with write permission on the card (if empty: free for all)
+  }
+  
+  message Columns {
+    required uint32	project_id = 1;
+    required uint32	id = 2;
+    required string	name = 3;
+    optional string	desc = 4;
+    repeated string	tags = 5;
+    repeated uint32	scripts_ids = 6; // IDs of the scripts attached to the column
+    repeated uint32	write = 7; // list of the user IDs with write permission on the column (if empty: free for all)
+    repeated Cards 	ColumnCards = 8;
+  }
+
+  message Projects {
+    required uint32	id = 1;
+    required string	name = 2;
+    required string	content = 3;
+    repeated uint32	admins_id = 4; // list of the administrator users of the projects
+    repeated uint32	read = 5;  // list of the user IDs with read permission on the project (if empty: free for all)
+    repeated Columns	projectColumns = 6; 
   }
 
   message Comment {

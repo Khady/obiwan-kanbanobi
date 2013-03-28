@@ -269,118 +269,6 @@ func (this *Msg_Password) GetNewpassword() string {
 	return ""
 }
 
-type Msg_Columns struct {
-	ProjectId        *uint32  `protobuf:"varint,1,req,name=project_id" json:"project_id,omitempty"`
-	Id               *uint32  `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
-	Name             *string  `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
-	Desc             *string  `protobuf:"bytes,4,opt,name=desc" json:"desc,omitempty"`
-	Tags             []string `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
-	ScriptsIds       []uint32 `protobuf:"varint,6,rep,name=scripts_ids" json:"scripts_ids,omitempty"`
-	Write            []uint32 `protobuf:"varint,7,rep,name=write" json:"write,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (this *Msg_Columns) Reset()         { *this = Msg_Columns{} }
-func (this *Msg_Columns) String() string { return proto.CompactTextString(this) }
-func (*Msg_Columns) ProtoMessage()       {}
-
-func (this *Msg_Columns) GetProjectId() uint32 {
-	if this != nil && this.ProjectId != nil {
-		return *this.ProjectId
-	}
-	return 0
-}
-
-func (this *Msg_Columns) GetId() uint32 {
-	if this != nil && this.Id != nil {
-		return *this.Id
-	}
-	return 0
-}
-
-func (this *Msg_Columns) GetName() string {
-	if this != nil && this.Name != nil {
-		return *this.Name
-	}
-	return ""
-}
-
-func (this *Msg_Columns) GetDesc() string {
-	if this != nil && this.Desc != nil {
-		return *this.Desc
-	}
-	return ""
-}
-
-func (this *Msg_Columns) GetTags() []string {
-	if this != nil {
-		return this.Tags
-	}
-	return nil
-}
-
-func (this *Msg_Columns) GetScriptsIds() []uint32 {
-	if this != nil {
-		return this.ScriptsIds
-	}
-	return nil
-}
-
-func (this *Msg_Columns) GetWrite() []uint32 {
-	if this != nil {
-		return this.Write
-	}
-	return nil
-}
-
-type Msg_Projects struct {
-	Id               *uint32  `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
-	Name             *string  `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
-	Content          *string  `protobuf:"bytes,3,req,name=content" json:"content,omitempty"`
-	AdminsId         []uint32 `protobuf:"varint,4,rep,name=admins_id" json:"admins_id,omitempty"`
-	Read             []uint32 `protobuf:"varint,5,rep,name=read" json:"read,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (this *Msg_Projects) Reset()         { *this = Msg_Projects{} }
-func (this *Msg_Projects) String() string { return proto.CompactTextString(this) }
-func (*Msg_Projects) ProtoMessage()       {}
-
-func (this *Msg_Projects) GetId() uint32 {
-	if this != nil && this.Id != nil {
-		return *this.Id
-	}
-	return 0
-}
-
-func (this *Msg_Projects) GetName() string {
-	if this != nil && this.Name != nil {
-		return *this.Name
-	}
-	return ""
-}
-
-func (this *Msg_Projects) GetContent() string {
-	if this != nil && this.Content != nil {
-		return *this.Content
-	}
-	return ""
-}
-
-func (this *Msg_Projects) GetAdminsId() []uint32 {
-	if this != nil {
-		return this.AdminsId
-	}
-	return nil
-}
-
-func (this *Msg_Projects) GetRead() []uint32 {
-	if this != nil {
-		return this.Read
-	}
-	return nil
-}
-
 type Msg_Cards struct {
 	Id               *uint32  `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
 	ProjectId        *uint32  `protobuf:"varint,2,req,name=project_id" json:"project_id,omitempty"`
@@ -433,13 +321,6 @@ func (this *Msg_Cards) GetDesc() string {
 	return ""
 }
 
-func (this *Msg_Cards) GetTags() []string {
-	if this != nil {
-		return this.Tags
-	}
-	return nil
-}
-
 func (this *Msg_Cards) GetUserId() uint32 {
 	if this != nil && this.UserId != nil {
 		return *this.UserId
@@ -447,18 +328,83 @@ func (this *Msg_Cards) GetUserId() uint32 {
 	return 0
 }
 
-func (this *Msg_Cards) GetScriptsIds() []uint32 {
-	if this != nil {
-		return this.ScriptsIds
-	}
-	return nil
+type Msg_Columns struct {
+	ProjectId        *uint32      `protobuf:"varint,1,req,name=project_id" json:"project_id,omitempty"`
+	Id               *uint32      `protobuf:"varint,2,req,name=id" json:"id,omitempty"`
+	Name             *string      `protobuf:"bytes,3,req,name=name" json:"name,omitempty"`
+	Desc             *string      `protobuf:"bytes,4,opt,name=desc" json:"desc,omitempty"`
+	Tags             []string     `protobuf:"bytes,5,rep,name=tags" json:"tags,omitempty"`
+	ScriptsIds       []uint32     `protobuf:"varint,6,rep,name=scripts_ids" json:"scripts_ids,omitempty"`
+	Write            []uint32     `protobuf:"varint,7,rep,name=write" json:"write,omitempty"`
+	ColumnCards      []*Msg_Cards `protobuf:"bytes,8,rep" json:"ColumnCards,omitempty"`
+	XXX_unrecognized []byte       `json:"-"`
 }
 
-func (this *Msg_Cards) GetWrite() []uint32 {
-	if this != nil {
-		return this.Write
+func (this *Msg_Columns) Reset()         { *this = Msg_Columns{} }
+func (this *Msg_Columns) String() string { return proto.CompactTextString(this) }
+func (*Msg_Columns) ProtoMessage()       {}
+
+func (this *Msg_Columns) GetProjectId() uint32 {
+	if this != nil && this.ProjectId != nil {
+		return *this.ProjectId
 	}
-	return nil
+	return 0
+}
+
+func (this *Msg_Columns) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
+	}
+	return 0
+}
+
+func (this *Msg_Columns) GetName() string {
+	if this != nil && this.Name != nil {
+		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Columns) GetDesc() string {
+	if this != nil && this.Desc != nil {
+		return *this.Desc
+	}
+	return ""
+}
+
+type Msg_Projects struct {
+	Id               *uint32        `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	Name             *string        `protobuf:"bytes,2,req,name=name" json:"name,omitempty"`
+	Content          *string        `protobuf:"bytes,3,req,name=content" json:"content,omitempty"`
+	AdminsId         []uint32       `protobuf:"varint,4,rep,name=admins_id" json:"admins_id,omitempty"`
+	Read             []uint32       `protobuf:"varint,5,rep,name=read" json:"read,omitempty"`
+	ProjectColumns   []*Msg_Columns `protobuf:"bytes,6,rep,name=projectColumns" json:"projectColumns,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (this *Msg_Projects) Reset()         { *this = Msg_Projects{} }
+func (this *Msg_Projects) String() string { return proto.CompactTextString(this) }
+func (*Msg_Projects) ProtoMessage()       {}
+
+func (this *Msg_Projects) GetId() uint32 {
+	if this != nil && this.Id != nil {
+		return *this.Id
+	}
+	return 0
+}
+
+func (this *Msg_Projects) GetName() string {
+	if this != nil && this.Name != nil {
+		return *this.Name
+	}
+	return ""
+}
+
+func (this *Msg_Projects) GetContent() string {
+	if this != nil && this.Content != nil {
+		return *this.Content
+	}
+	return ""
 }
 
 type Msg_Comment struct {
@@ -596,13 +542,6 @@ func (this *Msg_Users) GetMail() string {
 		return *this.Mail
 	}
 	return ""
-}
-
-func (this *Msg_Users) GetUserProject() []*Msg_Projects {
-	if this != nil {
-		return this.UserProject
-	}
-	return nil
 }
 
 type Msg_Ident struct {
