@@ -99,3 +99,18 @@ func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, erro
 
         return tab, nil
 }
+
+func (u *Project) IsAdmin(p *ConnectionPoolWrapper, uid uint32) (bool, error) {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	admins, err := getUInt32SliceCell(dbPool, "admins_id", "projects", u.Id)
+	if err != nil {
+		return false, err
+	}
+	for _, value := range admins {
+		if value == uid {
+			return true, nil
+		}
+	}
+	return false, err
+}
