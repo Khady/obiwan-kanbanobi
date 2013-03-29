@@ -27,3 +27,12 @@ on GNU/linux, you can use pip to get these packages:
 and install redis-server and. If you are on ubuntu/debian:
 
 # apt-get install redis-server
+
+For launch the website you must install gunicorn, if you are on ubuntu/debian
+
+# apt-get install gunicorn
+
+and use this commande line at the root of the webapp:
+
+$ gunicorn --debug --worker-class=gevent main:app
+
