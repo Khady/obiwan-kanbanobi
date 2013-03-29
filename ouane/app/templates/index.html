@@ -1,45 +1,70 @@
 {% extends "layout.html" %}
 {% block body %}
 <script>
-jQuery.fn.center = function () {
-    this.css("position","absolute");
-    this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) + 
-                                                $(window).scrollTop()) + "px");
-    this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) + 
-                                                $(window).scrollLeft()) + "px");
-    return this;
-}
-$(function() {
-$( ".addProject" ).button().click(function() {
-$( ".newProject" ).center();
-$( ".newProject" ).show();
-})
-$( ".newProject" ).hide();
-});
+<!-- jQuery.fn.center = function () { -->
+<!--     this.css("position","absolute"); -->
+<!--     this.css("top", Math.max(0, (($(window).height() - $(this).outerHeight()) / 2) +  -->
+<!--                                                 $(window).scrollTop()) + "px"); -->
+<!--     this.css("left", Math.max(0, (($(window).width() - $(this).outerWidth()) / 2) +  -->
+<!--                                                 $(window).scrollLeft()) + "px"); -->
+<!--     return this; -->
+<!-- } -->
+<!-- $(function() { -->
+<!-- $( ".addProject" ).button().click(function() { -->
+<!-- $( ".newProject" ).center(); -->
+<!-- $( ".newProject" ).show(); -->
+<!-- }) -->
+<!-- $( ".newProject" ).hide(); -->
+<!-- }); -->
 function sse() {
 	var source = new EventSource('/stream');
         source.onmessage = function(e) {
-		alert(e.data);
+		mydata = JSON.parse(e.data);
+		if (mydata.type == 'project')
+		{
+			$(".accordion").find("#"+mydata.id).remove();
+			$(".accordion").append("<div class=\"accordion-group\"><div class=\"accordion-heading\" id=\""+mydata.id+"\"><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#"+mydata.id+"-under\">"+mydata.name+"</a></div><div id=\""+mydata.id+"-under\" class=\"accordion-body collapse\"><div class=\"accordion-inner\"><p>"+mydata.content+"</p><a href=\"project/"+mydata.id+"\" class=\"btn\">Go to the project page!</a></div></div></div>");
+		}
 	};
 }
 sse();
 </script>
   <h1>Project List</h1>
-  {% for message in data %}
-    <p>{{ message.name }}</p>
-  {% endfor %}
-    <button class="addProject">Add a project</button>
-    <div class="newProject">
-      <h3>Add Project</h3>
-      <form action="" method="post" name="addProject">
-	{{form.hidden_tag()}}
+  <div class="accordion" id="accordion2">
+{% for message in data %}
+<div class="accordion-group" id="{{message.id}}">
+  <div class="accordion-heading">
+    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{message.id}}-under">{{message.name}}</a>
+  </div>
+  <div id="{{message.id}}-under" class="accordion-body collapse">
+    <div class="accordion-inner">
+      <p>{{message.content}}</p>
+      <a href="{{url_for('project', id=message.id)}}" class="btn">Go to the project page!</a>
+    </div>
+  </div>
+</div>
+{% endfor %}
+  </div>
+    <button href="#myModal" role="button" class="btn" data-toggle="modal">Add a project</button>
+    <div  id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="myModalLabel">Add Project</h3>
+	</div>
+	<div class="modal-body">
+	  {{form.hidden_tag()}}
 	<p>
 	  Name:<br>
-	  {{form.name}}<br>
+	  {{form.name(class="input-block-level")}}<br>
 	  Description:<br>
-	  {{form.description(rows=10)}}<br>
-	  <input type="submit" style="width:100%;" value="Add Project!">
+	  {{form.description(class="input-block-level")}}<br>
 	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <input class="btn btn-primary" type="submit" value="Add Project!">
+	</div>
       </form>
     </div>
 {%  endblock %}

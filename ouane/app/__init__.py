@@ -7,8 +7,11 @@ import redis
 
 red = redis.StrictRedis()
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ouane.db'
 db = SQLAlchemy(app)
+
+from dbUtils import *
+
 app.config.from_object('config')
 
 def event_stream():

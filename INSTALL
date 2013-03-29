@@ -24,6 +24,6 @@ on GNU/linux, you can use pip to get these packages:
 # pip install Flask-WTF
 # pip install redis
 
-and install redis-server. If you are on ubuntu/debian:
+and install redis-server and. If you are on ubuntu/debian:
 
 # apt-get install redis-server

@@ -1,9 +1,10 @@
+import json
 from network import Network
 from message_pb2 import Msg
 import message_pb2
 import threading
-from dbUtils import Cards, Columns, Users, Projects, Comments, Metadata
 from app import app, db, red
+from dbUtils import Cards, Columns, Users, Projects, Comments, Metadata
 
 class Api(threading.Thread):
     def __init__(self, host, port):
@@ -147,6 +148,22 @@ class Api(threading.Thread):
     def getUserConnectionData(self, name):
         return self.userLogin[name]
 
+    def addNewProjectInDB(self, project):
+        readstr = " ".join(project.read)
+        adminstr = " ".join(project.admins_id)
+        p = Projects.query.get(project.id)
+        print p
+        if (p == None):
+            p = Projects(project.id, project.name, adminstr, project.content, readstr)
+            db.session.add(p)
+        else:
+            p.name = project.name
+            p.admins_id = adminstr
+            p.content = project.content
+            p.read = readstr
+        db.session.commit()
+
+
     def run(self):
         while 1:
             self.network.run()
@@ -180,9 +197,7 @@ class Api(threading.Thread):
                     self.userLogin[msg.ident.login] = user
                     red.publish('ouane', u'IDENT')
                 if (msg.target == message_pb2.PROJECTS):
-                    p = Columns(msg.projects.id, msg.projects.name, msg.projects.admin_id, msg.projects.content, msg.projects.read)
-                    db.session.add(c)
-                    db.session.commit()
+                    self.addNewProjectInDB(msg.projects)
                     red.publish('ouane', u'PROJECTS')
                     print "PROJECTS"
                 if (msg.target == message_pb2.ERROR):
@@ -192,4 +207,14 @@ class Api(threading.Thread):
                     red.publish('ouane', u'USERS')
                     print "USERS"
                     for project in msg.users.userProject:
-                        self.getProjectById(msg.author_id, msg.session_id, project.id)
+                        self.addNewProjectInDB(project)
+                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(project.read), 'admins_id' : ' '.join(project.admins_id)}              
+                        dictproject['type'] = 'project'
+                        print dictproject
+                        red.publish('ouane', json.dumps(dictproject))
+                        print project.id
+                        print project.name
+                        print project.content
+                        print project.read
+                        print project.admins_id
+                        # self.getProjectById(msg.author_id, msg.session_id, project.id)

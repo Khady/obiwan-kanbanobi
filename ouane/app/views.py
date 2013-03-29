@@ -1,5 +1,6 @@
+import json
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
-from app  import app, a, event_stream
+from app  import app, a, event_stream, red
 from forms import LoginForm, AddProjectForm, AddUserForm
 from functools import wraps
 from dbUtils import Projects
@@ -41,27 +42,28 @@ def checklogin(name = None):
             return "KO"
 
 @app.route('/project', methods = ['GET', 'POST'])
-@app.route("/project/<name>", methods = ['GET', 'POST'])
+@app.route("/project/<id>", methods = ['GET', 'POST'])
 @login_required
-def project(name = ""):
+def project(id = 0):
     return render_template('project.html')
 
 @app.route("/", methods = ['GET', 'POST'])
 @app.route("/index", methods = ['GET', 'POST'])
 @login_required
 def index():
-    try:
-        data = Projects.query.all()
-        print data
-    except:
-        data = []
+    data = Projects.query.order_by(Projects.id).all()
+    # for project in data:
+    #     d = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : project.read, 'admins_id' : project.admins_id}
+    #     d['type'] = 'project'
+    #     print d
+    #     red.publish('ouane', json.dumps(d))
     form = AddProjectForm()
     if form.validate_on_submit():
         print form.name.data
         print form.description.data
         connection = a.getUserConnectionData(session['user_login'])
         a.createProject(connection['author_id'], connection['session_id'], form.name.data, form.description.data)
-    return render_template('index.html', data=data, form=form)
+    return render_template('index.html', data = data, form=form)
 
 @app.route("/admin", methods = ['GET', 'POST'])
 @login_required

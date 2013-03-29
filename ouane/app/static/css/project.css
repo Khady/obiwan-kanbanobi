@@ -81,15 +81,19 @@
     padding-left: 10px;
     padding-right: 10px;
     border-radius: 10px;
-    box-shadow: 6px 6px 9px gray
+    box-shadow: 6px 6px 9px gray;
 }
 
-div.newProject input
+div.modal-body  input
 {
-    min-width:400px;
+    width: 100%;
 }
 
 div.newProject textarea
 {
-    min-width:400px;
+    width: 100%;
+}
+
+form {
+  margin-bottom: 0px;
 }
