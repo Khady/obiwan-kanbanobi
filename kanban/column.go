@@ -212,50 +212,50 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 }
 
 func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
-        col := &Column{
-                *msg.Columns.Id,
-                *msg.Columns.Name,
+	col := &Column{
+		*msg.Columns.Id,
+		*msg.Columns.Name,
 		*msg.Columns.ProjectId,
 		"",
-                nil,
-                nil,
-                nil,
-        }
-        var answer *message.Msg
+		nil,
+		nil,
+		nil,
+	}
+	var answer *message.Msg
 
-// add verif for read right                                                                                         
-        if board, err := col.GetCardByColumnId(dbPool); err != nil{
-                answer = &message.Msg{
+	// add verif for read right
+	if board, err := col.GetCardByColumnId(dbPool); err != nil {
+		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(36),
-                        },
-                }
-        } else {
-                answer = &message.Msg{
+			},
+		}
+	} else {
+		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-                Columns: &message.Msg_Columns{
-				ProjectId: proto.Uint32(col.Project_id),
+			Columns: &message.Msg_Columns{
+				ProjectId:   proto.Uint32(col.Project_id),
 				Id:          proto.Uint32(col.Id),
 				Name:        &col.Name,
 				ColumnCards: ConvertTabOfCardToMessage(board),
 			},
 		}
 	}
-        sendKanbanMsg(conn, answer)
+	sendKanbanMsg(conn, answer)
 }
 
 func ConvertTabOfCardToMessage(p []Card) []*message.Msg_Cards {
-        var ret []*message.Msg_Cards
+	var ret []*message.Msg_Cards
 
-        for n := 0; n < len(p); n++ {
-                ret = append(ret, &message.Msg_Cards{
+	for n := 0; n < len(p); n++ {
+		ret = append(ret, &message.Msg_Cards{
 			Id:         proto.Uint32(p[n].Id),
 			ProjectId:  proto.Uint32(p[n].Project_id),
 			ColumnId:   proto.Uint32(p[n].Column_id),
@@ -265,9 +265,9 @@ func ConvertTabOfCardToMessage(p []Card) []*message.Msg_Cards {
 			UserId:     proto.Uint32(p[n].User_id),
 			ScriptsIds: p[n].Scripts_id,
 			Write:      p[n].Write,
-                })
-        }
-        return ret
+		})
+	}
+	return ret
 }
 
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)
