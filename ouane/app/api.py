@@ -42,6 +42,8 @@ class Api(threading.Thread):
         msg.author_id = author_id
         msg.session_id = session_id
         msg.projects.id = project_id
+        msg.projects.name = ""
+        msg.projects.content = ""
         self.network.setWriteStack(msg.SerializeToString())
 
     # def getAllColumns(self, author_id, session_id):
@@ -185,12 +187,8 @@ class Api(threading.Thread):
                     db.session.add(c)
                     db.session.commit()
                     red.publish('ouane', u'COLUMNS')
+                    print "COLUMNS"
                 if (msg.target == message_pb2.IDENT):
-                    # print msg.target
-                    # print msg.command
-                    # print msg.author_id
-                    # print msg.session_id
-                    # print msg.ident.login
                     user = {"author_id": msg.author_id, "session_id": msg.session_id}
                     self.getUserById(msg.author_id, msg.session_id, msg.author_id)
                     self.getAllProjetList(msg.author_id, msg.session_id, msg.author_id)
@@ -203,22 +201,14 @@ class Api(threading.Thread):
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(project.read), 'admins_id' : ' '.join(project.admins_id)}              
                         dictproject['type'] = 'project'
                         red.publish('ouane', json.dumps(dictproject))
-                        print "PROJECTS"
+                        self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)
                 if (msg.target == message_pb2.ERROR):
                     red.publish('ouane', u'ERROR')
                     print "ERROR"
                 if (msg.target == message_pb2.USERS):
-                    red.publish('ouane', u'USERS')
-                    print "USERS"
                     for project in msg.users.userProject:
                         self.addNewProjectInDB(project)
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(project.read), 'admins_id' : ' '.join(project.admins_id)}              
                         dictproject['type'] = 'project'
-                        print dictproject
                         red.publish('ouane', json.dumps(dictproject))
-                        print project.id
-                        print project.name
-                        print project.content
-                        print project.read
-                        print project.admins_id
-                        # self.getProjectById(msg.author_id, msg.session_id, project.id)
+                        self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)
