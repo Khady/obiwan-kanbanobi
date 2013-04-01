@@ -37,7 +37,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	} else {
 		// Envoyer un message de succes ici
 		answer = &message.Msg{
-			Target:    message.TARGET_+PROJECTS.Enum(),
+			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
