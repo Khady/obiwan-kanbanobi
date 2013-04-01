@@ -167,7 +167,7 @@ func startServer() error {
 	CONNECTION_LIST.ids = make(map[uint32]Connection)
 	CONNECTION_LIST.conns = make(map[net.Conn][]uint32)
 	server_port := ":" + *SPORT
-	tcpAddr, err := net.ResolveTCPAddr("ip4", server_port)
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", server_port)
 	if err != nil {
 		LOGGER.Printf("The port %s is invalid", server_port)
 		return err
