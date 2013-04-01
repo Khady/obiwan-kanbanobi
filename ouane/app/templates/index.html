@@ -23,7 +23,18 @@ function sse() {
 		if (mydata.type == 'project')
 		{
 			$(".accordion").find("#"+mydata.id).remove();
-			$(".accordion").append("<div class=\"accordion-group\"><div class=\"accordion-heading\" id=\""+mydata.id+"\"><h4><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#"+mydata.id+"-under\">"+mydata.name+"</a></h4></div><div id=\""+mydata.id+"-under\" class=\"accordion-body collapse\"><div class=\"accordion-inner\"><p>"+mydata.content+"</p><a href=\"project/"+mydata.id+"\" class=\"btn\">Go to the project page!</a></div></div></div>");
+			$(".accordion").append(
+"<div class=\"accordion-group\" id=\""+mydata.id+"\">
+  <div class=\"accordion-heading\">
+    <h4><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#"+mydata.id+"-under\">"+mydata.name+"</a></h4>
+  </div>
+  <div id=\""+mydata.id+"-under\" class=\"accordion-body collapse\">
+    <div class=\"accordion-inner\">
+      <p>"+mydata.content+"</p>
+      <a href=\"project/"+mydata.id+"\" class=\"btn\">Go to the project page!</a>
+</div>
+</div>
+</div>");
 		}
 	};
 }
