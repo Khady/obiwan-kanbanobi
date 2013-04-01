@@ -1,3 +1,4 @@
+
 package main
 
 import (
@@ -36,7 +37,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	} else {
 		// Envoyer un message de succes ici
 		answer = &message.Msg{
-			Target:    message.TARGET_PROJECTS.Enum(),
+			Target:    message.TARGET_+PROJECTS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
@@ -49,6 +50,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	}
 	conn.Write(write_int32(int32(len(data))))
 	conn.Write(data)
+	LOGGER.Print("WRITE !!!!!!!!")
 }
 
 func MsgProjectUpdate(conn net.Conn, msg *message.Msg) {
