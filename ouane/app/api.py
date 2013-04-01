@@ -197,9 +197,13 @@ class Api(threading.Thread):
                     self.userLogin[msg.ident.login] = user
                     red.publish('ouane', u'IDENT')
                 if (msg.target == message_pb2.PROJECTS):
-                    self.addNewProjectInDB(msg.projects)
-                    red.publish('ouane', u'PROJECTS')
-                    print "PROJECTS"
+                    if (msg.command == message_pb2.GET):
+                        self.addNewProjectInDB(msg.projects)
+                        project = msg.projects
+                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(project.read), 'admins_id' : ' '.join(project.admins_id)}              
+                        dictproject['type'] = 'project'
+                        red.publish('ouane', json.dumps(dictproject))
+                        print "PROJECTS"
                 if (msg.target == message_pb2.ERROR):
                     red.publish('ouane', u'ERROR')
                     print "ERROR"

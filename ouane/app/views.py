@@ -57,11 +57,12 @@ def index():
     #     d['type'] = 'project'
     #     print d
     #     red.publish('ouane', json.dumps(d))
+    connection = a.getUserConnectionData(session['user_login'])
     form = AddProjectForm()
+    a.getAllProjetList(connection['author_id'], connection['session_id'], connection['author_id'])
     if form.validate_on_submit():
         print form.name.data
         print form.description.data
-        connection = a.getUserConnectionData(session['user_login'])
         a.createProject(connection['author_id'], connection['session_id'], form.name.data, form.description.data)
     return render_template('index.html', data = data, form=form)
 
