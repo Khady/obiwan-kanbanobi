@@ -19,7 +19,6 @@ func buildNotify(projectId uint32, msg *message.Msg) {
 	}
 }
 
-
 func notifyUsers(msg *message.Msg) error {
 	var err error = nil
 	switch *msg.Target {

@@ -86,22 +86,22 @@ func (c *Column) Rename(p *ConnectionPoolWrapper) error {
 }
 
 func (u *Column) GetCardByColumnId(p *ConnectionPoolWrapper) ([]Card, error) {
-        var tab []Card
-        var t Card
+	var tab []Card
+	var t Card
 
-        db := p.GetConnection()
-        defer p.ReleaseConnection(db)
-        row, err := db.Query("SELECT * FROM cards WHERE Project_id = $1 AND column_id = $2", u.Project_id, u.Id)
-        if err != nil {
-                return tab, err
-        }
-        for row.Next() {
-                err = row.Scan(&t.Id, &t.Name, &t.Content, &t.Column_id, &t.Project_id, &t.Tags, &t.Scripts_id, &t.Write)
-                if err != nil {
-                        return tab, err
-                }
-                tab = append(tab, t)
-        }
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	row, err := db.Query("SELECT * FROM cards WHERE Project_id = $1 AND column_id = $2", u.Project_id, u.Id)
+	if err != nil {
+		return tab, err
+	}
+	for row.Next() {
+		err = row.Scan(&t.Id, &t.Name, &t.Content, &t.Column_id, &t.Project_id, &t.Tags, &t.Scripts_id, &t.Write)
+		if err != nil {
+			return tab, err
+		}
+		tab = append(tab, t)
+	}
 
-        return tab, nil
+	return tab, nil
 }

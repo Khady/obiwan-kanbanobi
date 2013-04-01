@@ -28,11 +28,11 @@ func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	return cell_ids, nil
 }
 
-func updateUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name string, cell []uint32, id uint32) error {
+func updateUInt32SliceCell(p *ConnectionPoolWrapper, column_name string, base_name string, cell []uint32, id uint32) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	new_cell := strings.Join(SString_of_SUInt32(cell), ",")
-	_, err := db.Exec("update $1 set $2 = $3 where id = $4", column_name, base_name, new_cell, id)
+	_, err := db.Exec("update $1 set $2 = $3 where id = $4", base_name, column_name, new_cell, id)
 	return err
 }
 

@@ -233,6 +233,11 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		CONNECTION_LIST.del(*msg.AuthorId)
+		session := &Session{
+			User_uid: *msg.AuthorId,
+		}
+		session.DelByUserId(dbPool)
 	}
 	sendKanbanMsg(conn, answer)
 }
