@@ -1,6 +1,7 @@
 package main
 
 import "strconv"
+import "strings"
 
 func changeStateUser(p *ConnectionPoolWrapper, id uint32, state bool) error {
 	db := p.GetConnection()
@@ -126,11 +127,15 @@ func (u *User) GetProjectByUserId(p *ConnectionPoolWrapper) ([]Project, error) {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row, err := db.Query("SELECT id, name, content FROM projects WHERE read LIKE '%," + strconv.FormatUint(uint64(u.Id), 10) + ",%'")
+	var read, admin string
+
 	if err != nil {
 		return tab, err
 	}
 	for row.Next() {
-		err = row.Scan(&t.Id, &t.Name, &t.Content)
+		err = row.Scan(&t.Id, &t.Name, &t.Content, &read, &admin)
+		t.Read = SUInt32_of_SString(strings.Split(read, ","))
+		t.admins_id = SUInt32_of_SString(strings.Split(admin, ","))
 		if err != nil {
 			return tab, err
 		}
