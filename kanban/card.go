@@ -70,6 +70,7 @@ func MsgCardCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -106,6 +107,7 @@ func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -134,6 +136,7 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -173,6 +176,7 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 				Write:      card.Write,
 			},
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }

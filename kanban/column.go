@@ -107,6 +107,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -141,6 +142,7 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -170,6 +172,7 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -207,6 +210,7 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 				Write:      column.Write,
 			},
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -247,6 +251,7 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 				ColumnCards: ConvertTabOfCardToMessage(board),
 			},
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }

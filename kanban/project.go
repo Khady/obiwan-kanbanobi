@@ -1,4 +1,3 @@
-
 package main
 
 import (
@@ -42,6 +41,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	data, err := proto.Marshal(answer)
 	if err != nil {
@@ -80,6 +80,7 @@ func MsgProjectUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	data, err := proto.Marshal(answer)
 	if err != nil {
@@ -112,6 +113,7 @@ func MsgProjectDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	data, err := proto.Marshal(answer)
 	if err != nil {
@@ -150,6 +152,7 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 				AdminsId: proj.admins_id,
 				Read:     proj.Read},
 		}
+		notifyUsers(msg)
 	}
 	data, err := proto.Marshal(answer)
 	if err != nil {
@@ -194,6 +197,7 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 				ProjectColumns: ConvertTabOfColumnToMessage(board),
 			},
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
