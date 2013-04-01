@@ -112,5 +112,14 @@ func (u *Project) IsAdmin(p *ConnectionPoolWrapper, uid uint32) (bool, error) {
 			return true, nil
 		}
 	}
+	read, err := getUInt32SliceCell(dbPool, "read", "projects", u.Id)
+	if err != nil {
+		return false, err
+	}
+	for _, value := range read {
+		if value == uid {
+			return true, nil
+		}
+	}
 	return false, err
 }
