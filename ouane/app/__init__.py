@@ -9,7 +9,7 @@ red = redis.StrictRedis()
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ouane.db'
 db = SQLAlchemy(app)
-
+app.config['DEBUG'] = True
 from dbUtils import *
 
 app.config.from_object('config')
