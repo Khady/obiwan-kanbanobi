@@ -151,8 +151,8 @@ class Api(threading.Thread):
         return self.userLogin[name]
 
     def addNewProjectInDB(self, project):
-        readstr = " ".join(project.read)
-        adminstr = " ".join(project.admins_id)
+        readstr = " ".join(str(project.read))
+        adminstr = " ".join(str(project.admins_id))
         p = Projects.query.get(project.id)
         print p
         if (p == None):
@@ -165,6 +165,20 @@ class Api(threading.Thread):
             p.read = readstr
         db.session.commit()
 
+    def addNewColumnInDB(self, column):
+        script = " ".join(column.scripts_ids)
+        writestr = " ".join(column.write)
+        c = Columns.query.get(column.id)
+        print p
+        if (c == None):
+            c = Columns(column.id, column.name, column.desc, column.tags, script, writestr)
+            db.session.add(p)
+        else:
+            c.name = column.name
+            c.admins_id = adminstr
+            c.content = column.content
+            c.read = readstr
+        db.session.commit()
 
     def run(self):
         while 1:
@@ -193,22 +207,35 @@ class Api(threading.Thread):
                     self.getUserById(msg.author_id, msg.session_id, msg.author_id)
                     self.getAllProjetList(msg.author_id, msg.session_id, msg.author_id)
                     self.userLogin[msg.ident.login] = user
-                    red.publish('ouane', u'IDENT')
+                    #red.publish('ouane', u'IDENT')
                 if (msg.target == message_pb2.PROJECTS):
-                    if (msg.command == message_pb2.GET):
+                    print msg.command == message_pb2.ERROR
+                    if (msg.command == message_pb2.SUCCES):
+                        print "SUCCESS"
+                    elif msg.command == message_pb2.ERROR:
+                        print msg.error.error_id
+                    else:
                         self.addNewProjectInDB(msg.projects)
                         project = msg.projects
-                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(project.read), 'admins_id' : ' '.join(project.admins_id)}              
+                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(str(project.read)), 'admins_id' : ' '.join(str(project.admins_id))}              
                         dictproject['type'] = 'project'
                         red.publish('ouane', json.dumps(dictproject))
                         self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)
+                        for columns in msg.projects.projectColumns:
+                            self.addNewColumnsInDB(columns)
+                            # dictcolumns = {'id' : column.id, 'name' : column.name, 'content' : column.content, 'read' : ' '.join(column.read), 'admins_id' : ' '.join(column.admins_id)}
+                            print columns
+                            print "SDFSDF"
+                            dictcolumns['type'] = 'column'
+                            red.publish('ouane', json.dumps(dictcolumns))
                 if (msg.target == message_pb2.ERROR):
                     red.publish('ouane', u'ERROR')
                     print "ERROR"
                 if (msg.target == message_pb2.USERS):
                     for project in msg.users.userProject:
+                        print "toto"
                         self.addNewProjectInDB(project)
-                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(project.read), 'admins_id' : ' '.join(project.admins_id)}              
+                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join(str(project.read)), 'admins_id' : ' '.join(str(project.admins_id))}              
                         dictproject['type'] = 'project'
                         red.publish('ouane', json.dumps(dictproject))
                         self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)
