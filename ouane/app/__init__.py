@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import g
 from flask.ext.sqlalchemy import SQLAlchemy
-from config import IPSERVER, PORTSERVER
+from configs import IPSERVER, PORTSERVER
 import datetime
 import redis
 
@@ -12,7 +12,7 @@ db = SQLAlchemy(app)
 app.config['DEBUG'] = True
 from dbUtils import *
 
-app.config.from_object('config')
+app.config.from_pyfile('config.py')
 
 def event_stream():
     pubsub = red.pubsub()
