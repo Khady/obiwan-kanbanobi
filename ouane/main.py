@@ -1,9 +1,6 @@
 #!/usr/bin/python
 
-from flask import g
 from app import app
-
-PORT = 5000
 
 if __name__ == "__main__":
     app.run(debug=True)

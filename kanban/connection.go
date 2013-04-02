@@ -130,6 +130,7 @@ func handleConnection(conn net.Conn) {
 	var size int
 	var buf []byte
 	defer conn.Close()
+	defer CONNECTION_QUEUE.del(conn)
 	defer CONNECTION_LIST.delConn(conn)
 	defer LOGGER.Print("Connection close")
 	for {
