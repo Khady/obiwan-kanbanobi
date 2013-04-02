@@ -223,8 +223,6 @@ func ConvertTabOfColumnToMessage(p []Column) []*message.Msg_Columns {
 }
 
 func MsgProject(conn net.Conn, msg *message.Msg) {
-    println("project test ", *msg.Command)
-
 	switch *msg.Command {
 	case message.CMD_CREATE:
 		MsgProjectCreate(conn, msg)

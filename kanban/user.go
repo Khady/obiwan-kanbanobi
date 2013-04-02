@@ -32,7 +32,6 @@ func (u *User) HaveRight(authorId uint32) bool {
 }
 
 func MsgUserCreate(conn net.Conn, msg *message.Msg) {
-
 	var answer *message.Msg
 	if msg.Users.Password == nil || msg.Users.Mail == nil {
 		answer = &message.Msg{
@@ -62,7 +61,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 			true,
 		}
 		if err := verifExisting.GetByName(dbPool); user.HaveRight((*msg.AuthorId)) &&
-			err == nil && verifExisting.Id == 0 && user.VerifExistingMail(dbPool) == false {
+			err != nil && verifExisting.Id == 0 && user.VerifExistingMail(dbPool) == false {
 			user.Password = user.Name
 			if err := user.Add(dbPool); err != nil {
 				answer = &message.Msg{
@@ -354,6 +353,8 @@ func ConvertTabOfProjectToMessage(p []Project) []*message.Msg_Projects {
 			Id:      proto.Uint32(p[n].Id),
 			Name:    proto.String(p[n].Name),
 			Content: proto.String(p[n].Content),
+			Read: p[n].Read,
+			AdminsId: p[n].admins_id,
 		})
 	}
 	return ret
