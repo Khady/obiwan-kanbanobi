@@ -173,7 +173,7 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 	}
 	var answer *message.Msg
 	
-	if err := proj.Get(dbPool); err != nil {
+	if err := proj.GetById(dbPool); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
