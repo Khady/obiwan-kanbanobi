@@ -205,6 +205,8 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 					Id:             proto.Uint32(proj.Id),
 					Name:           &proj.Name,
 					Content:        &proj.Content,
+					AdminsId:	proj.admins_id,
+					Read:		proj.Read,
 					ProjectColumns: ConvertTabOfColumnToMessage(board),
 				},
 			}
