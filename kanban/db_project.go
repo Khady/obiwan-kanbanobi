@@ -1,5 +1,7 @@
 package main
 
+import "strings"
+
 //setter les admins multiples
 func changeAdminProject(p *ConnectionPoolWrapper, id uint32, state bool) error {
 	db := p.GetConnection()
@@ -51,7 +53,10 @@ func (u *Project) GetById(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select * from projects where id = $1", u.Id)
-	err := row.Scan(&u.Id, &u.Name, &u.admins_id, &u.Read, &u.Content)
+	var admin, read string
+	err := row.Scan(&u.Id, &u.Name, &admin, &read, &u.Content)
+	u.admins_id = SUInt32_of_SString(strings.Split(admin, ","))
+	u.Read = SUInt32_of_SString(strings.Split(read, ","))
 	return err
 }
 
@@ -85,15 +90,19 @@ func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, erro
 
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	row, err := db.Query("SELECT * FROM column WHERE ProjectId = $1", u.Id)
+	row, err := db.Query("SELECT * FROM columns WHERE project_id = $1", u.Id)
 	if err != nil {
 		return tab, err
 	}
+	var tags, scriptid, write string
 	for row.Next() {
-		err = row.Scan(&t.Id, &t.Project_id, &t.Name, &t.Content, &t.Tags, &t.Scripts_id, &t.Write)
+		err = row.Scan(&t.Id, &t.Name, &t.Project_id, &t.Content, &tags, &scriptid, &write)
 		if err != nil {
 			return tab, err
 		}
+		t.Tags = strings.Split(tags, ",")
+		t.Scripts_id = SUInt32_of_SString(strings.Split(scriptid, ","))
+		t.Write = SUInt32_of_SString(strings.Split(write, ","))
 		tab = append(tab, t)
 	}
 
