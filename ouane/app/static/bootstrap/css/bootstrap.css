@@ -222,6 +222,8 @@ textarea {
 }
 
 body {
+  height: 100%;
+  width: 100%;
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -615,6 +617,9 @@ a:focus {
 }
 
 .container {
+ height: auto;
+ overflow-y:auto;
+ overflow-x:auto;
   margin-right: auto;
   margin-left: auto;
   *zoom: 1;
