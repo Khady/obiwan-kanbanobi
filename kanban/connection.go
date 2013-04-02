@@ -97,6 +97,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		unidentifiedUser(conn, data)
 		return
 	}
+    println(*data.Target)
 	switch *data.Target {
 	case message.TARGET_USERS:
 		LOGGER.Print("read TARGET_USERS message")
@@ -106,6 +107,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		MsgColumn(conn, data)
 	case message.TARGET_PROJECTS:
 		LOGGER.Print("read TARGET_PROJECTS message")
+	println("ca marche")
 		MsgProject(conn, data)
 	case message.TARGET_CARDS:
 		LOGGER.Print("read TARGET_CARDS message")
@@ -114,6 +116,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		LOGGER.Print("read TARGET_ADMIN message")
 		MsgAdmin(conn, data)
 	case message.TARGET_IDENT:
+	println("ca marche")
 		LOGGER.Print("read TARGET_IDENT message")
 		MsgIdent(conn, data)
 	case message.TARGET_NOTIF:

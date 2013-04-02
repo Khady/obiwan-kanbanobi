@@ -1,5 +1,10 @@
 package main
 
+import (
+    "strings"                                                                                                               
+    "fmt"
+)
+
 //setter les admins multiples
 func changeAdminProject(p *ConnectionPoolWrapper, id uint32, state bool) error {
 	db := p.GetConnection()
@@ -20,8 +25,9 @@ func GetNbProjects(p *ConnectionPoolWrapper) (int, error) {
 func (u *Project) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("INSERT INTO projects(name, content, admins_id, read) VALUES($1, $2, $3, $4);",
-		u.Name, u.admins_id, u.Read, u.Content)
+    _, err := db.Exec("INSERT INTO projects(name, admins_id, read, content) VALUES($1, $2, $3, $4);",
+	u.Name, strings.Join(SString_of_SUInt32(u.admins_id), " "), strings.Join(SString_of_SUInt32(u.Read), " "), u.Content)
+    fmt.Println(err)
 	return err
 }
 
@@ -64,8 +70,10 @@ func (u *Project) GetByName(p *ConnectionPoolWrapper) error {
 }
 
 func (u *Project) Get(p *ConnectionPoolWrapper) error {
+    println("Get")
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
+    print(u.Name)
 	row := db.QueryRow("select * from projects where name = $1", u.Name)
 	err := row.Scan(&u.Id, &u.Name, &u.admins_id, &u.Read, &u.Content)
 	return err

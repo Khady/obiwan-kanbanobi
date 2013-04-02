@@ -21,6 +21,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 		Read:      msg.Projects.Read,
 		Content:   *msg.Projects.Content,
 	}
+    println("project create")
 	var answer *message.Msg
 	if err := proj.Add(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
@@ -128,6 +129,7 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
 		Id: *msg.Projects.Id,
 	}
+    println("Get project")
 	var answer *message.Msg
 	if err := proj.Get(dbPool); err != nil {
 		answer = &message.Msg{
@@ -220,10 +222,9 @@ func ConvertTabOfColumnToMessage(p []Column) []*message.Msg_Columns {
 	return ret
 }
 
-// Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)
-// Il faut faire une pool de worker, un dispacher et lancer l'operation a effectuer dans le dispatch.
 func MsgProject(conn net.Conn, msg *message.Msg) {
-	println("project test")
+    println("project test ", *msg.Command)
+
 	switch *msg.Command {
 	case message.CMD_CREATE:
 		MsgProjectCreate(conn, msg)
