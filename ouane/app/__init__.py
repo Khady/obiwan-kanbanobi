@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import g
 from flask.ext.sqlalchemy import SQLAlchemy
-from configs import IPSERVER, PORTSERVER
+from config import IPSERVER, PORTSERVER # maxime t'es trop con
 import datetime
 import redis
 

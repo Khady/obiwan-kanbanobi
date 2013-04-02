@@ -15,6 +15,11 @@ exit
 
 Client side:
 
+First, install the Python development package and the libevent package :
+# apt-get install libevent-dev
+# apt-get install python-dev
+
+
 Before launch main.py, you must have Flask, Flask-SQLAlchemy, Flask-WTF on your system,
 
 on GNU/linux, you can use pip to get these packages:
@@ -25,6 +30,7 @@ on GNU/linux, you can use pip to get these packages:
 # pip install redis
 # pip install gevent
 # pip install gunicorn
+# pip install protobuf
 
 and install redis-server and. If you are on ubuntu/debian:
 
