@@ -18,7 +18,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
 		Name:      *msg.Projects.Name,
 		admins_id: msg.Projects.AdminsId,
-		Read:      msg.Projects.Read,
+	Read:      []uint32 {*msg.AuthorId},
 		Content:   *msg.Projects.Content,
 	}
     println("project create")
