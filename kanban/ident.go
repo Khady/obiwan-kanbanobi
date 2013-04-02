@@ -14,6 +14,7 @@ type Session struct {
 	User_id     string
 	Ident_date  time.Time
 	Session_key string
+	User_uid    uint32
 }
 
 // Cette fonction doit gerer l'identification d'un utilisateur (verifier qu'il n'est pas deja identifie,

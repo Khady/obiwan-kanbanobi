@@ -38,7 +38,20 @@ func MsgCardCreate(conn net.Conn, msg *message.Msg) {
 		msg.Cards.Write,
 	}
 	var answer *message.Msg
-	if err := card.Add(dbPool); err != nil {
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_CARDS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := card.Add(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),
@@ -57,6 +70,7 @@ func MsgCardCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -93,6 +107,7 @@ func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -121,6 +136,7 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
@@ -160,6 +176,7 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 				Write:      card.Write,
 			},
 		}
+		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }

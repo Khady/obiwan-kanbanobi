@@ -55,3 +55,14 @@ func (s *Session) DelByUserName(p *ConnectionPoolWrapper) error {
 	}
 	return err
 }
+
+func (s *Session) DelByUserId(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	row := db.QueryRow("select name from users where id = $1", s.User_uid)
+	err := row.Scan(&s.User_id)
+	if err == nil {
+		err = s.DelByUserName(p)
+	}
+	return err
+}

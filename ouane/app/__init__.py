@@ -1,15 +1,18 @@
 from flask import Flask
 from flask import g
 from flask.ext.sqlalchemy import SQLAlchemy
-from config import IPSERVER, PORTSERVER
+from config import IPSERVER, PORTSERVER # maxime t'es trop con
 import datetime
 import redis
 
 red = redis.StrictRedis()
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ouane.db'
 db = SQLAlchemy(app)
-app.config.from_object('config')
+app.config['DEBUG'] = True
+from dbUtils import *
+
+app.config.from_pyfile('config.py')
 
 def event_stream():
     pubsub = red.pubsub()

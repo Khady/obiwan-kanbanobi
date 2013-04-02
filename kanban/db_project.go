@@ -78,3 +78,48 @@ func (u *Project) PutAdmin(p *ConnectionPoolWrapper) error {
 func (u *Project) Unadmin(p *ConnectionPoolWrapper) error {
 	return changeAdminProject(p, u.Id, false)
 }
+
+func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, error) {
+	var tab []Column
+	var t Column
+
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	row, err := db.Query("SELECT * FROM column WHERE ProjectId = $1", u.Id)
+	if err != nil {
+		return tab, err
+	}
+	for row.Next() {
+		err = row.Scan(&t.Id, &t.Project_id, &t.Name, &t.Content, &t.Tags, &t.Scripts_id, &t.Write)
+		if err != nil {
+			return tab, err
+		}
+		tab = append(tab, t)
+	}
+
+	return tab, nil
+}
+
+func (u *Project) IsAdmin(p *ConnectionPoolWrapper, uid uint32) (bool, error) {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
+	admins, err := getUInt32SliceCell(dbPool, "admins_id", "projects", u.Id)
+	if err != nil {
+		return false, err
+	}
+	for _, value := range admins {
+		if value == uid {
+			return true, nil
+		}
+	}
+	read, err := getUInt32SliceCell(dbPool, "read", "projects", u.Id)
+	if err != nil {
+		return false, err
+	}
+	for _, value := range read {
+		if value == uid {
+			return true, nil
+		}
+	}
+	return false, err
+}

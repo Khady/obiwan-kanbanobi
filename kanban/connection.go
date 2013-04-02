@@ -106,6 +106,7 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		MsgColumn(conn, data)
 	case message.TARGET_PROJECTS:
 		LOGGER.Print("read TARGET_PROJECTS message")
+		MsgProject(conn, data)
 	case message.TARGET_CARDS:
 		LOGGER.Print("read TARGET_CARDS message")
 		MsgCard(conn, data)
@@ -129,6 +130,7 @@ func handleConnection(conn net.Conn) {
 	var size int
 	var buf []byte
 	defer conn.Close()
+	defer CONNECTION_QUEUE.del(conn)
 	defer CONNECTION_LIST.delConn(conn)
 	defer LOGGER.Print("Connection close")
 	for {
@@ -166,7 +168,7 @@ func startServer() error {
 	CONNECTION_LIST.ids = make(map[uint32]Connection)
 	CONNECTION_LIST.conns = make(map[net.Conn][]uint32)
 	server_port := ":" + *SPORT
-	tcpAddr, err := net.ResolveTCPAddr("ip4", server_port)
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", server_port)
 	if err != nil {
 		LOGGER.Printf("The port %s is invalid", server_port)
 		return err
