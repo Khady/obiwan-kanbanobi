@@ -169,35 +169,47 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 		*msg.Projects.Name,
 		nil,
 		nil,
-		"",
+		*msg.Projects.Content,
 	}
 	var answer *message.Msg
-
-	// add verif for read right
-	if board, err := proj.GetColumnByProjectId(dbPool); err != nil {
+	
+	if err := proj.Get(dbPool); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+		Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(36),
 			},
 		}
 	} else {
-		answer = &message.Msg{
-			Target:    message.TARGET_PROJECTS.Enum(),
-			Command:   message.CMD_SUCCES.Enum(),
-			AuthorId:  proto.Uint32(*msg.AuthorId),
-			SessionId: proto.String(*msg.SessionId),
+		// add verif for read right
+		if board, err := proj.GetColumnByProjectId(dbPool); err != nil {
+			answer = &message.Msg{
+				Target:    message.TARGET_PROJECTS.Enum(),
+				Command:   message.CMD_ERROR.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
+				SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+					ErrorId: proto.Uint32(36),
+				},
+			}
+		} else {
+			answer = &message.Msg{
+				Target:    message.TARGET_PROJECTS.Enum(),
+				Command:   message.CMD_SUCCES.Enum(),
+				AuthorId:  proto.Uint32(*msg.AuthorId),
+				SessionId: proto.String(*msg.SessionId),
 			Projects: &message.Msg_Projects{
-				Id:             proto.Uint32(proj.Id),
-				Name:           &proj.Name,
-				Content:        &proj.Content,
-				ProjectColumns: ConvertTabOfColumnToMessage(board),
-			},
+					Id:             proto.Uint32(proj.Id),
+					Name:           &proj.Name,
+					Content:        &proj.Content,
+					ProjectColumns: ConvertTabOfColumnToMessage(board),
+				},
+			}
+			notifyUsers(msg)
 		}
-		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
