@@ -107,7 +107,7 @@ func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, erro
 		if err != nil {
 			return tab, err
 		}
-		t.Tags = strings.Split(tags, ",")
+	t.Tags = strings.Split(tags, ",")
 		t.Scripts_id = SUInt32_of_SString(strings.Split(scriptid, ","))
 		t.Write = SUInt32_of_SString(strings.Split(write, ","))
 		tab = append(tab, t)

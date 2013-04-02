@@ -21,7 +21,6 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	Read:      []uint32 {*msg.AuthorId},
 		Content:   *msg.Projects.Content,
 	}
-    println("project create")
 	var answer *message.Msg
 	if err := proj.Add(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
@@ -35,12 +34,17 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
-			Command:   message.CMD_SUCCES.Enum(),
+			Command:   message.CMD_GET.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
+			Projects: &message.Msg_Projects{
+				Id:       &proj.Id,
+				Name:     &proj.Name,
+				Content:  &proj.Content,
+				AdminsId: proj.admins_id,
+				Read:     proj.Read},
 		}
 		notifyUsers(msg)
 	}
@@ -129,7 +133,6 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
 		Id: *msg.Projects.Id,
 	}
-    println("Get project")
 	var answer *message.Msg
 	if err := proj.Get(dbPool); err != nil {
 		answer = &message.Msg{
