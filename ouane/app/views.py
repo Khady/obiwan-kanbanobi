@@ -1,6 +1,5 @@
-import json
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
-from app  import app, a, event_stream, red
+from app  import app, a, event_stream
 from forms import LoginForm, AddProjectForm, AddUserForm
 from functools import wraps
 from dbUtils import Projects, Columns
@@ -48,7 +47,6 @@ def project(id = 0):
     connection = a.getUserConnectionData(session['user_login'])
     a.getColumnsByProjectId(connection['author_id'], connection['session_id'], id)
     data = Columns.query.filter_by(project_id = id).order_by(Columns.id).all()
-    print data
     return render_template('project.html')
 
 @app.route("/", methods = ['GET', 'POST'])

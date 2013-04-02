@@ -20,7 +20,7 @@ function sse() {
 	var source = new EventSource('/stream');
         source.onmessage = function(e) {
 		mydata = JSON.parse(e.data);
-		alert({{session.author_id}} in mydata.read.split(" "));
+		<!-- alert({{session.author_id}} in mydata.read.split(" ")); -->
 		if (mydata.type == 'project')
 		{
 			$(".accordion").find("#"+mydata.id).remove();
