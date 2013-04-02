@@ -2,30 +2,62 @@
 {% block body %}
 
 <script>
+var columnsNumber = 0;
+
+
+function createNewColumn() {
+	columnsNumber++;
+	
+	var columnID = "column" + columnsNumber;
+	var colContainer = $("<div class=\"column\" id=\"" + columnID + "\"></div>");
+	var columnTitle = $("<button class=\"columnTitle btn disabled\">Colonne</button>").button().click(function() { columnModif(); });
+	var cardsSpace = $("<div class=\"cardsSpace\" id=\"" + columnID + "-cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" });
+	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
+
+	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"addCard btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() { addCardToColumn($(this).attr('id')); });
+
+	colContainer.append(columnTitle);
+	cardsList.appendTo(cardsSpace);
+	cardsSpace.appendTo(colContainer);
+	colContainer.append(addCard);
+	colContainer.appendTo("#columnsRow");
+}
+
 function columnModif() {
 	alert("Normalement ca permettra de modif la colonne");
 }
 
-function caseAdd() {
-	alert("Normalement ca ajoutera une carte a la colonne");
+function addCardToColumn(buttonID) {
+	var columnsCardsListID = "#" + buttonID.split("-")[0] + "-cardsList";
+	var listSize = $(columnsCardsListID + " li").length;
+	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit0\">Nouveau post-it</li>");
+	$(columnsCardsListID).append(newCard);
 }
 
 $(function() {
 
+$(document).ready(function(){
+    $('#columnsList').height($(window).height());
+});
+
+
 $( ".columnCreation" ).button().click(function() {
-	var colContainer = $("<div class=\"column\"></div>");
-	var columnTitle = $("<button class=\"columnTitle btn disabled\">Colonne</button>").button().click(function() { columnModif(); });
-	var addCard = $("<button class=\"addCard  btn disabled\">Add a card...</button></div></td>").button().click(function() { caseAdd(); });
+	createNewColumn();
+	<!-- var colContainer = $("<div class=\"column\"></div>"); -->
+	<!-- var columnTitle = $("<button class=\"columnTitle btn disabled\">Colonne</button>").button().click(function() { columnModif(); }); -->
+	<!-- var addCard = $("<button class=\"addCard  btn disabled\">Add a card...</button></div></td>").button().click(function() { caseAdd(); }); -->
 
-	colContainer.append(columnTitle);
+	<!-- colContainer.append(columnTitle); -->
 
-	var cardsSpace = $("<div class=\"cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" });
-	var cardsList = $("<ul class=\"cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
+	<!-- var cardsSpace = $("<div class=\"cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" }); -->
+	<!-- var cardsList = $("<ul class=\"cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection(); -->
 
-	cardsList.appendTo(cardsSpace);
-	cardsSpace.appendTo(colContainer);
-	colContainer.append(addCard);
-	colContainer.appendTo("#columnsList");
+	<!-- cardsList.appendTo(cardsSpace); -->
+	<!-- cardsSpace.appendTo(colContainer); -->
+	<!-- colContainer.append(addCard); -->
+	<!-- colContainer.appendTo("#columnsList"); -->
+	<!-- columnsNumber++; -->
+	<!-- alert(columnsNumber); -->
 })
 
 $(".cardsList").sortable({
@@ -41,7 +73,7 @@ $( ".columnTitle" ).button().click(function() {
 })
 
 $(".addCard").button().click(function() {
-	caseAdd();
+	addCardToColumn($(this).attr('id'));
 })
 
 
@@ -52,19 +84,44 @@ $(".addCard").button().click(function() {
 <hr>
 
 <div id="columnsList">
-<div class="column">
-<button class="columnTitle btn disabled">Colonne</button>
-<div class="cardsSpace">
-<ul class="cardsList">
-<li class="navbar-inner postit">Lorem ipsum sin</li>
-<li class="navbar-inner postit">Lorem ipsum sin dolor </li>
-<li class="navbar-inner postit">Lorem ipsum sin dolor amet </li>
-<li class="navbar-inner postit">mo mo </li>
-<li class="navbar-inner postit">MOTUS </li>
-</ul>
-</div>
-<button class="addCard btn disabled">Add a card...</button>
+  <div id="columnsRow">
+    
+    <div class="column" id="column0">
+      <button class="columnTitle btn disabled">Colonne</button>
+      <div class="cardsSpace" id="column0-cardsSpace">
+        <ul class="cardsList" id="column0-cardsList">
+          <li class="navbar-inner postit" id="postit0">Lorem ipsum sin</li>
+          <li class="navbar-inner postit" id="postit1">Lorem ipsum sin dolor </li>
+          <li class="navbar-inner postit" id="postit2">Lorem ipsum sin dolor amet </li>
+          <li class="navbar-inner postit" id="postit3">mo mo </li>
+          <li class="navbar-inner postit" id="postit4">MOTUS </li>
+        </ul>
+      </div>
+    <button href="#addACardPopup" role="button" class="addCard btn disabled" data-toggle="modal" id="column0-addCardButton">Add a card...</button>
+    </div>
+
+
+  </div>
 </div>
 
-</div>
+<!-- The "Add a card" pop-up -->
+    <div  id="addACardPopup" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="myModalLabel">Add a Card</h3>
+	</div>
+	<div class="modal-body">
+	<p>
+	  Title:<br>
+	  Description:<br>
+	  Personnes affectees:<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <input class="btn btn-primary" type="submit" value="Add a Card!">
+	</div>
+      </form>
+    </div>
 {% endblock %}
