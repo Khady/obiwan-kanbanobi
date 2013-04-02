@@ -58,7 +58,10 @@ func (u *Project) GetById(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select * from projects where id = $1", u.Id)
-	err := row.Scan(&u.Id, &u.Name, &u.admins_id, &u.Read, &u.Content)
+	var admin, read string
+	err := row.Scan(&u.Id, &u.Name, &admin, &read, &u.Content)
+	u.admins_id = SUInt32_of_SString(strings.Split(admin, ","))
+	u.Read = SUInt32_of_SString(strings.Split(read, ","))
 	return err
 }
 
