@@ -85,7 +85,7 @@ func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, erro
 
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	row, err := db.Query("SELECT * FROM column WHERE ProjectId = $1", u.Id)
+	row, err := db.Query("SELECT * FROM columns WHERE ProjectId = $1", u.Id)
 	if err != nil {
 		return tab, err
 	}
