@@ -223,7 +223,6 @@ func ConvertTabOfColumnToMessage(p []Column) []*message.Msg_Columns {
 // Cette fonction a une gestion synchrone des messages (traitement les uns apres les autres, pas de traitements paralleles)
 // Il faut faire une pool de worker, un dispacher et lancer l'operation a effectuer dans le dispatch.
 func MsgProject(conn net.Conn, msg *message.Msg) {
-	println("project test")
 	switch *msg.Command {
 	case message.CMD_CREATE:
 		MsgProjectCreate(conn, msg)
