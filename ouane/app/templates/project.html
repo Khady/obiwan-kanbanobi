@@ -33,16 +33,31 @@ function addCardToColumn(buttonID) {
 	$(columnsCardsListID).append(newCard);
 }
 
+function refreshColumnsListHeight() {
+    var bodyheight = $(window).height();
+    var navbarheight = $("#navbar").height();
+    var headerheight = $("#columnsHeader").height();
+    var newcolumnsheight = bodyheight - navbarheight - headerheight - 42; <!-- // 32 is an empirical constant amount of pixels probably due to some margins somewhere -->
+
+    $('#columnsList').height(newcolumnsheight);
+}
+
 $(document).ready(function() {
-    var bodyheight = $(document).height();
-    $("#columnsList").height(bodyheight - 10);
+    refreshColumnsListHeight();
 });
 
 $(function() {
 
+
+$(window).resize(function() {
+    refreshColumnsListHeight();
+});
+
+$(window).trigger('resize');
+
+
 $( ".columnCreation" ).button().click(function() {
 	createNewColumn();
-
 })
 
 $(".cardsList").sortable({
@@ -65,8 +80,10 @@ $(".addCard").button().click(function() {
 });
 </script>
 
+<div id="columnsHeader">
 <a class="columnCreation btn btn-large">Ajouter une colonne</a>
 <hr>
+</div>
 
 <div id="columnsList">
   <div id="columnsRow">

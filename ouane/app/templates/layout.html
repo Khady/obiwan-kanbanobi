@@ -21,7 +21,7 @@
     <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
     <script type=text/javascript src="{{ config.JUGGERNAUT_DRIVER }}"></script>
      <script src="{{ url_for('static', filename='./bootstrap/js/bootstrap.js') }}"></script>
-     <div class="navbar navbar-inverse navbar-fixed-top">
+     <div id="navbar" class="navbar navbar-inverse navbar-fixed-top">
        <div class="navbar-inner">
          <div class="container">
            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -45,7 +45,7 @@
      {% for message in get_flashed_messages() %}
      <div class=flash>{{ message }}</div>
      {% endfor %}
-     <div class="container">
+     <div id="mycolumns" class="container">
        {% block body %}{% endblock %}
      </div>
   </body>
