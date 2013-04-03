@@ -62,13 +62,15 @@ class Api(threading.Thread):
     #     msg.session_id = session_id
     #     self.network.setWriteStack(msg.SerializeToString())
 
-    def getCardsByColumnID(self, author_id, session_id, project_id):
+    def getCardsByColumnID(self, author_id, session_id, columns_id):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
         msg.command = message_pb2.GETBOARD
         msg.author_id = author_id
         msg.session_id = session_id
-        msg.columns.id = project_id
+        msg.columns.id = columns_id
+        msg.columns.project_id = 0
+        msg.columns.name = ""
         self.network.setWriteStack(msg.SerializeToString())
 
     # def getAllUsers(self, author_id, session_id):
@@ -197,12 +199,16 @@ class Api(threading.Thread):
                     db.session.commit()
                     red.publish('ouane', u'CARDS')
                 if (msg.target == message_pb2.COLUMNS):
-                    c = Columns(msg.columns.id, msg.columns.name, msg.columns.column_id, msg.columns.project_id, msg.columns.tags,
-                                msg.columns.scripts_id, msg.columns.write)
-                    db.session.add(c)
-                    db.session.commit()
-                    red.publish('ouane', u'COLUMNS')
-                    print "COLUMNS"
+                    c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
+                                msg.columns.scripts_ids, msg.columns.write)
+                    # db.session.add(c)
+                    # db.session.commit()
+                    # red.publish('ouane', u'COLUMNS')
+                    if msg.command == message_pb2.ERROR:
+                        print 'ERROR'
+                        print msg.error.error_id
+                    else:
+                        print "COLUMNS"
                 if (msg.target == message_pb2.IDENT):
                     user = {"author_id": msg.author_id, "session_id": msg.session_id}
                     self.getUserById(msg.author_id, msg.session_id, msg.author_id)
@@ -223,7 +229,7 @@ class Api(threading.Thread):
                             self.addNewColumnInDB(columns)
                             # dictcolumns = {'id' : column.id, 'name' : column.name, 'content' : column.content, 'read' : ' '.join(column.read), 'admins_id' : ' '.join(column.admins_id)}
                             print columns
-                            print "SDFSDF"
+                            self.getCardsByColumnID(msg.author_id, msg.session_id, msg.columns.id)
                             #dictcolumns['type'] = 'column'
                             #red.publish('ouane', json.dumps(dictcolumns))
                 if (msg.target == message_pb2.ERROR):
