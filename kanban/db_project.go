@@ -1,7 +1,7 @@
 package main
 
 import (
-    "strings"
+	"strings"
 )
 
 //setter les admins multiples
@@ -42,7 +42,7 @@ func (u *Project) Del(p *ConnectionPoolWrapper) error {
 func (u *Project) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-    _, err := db.Exec("update projects set name = $1, admins_id = $2, read = $3, content = $4,  where id = $5",
+	_, err := db.Exec("update projects set name = $1, admins_id = $2, read = $3, content = $4,  where id = $5",
 		u.Name, u.admins_id, u.Read, u.Content, u.Id)
 	return err
 }
@@ -66,15 +66,15 @@ func (u *Project) GetById(p *ConnectionPoolWrapper) error {
 }
 
 func (u *Project) Get(p *ConnectionPoolWrapper) error {
-    var admin, read string
+	var admin, read string
 
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select * from projects where name = $1 limit 1;", u.Name)
 	err := row.Scan(&u.Id, &u.Name, &admin, &read, &u.Content)
-    u.admins_id = SUInt32_of_SString(strings.Split(admin, ","))
-    u.Read = SUInt32_of_SString(strings.Split(read, ","))
-    return err
+	u.admins_id = SUInt32_of_SString(strings.Split(admin, ","))
+	u.Read = SUInt32_of_SString(strings.Split(read, ","))
+	return err
 }
 
 func (u *Project) PutAdmin(p *ConnectionPoolWrapper) error {
@@ -101,7 +101,7 @@ func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, erro
 		if err != nil {
 			return tab, err
 		}
-	t.Tags = strings.Split(tags, ",")
+		t.Tags = strings.Split(tags, ",")
 		t.Scripts_id = SUInt32_of_SString(strings.Split(scriptid, ","))
 		t.Write = SUInt32_of_SString(strings.Split(write, ","))
 		tab = append(tab, t)

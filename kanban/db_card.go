@@ -72,13 +72,6 @@ func (c *Card) ChangeContent(p *ConnectionPoolWrapper) error {
 	return err
 }
 
-func (c *Card) DelComments(p *ConnectionPoolWrapper) error {
-	db := p.GetConnection()
-	defer p.ReleaseConnection(db)
-	_, err := db.Exec("delete from comments where cards_id = $1", c.Id)
-	return err
-}
-
 func (c *Card) UpdateTags(p *ConnectionPoolWrapper, tags []string) error {
 	return updateStringSliceCell(p, "cards", "tags", tags, c.Id)
 }

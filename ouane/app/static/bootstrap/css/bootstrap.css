@@ -221,7 +221,7 @@ textarea {
   }
 }
 
-body {
+body, html {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -617,9 +617,9 @@ a:focus {
 }
 
 .container {
- height: auto;
- overflow-y:auto;
- overflow-x:auto;
+ height: 100%;
+ overflow-y:hidden;
+ overflow-x: hidden;
   margin-right: auto;
   margin-left: auto;
   *zoom: 1;
