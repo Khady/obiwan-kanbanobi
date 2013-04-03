@@ -88,6 +88,9 @@ func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 		msg.Cards.Write,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),
@@ -127,6 +130,9 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Cards.Id,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),
@@ -166,6 +172,9 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Cards.Id,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),

@@ -93,7 +93,7 @@ class Api(threading.Thread):
         msg.users.name = ""
         msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
-        
+
     def createColumns(self, author_id, session_id, project_id, name = "", desc = "", tags = [], scripts_ids = [], write = []):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
@@ -210,11 +210,15 @@ class Api(threading.Thread):
                     else:
                         print "COLUMNS"
                 if (msg.target == message_pb2.IDENT):
-                    user = {"author_id": msg.author_id, "session_id": msg.session_id}
-                    self.getUserById(msg.author_id, msg.session_id, msg.author_id)
-                    self.getAllProjetList(msg.author_id, msg.session_id, msg.author_id)
-                    self.userLogin[msg.ident.login] = user
-                    #red.publish('ouane', u'IDENT')
+                    if msg.command == message_pb2.ERROR:
+                        print 'ERROR'
+                        print msg.error.error_id
+                    else:
+                        user = {"author_id": msg.author_id, "session_id": msg.session_id}
+                        self.getUserById(msg.author_id, msg.session_id, msg.author_id)
+                        self.getAllProjetList(msg.author_id, msg.session_id, msg.author_id)
+                        self.userLogin[msg.ident.login] = user
+                        #red.publish('ouane', u'IDENT')
                 if (msg.target == message_pb2.PROJECTS):
                     if msg.command == message_pb2.ERROR:
                         print 'ERROR'

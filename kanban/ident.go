@@ -27,7 +27,8 @@ func MsgIdentConnect(conn net.Conn, msg *message.Msg) {
 	u := User{Name: *msg.Ident.Login}
 	var err error
 	var checkPassword bool
-	if err = u.GetByName(dbPool); err == nil {
+	err = u.GetByName(dbPool)
+	if err == nil {
 		session := &Session{
 			Id:          0,
 			User_id:     *msg.Ident.Login,

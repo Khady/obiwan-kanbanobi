@@ -26,7 +26,12 @@ func (p *ConnectionPoolWrapper) InitPool(size int, initfn InitFunction, url stri
 		if err != nil {
 			return err
 		}
-
+		var tmp int
+		row := conn.QueryRow("select 1")
+		err = row.Scan(&tmp)
+		if err != nil {
+			return err
+		}
 		// If the init function succeeded, add the connection to the channel
 		p.conn <- conn
 	}
