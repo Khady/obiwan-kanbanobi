@@ -86,7 +86,17 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 		// msg.Columns.Write,
 	}
 	var answer *message.Msg
-	if err := column.Add(dbPool); err != nil {
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := column.Add(dbPool); err != nil {
 		LOGGER.Print("Impossible to create new column", err)
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
@@ -123,7 +133,17 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 		msg.Columns.Write,
 	}
 	var answer *message.Msg
-	if err := column.Update(dbPool); err != nil {
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := column.Update(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -153,7 +173,17 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Columns.Id,
 	}
 	var answer *message.Msg
-	if err := column.Del(dbPool); err != nil {
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := column.Del(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -182,7 +212,17 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Columns.Id,
 	}
 	var answer *message.Msg
-	if err := column.Get(dbPool); err != nil {
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := column.Get(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -228,7 +268,17 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 	var answer *message.Msg
 
 	// add verif for read right
-	if board, err := col.GetCardByColumnId(dbPool); err != nil {
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_COLUMNS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if board, err := col.GetCardByColumnId(dbPool); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
