@@ -534,16 +534,24 @@ func (m *Msg_Comment) GetCardId() uint32 {
 }
 
 type Msg_Metadata struct {
-	ObjectType       *uint32 `protobuf:"varint,1,req,name=object_type" json:"object_type,omitempty"`
-	ObjectId         *uint32 `protobuf:"varint,2,req,name=object_id" json:"object_id,omitempty"`
-	DataKey          *string `protobuf:"bytes,3,opt,name=data_key" json:"data_key,omitempty"`
-	DataValue        *string `protobuf:"bytes,4,opt,name=data_value" json:"data_value,omitempty"`
+	Id               *uint32 `protobuf:"varint,1,req,name=id" json:"id,omitempty"`
+	ObjectType       *uint32 `protobuf:"varint,2,req,name=object_type" json:"object_type,omitempty"`
+	ObjectId         *uint32 `protobuf:"varint,3,req,name=object_id" json:"object_id,omitempty"`
+	DataKey          *string `protobuf:"bytes,4,opt,name=data_key" json:"data_key,omitempty"`
+	DataValue        *string `protobuf:"bytes,5,opt,name=data_value" json:"data_value,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *Msg_Metadata) Reset()         { *m = Msg_Metadata{} }
 func (m *Msg_Metadata) String() string { return proto.CompactTextString(m) }
 func (*Msg_Metadata) ProtoMessage()    {}
+
+func (m *Msg_Metadata) GetId() uint32 {
+	if m != nil && m.Id != nil {
+		return *m.Id
+	}
+	return 0
+}
 
 func (m *Msg_Metadata) GetObjectType() uint32 {
 	if m != nil && m.ObjectType != nil {
