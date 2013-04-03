@@ -36,6 +36,9 @@ def checklogin(name = None):
         if a.checkIfConnected(request.args.get('login')) == True and name == request.args.get('login'):
             session['logged_in'] = True
             session['user_login'] = request.args.get('login')
+            connection = a.getUserConnectionData(session['user_login'])
+            session['author_id'] = connection['author_id']
+            session['session_id'] = connection['session_id']
             return "OK"
         else:
             return "KO"
@@ -44,8 +47,7 @@ def checklogin(name = None):
 @app.route("/project/<int:id>", methods = ['GET', 'POST'])
 @login_required
 def project(id = 0):
-    connection = a.getUserConnectionData(session['user_login'])
-    a.getColumnsByProjectId(connection['author_id'], connection['session_id'], id)
+    a.getColumnsByProjectId(session['author_id'], session['session_id'], id)
     data = Columns.query.filter_by(project_id = id).order_by(Columns.id).all()
     return render_template('project.html')
 
@@ -54,11 +56,10 @@ def project(id = 0):
 @login_required
 def index():
     data = Projects.query.order_by(Projects.id).all()
-    connection = a.getUserConnectionData(session['user_login'])
     form = AddProjectForm()
-    a.getAllProjetList(connection['author_id'], connection['session_id'], connection['author_id'])
+    a.getAllProjetList(session['author_id'], session['session_id'], session['author_id'])
     if form.validate_on_submit():
-        a.createProject(connection['author_id'], connection['session_id'], form.name.data, form.description.data)
+        a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
     return render_template('index.html', data = data, form=form)
 
 @app.route("/admin", methods = ['GET', 'POST'])
@@ -66,8 +67,7 @@ def index():
 def admin():
     form = AddUserForm()
     if form.validate_on_submit():
-        connection = a.getUserConnectionData(session['user_login'])
-        a.createUser(connection['author_id'], connection['session_id'], form.login.data, form.email.data, form.password.data, False)
+        a.createUser(session['author_id'], session['session_id'], form.login.data, form.email.data, form.password.data, False)
     elif request.method == 'POST' and form.validate() == False:
         flash("Error during the user creation!")
     return render_template('admin.html', form=form)

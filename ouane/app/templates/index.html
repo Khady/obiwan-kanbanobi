@@ -16,12 +16,26 @@
 <!-- }) -->
 <!-- $( ".newProject" ).hide(); -->
 <!-- }); -->
+function isInTab (tab, value) {
+     ifhaveonly = true;
+     for (i in tab) {
+	if (tab[i] == value) {
+		return true;
+	}
+	if (tab[i] != 0)
+		ifhaveonly = false;
+     }
+     if (ifhaveonly)
+	return true;
+     return false;
+}
+
 function sse() {
 	var source = new EventSource('/stream');
         source.onmessage = function(e) {
 		mydata = JSON.parse(e.data);
-		<!-- alert({{session.author_id}} in mydata.read.split(" ")); -->
-		if (mydata.type == 'project')
+                author_id = {{ session.author_id }};
+		if (mydata.type == 'project' && isInTab(mydata.read.split(" "), author_id))
 		{
 			$(".accordion").find("#"+mydata.id).remove();
 			$(".accordion").append("<div class=\"accordion-group\" id=\""+mydata.id+"\"><div class=\"accordion-heading\"><h4><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#"+mydata.id+"-under\">"+mydata.name+"</a></h4></div><div id=\""+mydata.id+"-under\" class=\"accordion-body collapse\"><div class=\"accordion-inner\"><p>"+mydata.content+"</p><a href=\"project/"+mydata.id+"\" class=\"btn\">Go to the project page!</a></div></div></div>");

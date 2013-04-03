@@ -217,7 +217,6 @@ class Api(threading.Thread):
                         self.addNewProjectInDB(msg.projects)
                         project = msg.projects
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}
-                        print "SDFSDFS"
                         dictproject['type'] = 'project'
                         red.publish('ouane', json.dumps(dictproject))
                         for columns in msg.projects.projectColumns:
@@ -232,10 +231,8 @@ class Api(threading.Thread):
                     print "ERROR"
                 if (msg.target == message_pb2.USERS):
                     for project in msg.users.userProject:
-                        print "toto"
                         self.addNewProjectInDB(project)
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}
-                        print dictproject
                         dictproject['type'] = 'project'
                         red.publish('ouane', json.dumps(dictproject))
                         self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)
