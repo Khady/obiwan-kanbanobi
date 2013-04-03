@@ -1,7 +1,7 @@
 package main
 
 import (
-    "strings"                                                                                                               
+    "strings"
 )
 
 //setter les admins multiples
@@ -26,7 +26,6 @@ func (u *Project) Add(p *ConnectionPoolWrapper) error {
 	defer p.ReleaseConnection(db)
      _, err := db.Exec("INSERT INTO projects(name, admins_id, read, content) VALUES ('" +
      	u.Name + "', '," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",', '," +  strings.Join(SString_of_SUInt32(u.Read), ",") + ",', '" +  u.Content + "');")
-
     return err
 }
 
