@@ -4,7 +4,6 @@
 <script>
 var columnsNumber = 0;
 
-
 function createNewColumn() {
 	columnsNumber++;
 	
@@ -34,30 +33,16 @@ function addCardToColumn(buttonID) {
 	$(columnsCardsListID).append(newCard);
 }
 
-$(function() {
-
-$(document).ready(function(){
-    $('#columnsList').height($(window).height());
+$(document).ready(function() {
+    var bodyheight = $(document).height();
+    $("#columnsList").height(bodyheight - 10);
 });
 
+$(function() {
 
 $( ".columnCreation" ).button().click(function() {
 	createNewColumn();
-	<!-- var colContainer = $("<div class=\"column\"></div>"); -->
-	<!-- var columnTitle = $("<button class=\"columnTitle btn disabled\">Colonne</button>").button().click(function() { columnModif(); }); -->
-	<!-- var addCard = $("<button class=\"addCard  btn disabled\">Add a card...</button></div></td>").button().click(function() { caseAdd(); }); -->
 
-	<!-- colContainer.append(columnTitle); -->
-
-	<!-- var cardsSpace = $("<div class=\"cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" }); -->
-	<!-- var cardsList = $("<ul class=\"cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection(); -->
-
-	<!-- cardsList.appendTo(cardsSpace); -->
-	<!-- cardsSpace.appendTo(colContainer); -->
-	<!-- colContainer.append(addCard); -->
-	<!-- colContainer.appendTo("#columnsList"); -->
-	<!-- columnsNumber++; -->
-	<!-- alert(columnsNumber); -->
 })
 
 $(".cardsList").sortable({

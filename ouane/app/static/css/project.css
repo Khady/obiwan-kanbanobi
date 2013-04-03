@@ -1,16 +1,17 @@
 #columnsList {
-    width: auto;
+    /* width: 100%; */
     height: auto;
     /* min-height: 100%; */
     /* background: red; */
-    overflow-x: scroll;
-    overflow-y: hidden;
+    /* overflow-y: scroll; */
 }
 
 #columnsRow {
+    height: 100%;
     /* background: darkblue; */
     width: auto;
     white-space: nowrap;
+    overflow-x: auto;
 }
 
 .column {
@@ -24,6 +25,7 @@
 	border: gray solid 1px;
 	display: inline-block;
 	margin: 10px 10px 10px 10px;
+	vertical-align: top;
 }
 
 .columnTitle
@@ -41,6 +43,8 @@
 	width: 100%;
 	height: auto;
 	min-height: 45px;
+	max-height: 100%;
+	overflow-y: auto;
 	/* background: darkblue; */
 }
 
@@ -51,6 +55,8 @@
 	width: 100%;
 	height: auto;
 	min-height: 45px;
+	max-height: 100%;
+	overflow: auto;
 }
 
 .postit {
