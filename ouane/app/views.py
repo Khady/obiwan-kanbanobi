@@ -55,7 +55,16 @@ def project(id = 0):
 @app.route("/index", methods = ['GET', 'POST'])
 @login_required
 def index():
-    data = Projects.query.order_by(Projects.id).all()
+    d = Projects.query.order_by(Projects.id).all()
+    data = []
+    for p in d:
+        t = p.read.split(" ")
+        if len(data) == 0:
+            data.append(p)
+        elif str(session['author_id']) in t:
+            data.append(p)
+        elif t.count("0") == len(t):
+            data.append(p)
     form = AddProjectForm()
     a.getAllProjetList(session['author_id'], session['session_id'], session['author_id'])
     if form.validate_on_submit():
