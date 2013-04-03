@@ -2,3 +2,4 @@ wiki
 *.pyc
 *~
 #*#
+ouane/app/ouane.db
