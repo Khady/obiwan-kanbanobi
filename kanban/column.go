@@ -86,6 +86,9 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 		// msg.Columns.Write,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Columns.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -133,6 +136,9 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 		msg.Columns.Write,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Columns.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -173,6 +179,9 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Columns.Id,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Columns.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -212,6 +221,9 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Columns.Id,
 	}
 	var answer *message.Msg
+	proj := &Project{
+		Id: *msg.Columns.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
@@ -268,6 +280,9 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 	var answer *message.Msg
 
 	// add verif for read right
+	proj := &Project{
+		Id: *msg.Columns.ProjectId,
+	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
