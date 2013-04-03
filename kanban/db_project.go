@@ -62,20 +62,16 @@ func (u *Project) GetById(p *ConnectionPoolWrapper) error {
 	return err
 }
 
-func (u *Project) GetByName(p *ConnectionPoolWrapper) error {
-	db := p.GetConnection()
-	defer p.ReleaseConnection(db)
-	row := db.QueryRow("select * from projects where name = $1", u.Name)
-	err := row.Scan(&u.Id, &u.Name, &u.admins_id, &u.Read, &u.Content)
-	return err
-}
-
 func (u *Project) Get(p *ConnectionPoolWrapper) error {
+    var admin, read string
+
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	row := db.QueryRow("select * from projects where name = $1", u.Name)
-	err := row.Scan(&u.Id, &u.Name, &u.admins_id, &u.Read, &u.Content)
-	return err
+	row := db.QueryRow("select * from projects where name = $1 limit 1;", u.Name)
+	err := row.Scan(&u.Id, &u.Name, &admin, &read, &u.Content)
+    u.admins_id = SUInt32_of_SString(strings.Split(admin, ","))
+    u.Read = SUInt32_of_SString(strings.Split(read, ","))
+    return err
 }
 
 func (u *Project) PutAdmin(p *ConnectionPoolWrapper) error {
