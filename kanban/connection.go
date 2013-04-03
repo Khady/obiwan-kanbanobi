@@ -3,9 +3,9 @@ package main
 import (
 	"bitbucket.org/ongisnotaguild/obi-wan-kanbanobi/kanban/protocol"
 	"code.google.com/p/goprotobuf/proto"
-	"fmt"
 	"io"
 	"net"
+        "fmt"
 )
 
 func (c *connectionList) add(uid uint32, ulogin string, conn net.Conn) {
@@ -97,7 +97,6 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		unidentifiedUser(conn, data)
 		return
 	}
-    println(*data.Target)
 	switch *data.Target {
 	case message.TARGET_USERS:
 		LOGGER.Print("read TARGET_USERS message")

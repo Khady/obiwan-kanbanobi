@@ -55,7 +55,6 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	}
 	conn.Write(write_int32(int32(len(data))))
 	conn.Write(data)
-	LOGGER.Print("WRITE !!!!!!!!")
 }
 
 func MsgProjectUpdate(conn net.Conn, msg *message.Msg) {
