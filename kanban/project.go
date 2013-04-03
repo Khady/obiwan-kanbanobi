@@ -18,7 +18,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
 		Name:      *msg.Projects.Name,
 		admins_id: msg.Projects.AdminsId,
-	Read:      []uint32 {*msg.AuthorId},
+		Read:      []uint32{*msg.AuthorId},
 		Content:   *msg.Projects.Content,
 	}
 	var answer *message.Msg
@@ -176,14 +176,14 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 		*msg.Projects.Content,
 	}
 	var answer *message.Msg
-	
+
 	if err := proj.GetById(dbPool); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Error: &message.Msg_Error{
+			Error: &message.Msg_Error{
 				ErrorId: proto.Uint32(36),
 			},
 		}
@@ -195,7 +195,7 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 				Command:   message.CMD_ERROR.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Error: &message.Msg_Error{
+				Error: &message.Msg_Error{
 					ErrorId: proto.Uint32(36),
 				},
 			}
@@ -205,12 +205,12 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 				Command:   message.CMD_SUCCES.Enum(),
 				AuthorId:  proto.Uint32(*msg.AuthorId),
 				SessionId: proto.String(*msg.SessionId),
-			Projects: &message.Msg_Projects{
+				Projects: &message.Msg_Projects{
 					Id:             proto.Uint32(proj.Id),
 					Name:           &proj.Name,
 					Content:        &proj.Content,
-					AdminsId:	proj.admins_id,
-					Read:		proj.Read,
+					AdminsId:       proj.admins_id,
+					Read:           proj.Read,
 					ProjectColumns: ConvertTabOfColumnToMessage(board),
 				},
 			}

@@ -350,10 +350,10 @@ func ConvertTabOfProjectToMessage(p []Project) []*message.Msg_Projects {
 
 	for n := 0; n < len(p); n++ {
 		ret = append(ret, &message.Msg_Projects{
-			Id:      proto.Uint32(p[n].Id),
-			Name:    proto.String(p[n].Name),
-			Content: proto.String(p[n].Content),
-			Read: p[n].Read,
+			Id:       proto.Uint32(p[n].Id),
+			Name:     proto.String(p[n].Name),
+			Content:  proto.String(p[n].Content),
+			Read:     p[n].Read,
 			AdminsId: p[n].admins_id,
 		})
 	}
