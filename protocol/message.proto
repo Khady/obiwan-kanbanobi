@@ -83,7 +83,7 @@ message Msg {
     required uint32     object_type = 1;
     required uint32     object_id = 2;
     optional string     data_key = 3;
-    optional uint32     data_value = 4;
+    optional string     data_value = 4;
   }
 
   message Users {
@@ -116,4 +116,5 @@ message Msg {
   optional Error	error = 10;
   optional Notif	notif = 11;
   optional Password     password = 12;
+  optional Metadata	metadata = 13;
 }
