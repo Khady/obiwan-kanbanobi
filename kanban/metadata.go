@@ -7,9 +7,9 @@ import (
 )
 
 type Metadata struct {
-	Id          int
-	Object_type int
-	Object_id   int
+	Id          uint32
+	Object_type uint32
+	Object_id   uint32
 	Data_key    string
 	Data_value  string
 }
@@ -17,13 +17,14 @@ type Metadata struct {
 func MsgMetadataCreate(conn net.Conn, msg *message.Msg) {
 	m := &Metadata{
 	0,
-	0,
-	0,
-	msg.Msg_Metadata.ObjectId,
-	msg.Msg_Metadata.Data,
-	msg.Msg_Metadata.DataValue }
+	*msg.Metadata.ObjectType,
+	*msg.Metadata.ObjectId,
+	*msg.Metadata.DataKey,
+	*msg.Metadata.DataValue,
+    }
         var answer *message.Msg
-    if err := m.Add(dbPool); err != nil {
+    err := m.Add(dbPool); 
+    if err != nil {
         
 	answer = &message.Msg{
             Target:    message.TARGET_METADATA.Enum(),
@@ -44,8 +45,9 @@ func MsgMetadataCreate(conn net.Conn, msg *message.Msg) {
 	    SessionId: proto.String(*msg.SessionId),
 	}
     }
+    data, err := proto.Marshal(answer)
     if err != nil {
-        LOGGER.Print("Error in MsgMetadataCreate(", err, answer)
+        LOGGER.Print("Error in MsgMetadataCreate: ", err, " ",answer)
         return
     }
     conn.Write(write_int32(int32(len(data))))
@@ -55,10 +57,11 @@ func MsgMetadataCreate(conn net.Conn, msg *message.Msg) {
 func MsgMetadataUpdate(conn net.Conn, msg *message.Msg) {
     m := &Metadata{
 	0,
-	0,
-	0,
-	msg.Msg_Metadata.ObjectId,
-	msg.Msg_Metadata.DataValue }
+	*msg.Metadata.ObjectType,
+	*msg.Metadata.ObjectId,
+	*msg.Metadata.DataKey,
+	*msg.Metadata.DataValue,
+    }
     
     var answer *message.Msg
 	if err := m.Update(dbPool); err != nil {
@@ -92,7 +95,9 @@ func MsgMetadataUpdate(conn net.Conn, msg *message.Msg) {
 
 func MsgMetadataDelete(conn net.Conn, msg *message.Msg) {
     m := &Metadata{
-	Id: *msg.Msg_Metadata.Id,
+	Id:	*msg.Metadata.Id,
+	Object_type:	*msg.Metadata.ObjectType,
+	Object_id:	*msg.Metadata.ObjectId,
     }
 	var answer *message.Msg
     if err := m.Del(dbPool); err != nil {
@@ -124,11 +129,11 @@ func MsgMetadataDelete(conn net.Conn, msg *message.Msg) {
 }
 
 func MsgMetadatadGet(conn net.Conn, msg *message.Msg) {
-	card := &Card{
-		Id: *msg.Cards.Id,
+    metadata := &Metadata{
+		Id: *msg.Metadata.Id,
 	}
 	var answer *message.Msg
-	if err := card.Get(dbPool); err != nil {
+	if err := metadata.Get(dbPool); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_METADATA.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
@@ -141,23 +146,19 @@ func MsgMetadatadGet(conn net.Conn, msg *message.Msg) {
 	} else {
 		// Envoyer un message de succes ici
 		answer = &message.Msg{
-			Target:    message.TARGET_CARDS.Enum(),
+			Target:    message.TARGET_METADATA.Enum(),
 			Command:   message.CMD_GET.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-			Cards: &message.Metadata{
-				Id:         proto.Uint32(card.Id),
-				ProjectId:  proto.Uint32(card.Project_id),
-				ColumnId:   proto.Uint32(card.Column_id),
-				Name:       proto.String(card.Name),
-				Desc:       proto.String(card.Content),
-				Tags:       card.Tags,
-				UserId:     proto.Uint32(card.User_id),
-				ScriptsIds: card.Scripts_id,
-				Write:      card.Write,
-			},
-		}
+	Metadata: &message.Msg_Metadata{
+		Id:      proto.Uint32(metadata.Id),
+		ObjectType:     proto.Uint32(metadata.Object_type),
+		ObjectId:       proto.Uint32(metadata.Object_id),
+		DataKey:     proto.String(metadata.Data_key),
+		DataValue:  proto.String(metadata.Data_value),
+	    },
 	}
+    }
 	data, err := proto.Marshal(answer)
 	if err != nil {
 		LOGGER.Print("Impossible to marshal msg in MsgMetadataUpdate", err, answer)
@@ -165,7 +166,7 @@ func MsgMetadatadGet(conn net.Conn, msg *message.Msg) {
 	}
 	conn.Write(write_int32(int32(len(data))))
 	conn.Write(data)
-}
+    }
 
 
 func MsgMetadata(conn net.Conn, msg *message.Msg) {
