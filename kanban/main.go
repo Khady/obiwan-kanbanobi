@@ -90,6 +90,7 @@ func main() {
 	LOGGER = log.New(f, "", LOG_FLAGS)
 	if err := dbPool.InitPool(2, db_open, info_connect_bdd); err != nil {
 		fmt.Println("Impossible to connect to the db:", err)
+		return
 	}
 	startServer()
 }

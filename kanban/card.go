@@ -88,7 +88,20 @@ func MsgCardUpdate(conn net.Conn, msg *message.Msg) {
 		msg.Cards.Write,
 	}
 	var answer *message.Msg
-	if err := card.Update(dbPool); err != nil {
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_CARDS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := card.Update(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),
@@ -117,7 +130,20 @@ func MsgCardDelete(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Cards.Id,
 	}
 	var answer *message.Msg
-	if err := card.Del(dbPool); err != nil {
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_CARDS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := card.Del(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),
@@ -146,7 +172,20 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Cards.Id,
 	}
 	var answer *message.Msg
-	if err := card.Get(dbPool); err != nil {
+	proj := &Project{
+		Id: *msg.Cards.ProjectId,
+	}
+	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
+		answer = &message.Msg{
+			Target:    message.TARGET_CARDS.Enum(),
+			Command:   message.CMD_ERROR.Enum(),
+			AuthorId:  proto.Uint32(*msg.AuthorId),
+			SessionId: proto.String(*msg.SessionId),
+			Error: &message.Msg_Error{
+				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+			},
+		}
+	} else if err := card.Get(dbPool); err != nil {
 		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),

@@ -24,9 +24,12 @@ func GetNbProjects(p *ConnectionPoolWrapper) (int, error) {
 func (u *Project) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	_, err := db.Exec("INSERT INTO projects(name, admins_id, read, content) VALUES ('" +
-		u.Name + "', '," + strings.Join(SString_of_SUInt32(u.admins_id), ",") + ",', '," + strings.Join(SString_of_SUInt32(u.Read), ",") + ",', '" + u.Content + "');")
-	return err
+    _, err := db.Exec("INSERT INTO projects(name, admins_id, read, content) VALUES ($1,$2,$3,$4)", u.Name,
+	"," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",", 
+	","  + strings.Join(SString_of_SUInt32(u.Read), ",") , u.Content)
+    //    	u.Name + "', '," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",', '," +  strings.Join(SString_of_SUInt32(u.Read), ",") + ",', '" +  u.Content + "');")
+    println(err)
+    return err
 }
 
 func (u *Project) Del(p *ConnectionPoolWrapper) error {

@@ -80,10 +80,11 @@ message Msg {
   }
 
   message Metadata {
-    required uint32     object_type = 1;
-    required uint32     object_id = 2;
-    optional string     data_key = 3;
-    optional string     data_value = 4;
+    required uint32     id = 1;
+    required uint32     object_type = 2;
+    required uint32     object_id = 3;
+    optional string     data_key = 4;
+    optional string     data_value = 5;
   }
 
   message Users {
