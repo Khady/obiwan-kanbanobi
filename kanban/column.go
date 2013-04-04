@@ -279,7 +279,6 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 	}
 	var answer *message.Msg
 
-
 	// add verif for read right
 	col.Get(dbPool)
 	proj := &Project{
@@ -318,7 +317,6 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 				ColumnCards: ConvertTabOfCardToMessage(board),
 			},
 		}
-		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }

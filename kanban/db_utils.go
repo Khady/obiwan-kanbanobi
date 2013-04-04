@@ -21,9 +21,8 @@ func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	defer p.ReleaseConnection(db)
 	var cell string
 	var cell_ids []uint32
-	tmp := "select " + column_name + " from " + base_name + " where id = $1"
-	fmt.Println(tmp, id)
-	row := db.QueryRow(tmp, id)
+	req := "select " + column_name + " from " + base_name + " where id = $1"
+	row := db.QueryRow(req, id)
 	if err := row.Scan(&cell); err != nil {
 		fmt.Println(err)
 		return cell_ids, err
