@@ -215,7 +215,6 @@ func MsgProjectGetBoard(conn net.Conn, msg *message.Msg) {
 					ProjectColumns: ConvertTabOfColumnToMessage(board),
 				},
 			}
-			notifyUsers(msg)
 		}
 	}
 	sendKanbanMsg(conn, answer)
