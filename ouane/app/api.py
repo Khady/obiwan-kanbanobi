@@ -62,14 +62,14 @@ class Api(threading.Thread):
     #     msg.session_id = session_id
     #     self.network.setWriteStack(msg.SerializeToString())
 
-    def getCardsByColumnID(self, author_id, session_id, columns_id):
+    def getCardsByColumnID(self, author_id, session_id, columns_id, project_id):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
         msg.command = message_pb2.GETBOARD
         msg.author_id = author_id
         msg.session_id = session_id
         msg.columns.id = columns_id
-        msg.columns.project_id = 0
+        msg.columns.project_id = project_id
         msg.columns.name = ""
         self.network.setWriteStack(msg.SerializeToString())
 
@@ -203,7 +203,7 @@ class Api(threading.Thread):
                     # db.session.commit()
                     # red.publish('ouane', u'COLUMNS')
                     if msg.command == message_pb2.ERROR:
-                        print 'ERROR'
+                        print 'ERROR COLUMNS',
                         print msg.error.error_id
                     else:
                         c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
@@ -213,11 +213,11 @@ class Api(threading.Thread):
                                msg.columns.scripts_ids, msg.columns.write]
                         for cards in msg.columns.ColumnCards:
                             print "CARD",
-                            print [cards.id, cards.name, cards.column_id, cards.project_id, cards.tags,
-                                   cards.user_id, cards.scripts_id, cards.write]
+                            print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
+                                   cards.user_id, cards.scripts_ids, cards.write]
                 if (msg.target == message_pb2.IDENT):
                     if msg.command == message_pb2.ERROR:
-                        print 'ERROR'
+                        print 'ERROR IDENT',
                         print msg.error.error_id
                     else:
                         user = {"author_id": msg.author_id, "session_id": msg.session_id}
@@ -227,7 +227,7 @@ class Api(threading.Thread):
                         #red.publish('ouane', u'IDENT')
                 if (msg.target == message_pb2.PROJECTS):
                     if msg.command == message_pb2.ERROR:
-                        print 'ERROR'
+                        print 'ERROR PROJECT',
                         print msg.error.error_id
                     else:
                         self.addNewProjectInDB(msg.projects)
@@ -239,7 +239,7 @@ class Api(threading.Thread):
                             self.addNewColumnInDB(columns)
                             # dictcolumns = {'id' : column.id, 'name' : column.name, 'content' : column.content, 'read' : ' '.join(column.read), 'admins_id' : ' '.join(column.admins_id)}
                             print columns
-                            self.getCardsByColumnID(msg.author_id, msg.session_id, msg.columns.id)
+                            self.getCardsByColumnID(msg.author_id, msg.session_id, columns.id, msg.projects.id)
                             #dictcolumns['type'] = 'column'
                             #red.publish('ouane', json.dumps(dictcolumns))
                 if (msg.target == message_pb2.ERROR):
