@@ -183,6 +183,25 @@ class Api(threading.Thread):
             c.write = writestr
         db.session.commit()
 
+
+    def addNewCardInDB(self, card):
+        script = " ".join(str(card.scripts_ids))
+        writestr = " ".join(str(card.write))
+        c = Cards.query.get(card.id)
+ #       print c
+        if (c == None):
+            c = Cards(card.id, card.name, card.desc, card.column_id, card.project_id, ' '.join(card.tags), card.user_id, 0, writestr)
+            db.session.add(c)
+        else:
+            c.name = card.name
+            c.content = card.desc
+            c.column_id = card.column_id
+            c.tags = ' '.join(card.tags)
+            c.user_id = card.user_id
+            c.scripts_id = 0
+            c.write = writestr
+        db.session.commit()
+
     def run(self):
         while 1:
             self.network.run()
@@ -206,12 +225,15 @@ class Api(threading.Thread):
                         print 'ERROR COLUMNS',
                         print msg.error.error_id
                     else:
-                        c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
-                                    msg.columns.scripts_ids, msg.columns.write)
+                        # c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
+                        #             msg.columns.scripts_ids, msg.columns.write)
+                        columns = msg.columns
+                        self.addNewColumnInDB(columns)
                         print "COLUMNS",
                         print [msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
                                msg.columns.scripts_ids, msg.columns.write]
                         for cards in msg.columns.ColumnCards:
+                            self.addNewCardInDB(cards)
                             print "CARD",
                             print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
                                    cards.user_id, cards.scripts_ids, cards.write]

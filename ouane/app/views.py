@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, g, request, url_for, session
 from app  import app, a, event_stream
 from forms import LoginForm, AddProjectForm, AddUserForm
 from functools import wraps
-from dbUtils import Projects, Columns
+from dbUtils import Projects, Columns, Cards
 
 # index view function suppressed for brevity
 
@@ -49,7 +49,11 @@ def checklogin(name = None):
 def project(id = 0):
     a.getColumnsByProjectId(session['author_id'], session['session_id'], id)
     data = Columns.query.filter_by(project_id = id).order_by(Columns.id).all()
-    return render_template('project.html')
+    card = {}
+    for d in data:
+       c = Cards.query.filter_by(column_id = d.id).order_by(Cards.id).all()
+       card[d.id] = c
+    return render_template('project.html', columns=data, card=card)
 
 @app.route("/", methods = ['GET', 'POST'])
 @app.route("/index", methods = ['GET', 'POST'])
@@ -66,7 +70,7 @@ def index():
         elif t.count("0") == len(t):
             data.append(p)
     form = AddProjectForm()
-    a.getAllProjetList(session['author_id'], session['session_id'], session['author_id'])
+    #a.getAllProjetList(session['author_id'], session['session_id'], session['author_id'])
     if form.validate_on_submit():
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
     return render_template('index.html', data = data, form=form)

@@ -88,20 +88,19 @@ $(".addCard").button().click(function() {
 <div id="columnsList">
   <div id="columnsRow">
     
-    <div class="column" id="column0">
-      <button class="columnTitle btn disabled">Colonne</button>
-      <div class="cardsSpace" id="column0-cardsSpace">
-        <ul class="cardsList" id="column0-cardsList">
-          <li class="navbar-inner postit" id="postit0">Lorem ipsum sin</li>
-          <li class="navbar-inner postit" id="postit1">Lorem ipsum sin dolor </li>
-          <li class="navbar-inner postit" id="postit2">Lorem ipsum sin dolor amet </li>
-          <li class="navbar-inner postit" id="postit3">mo mo </li>
-          <li class="navbar-inner postit" id="postit4">MOTUS </li>
+    {% for c in columns %}
+    <div class="column" id="column{{c.id}}">
+      <button class="columnTitle btn disabled">{{c.name}}</button>
+      <div class="cardsSpace" id="column{{c.id}}-cardsSpace">
+        <ul class="cardsList" id="column{{c.id}}-cardsList">
+	  {% for ca in card[c.id] %}
+          <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}}</li>
+          {% endfor %}
         </ul>
       </div>
-    <button href="#addACardPopup" role="button" class="addCard btn disabled" data-toggle="modal" id="column0-addCardButton">Add a card...</button>
+    <button href="#addACardPopup" role="button" class="addCard btn disabled" data-toggle="modal" id="column{{c.id}}-addCardButton">Add a card...</button>
     </div>
-
+    {% endfor %}
 
   </div>
 </div>
