@@ -195,12 +195,10 @@ class Api(threading.Thread):
                 if (msg.target == message_pb2.CARDS):
                     c = Card(msg.cards.id, msg.cards.name, msg.cards.column_id, msg.cards.project_id, msg.cards.tags,
                              msg.cards.user_id, msg.cards.scripts_id, msg.cards.write)
-                    db.session.add(c)
-                    db.session.commit()
+                    # db.session.add(c)
+                    # db.session.commit()
                     red.publish('ouane', u'CARDS')
                 if (msg.target == message_pb2.COLUMNS):
-                    c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
-                                msg.columns.scripts_ids, msg.columns.write)
                     # db.session.add(c)
                     # db.session.commit()
                     # red.publish('ouane', u'COLUMNS')
@@ -208,7 +206,15 @@ class Api(threading.Thread):
                         print 'ERROR'
                         print msg.error.error_id
                     else:
-                        print "COLUMNS"
+                        c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
+                                    msg.columns.scripts_ids, msg.columns.write)
+                        print "COLUMNS",
+                        print [msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
+                               msg.columns.scripts_ids, msg.columns.write]
+                        for cards in msg.columns.ColumnCards:
+                            print "CARD",
+                            print [cards.id, cards.name, cards.column_id, cards.project_id, cards.tags,
+                                   cards.user_id, cards.scripts_id, cards.write]
                 if (msg.target == message_pb2.IDENT):
                     if msg.command == message_pb2.ERROR:
                         print 'ERROR'
