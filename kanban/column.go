@@ -279,9 +279,11 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 	}
 	var answer *message.Msg
 
+
 	// add verif for read right
+	col.Get(dbPool)
 	proj := &Project{
-		Id: *msg.Columns.ProjectId,
+		Id: col.Project_id,
 	}
 	if adm, err := proj.IsAdmin(dbPool, *msg.AuthorId); adm == false || err != nil {
 		answer = &message.Msg{

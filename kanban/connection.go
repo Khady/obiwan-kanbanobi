@@ -114,7 +114,6 @@ func readMsg(conn net.Conn, msg []byte, length int) {
 		LOGGER.Print("read TARGET_ADMIN message")
 		MsgAdmin(conn, data)
 	case message.TARGET_IDENT:
-		println("ca marche")
 		LOGGER.Print("read TARGET_IDENT message")
 		MsgIdent(conn, data)
 	case message.TARGET_NOTIF:

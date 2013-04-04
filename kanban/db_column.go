@@ -95,8 +95,12 @@ func (u *Column) GetCardByColumnId(p *ConnectionPoolWrapper) ([]Card, error) {
 	if err != nil {
 		return tab, err
 	}
+	var tags, scriptid, write string
 	for row.Next() {
-		err = row.Scan(&t.Id, &t.Name, &t.Content, &t.Column_id, &t.Project_id, &t.Tags, &t.Scripts_id, &t.Write)
+		err = row.Scan(&t.Id, &t.Name, &t.Content, &t.Column_id, &t.Project_id, &tags, &t.User_id, &scriptid, &write)
+		t.Tags = strings.Split(tags, ",")
+                t.Scripts_id = SUInt32_of_SString(strings.Split(scriptid, ","))
+                t.Write = SUInt32_of_SString(strings.Split(write, ","))
 		if err != nil {
 			return tab, err
 		}

@@ -28,7 +28,6 @@ func (u *Project) Add(p *ConnectionPoolWrapper) error {
 	"," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",", 
 	","  + strings.Join(SString_of_SUInt32(u.Read), ",") , u.Content)
     //    	u.Name + "', '," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",', '," +  strings.Join(SString_of_SUInt32(u.Read), ",") + ",', '" +  u.Content + "');")
-    println(err)
     return err
 }
 
@@ -113,16 +112,15 @@ func (u *Project) GetColumnByProjectId(p *ConnectionPoolWrapper) ([]Column, erro
 func (u *Project) IsAdmin(p *ConnectionPoolWrapper, uid uint32) (bool, error) {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	admins, err := getUInt32SliceCell(dbPool, "admins_id", "projects", u.Id)
-	if err != nil {
-		return false, err
-	}
-	for _, value := range admins {
-		if value == uid {
-			return true, nil
+	admins, err := getUInt32SliceCell(dbPool, "projects", "admins_id", u.Id)
+	if err == nil {
+		for _, value := range admins {
+			if value == uid {
+				return true, nil
+			}
 		}
 	}
-	read, err := getUInt32SliceCell(dbPool, "read", "projects", u.Id)
+	read, err := getUInt32SliceCell(dbPool, "projects", "read", u.Id)
 	if err != nil {
 		return false, err
 	}

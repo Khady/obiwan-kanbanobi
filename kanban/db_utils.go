@@ -5,6 +5,7 @@ import (
 	"github.com/bmizerany/pq"
 	"sort"
 	"strings"
+	"fmt"
 )
 
 func db_open(url string) (*sql.DB, error) {
@@ -20,8 +21,11 @@ func getUInt32SliceCell(p *ConnectionPoolWrapper, base_name string, column_name 
 	defer p.ReleaseConnection(db)
 	var cell string
 	var cell_ids []uint32
-	row := db.QueryRow("select $1 from $2 where id = $3", column_name, base_name, id)
+	tmp := "select " + column_name + " from " + base_name + " where id = $1"
+	fmt.Println(tmp, id)
+	row := db.QueryRow(tmp, id)
 	if err := row.Scan(&cell); err != nil {
+		fmt.Println(err)
 		return cell_ids, err
 	}
 	cell_ids = SUInt32_of_SString(strings.Split(cell, ","))
