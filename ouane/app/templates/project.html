@@ -7,13 +7,6 @@ function sse() {
 	var source = new EventSource('/stream');
         source.onmessage = function(e) {
 		mydata = JSON.parse(e.data);
-		alert($("#columnsRow").find("#column"+mydata.id).length);
-		<!-- if ($("#columnsRow").find(".column"+mydata.id).length) { -->
-		<!-- 	alert("toto");		 -->
-		<!-- } -->
-		<!-- else { -->
-		<!-- 	alert("tata"); -->
-		<!-- } -->
 		if (mydata.type == 'columns' && mydata.project_id == {{ id }} && $("#columnsRow").find("#column"+mydata.id).length == 0) {
 			createNewColumn(mydata.id, mydata.name);
 		}
