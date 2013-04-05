@@ -122,3 +122,14 @@ func (c *Card) DelScript(p *ConnectionPoolWrapper, id uint32) error {
 	return delIdInCell(p, id, c.Id, "cards", "scripts_id")
 
 }
+
+func (c *Card)GetLastCardWithName(p* ConnectionPoolWrapper) error {
+        db := p.GetConnection()
+        defer p.ReleaseConnection(db)
+	row := db.QueryRow("select max(id) from cards where name= $1", c.Name)
+        err := row.Scan(&c.Id)
+        if (err != nil) {
+		println("lol")
+        }
+        return err
+}

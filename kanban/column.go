@@ -68,7 +68,6 @@ func MsgColumnCheckDefaultWrite(write *[]uint32) *[]uint32 {
 // msg.Columns.UserId est utilise par defaut pour le moment. Mais c'est un champ optionnel.
 // Il faudrait faire un test pour savoir si c'est le author_id ou lui qui est utilise.
 func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
-	println("graouh")
 	LOGGER.Print("New TARGET_COLUMN msg, CMD = CREATE")
 	description := MsgColumnCheckDefaultDesc(msg.Columns.Desc)
 	tags := MsgColumnCheckDefaultTags(&msg.Columns.Tags)

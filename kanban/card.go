@@ -63,12 +63,26 @@ func MsgCardCreate(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	} else {
+		card.GetLastCardWithName(dbPool)
+		println(card.Id)
+		*msg.Cards.Id = card.Id
 		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_CARDS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
+			Cards: &message.Msg_Cards{
+				Id:         proto.Uint32(card.Id),
+				ProjectId:  proto.Uint32(card.Project_id),
+				ColumnId:   proto.Uint32(card.Column_id),
+				Name:       proto.String(card.Name),
+				Desc:       proto.String(card.Content),
+				Tags:       card.Tags,
+				UserId:     proto.Uint32(card.User_id),
+				ScriptsIds: card.Scripts_id,
+				Write:      card.Write,
+			},
 		}
 		notifyUsers(msg)
 	}

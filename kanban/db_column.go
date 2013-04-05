@@ -2,7 +2,6 @@ package main
 
 import (
 	"strings"
-	"fmt"
 )
 
 func (c *Column) Add(p *ConnectionPoolWrapper) error {
@@ -53,7 +52,6 @@ func (c *Column)GetLastColumnWithName(p* ConnectionPoolWrapper) error {
 	row := db.QueryRow("select max(id) from columns where name= $1", c.Name)
 	err := row.Scan(&c.Id)
 	if (err != nil) {
-		fmt.Println(err)
 		return err
 	}
 	return err
