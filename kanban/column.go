@@ -115,7 +115,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 		LOGGER.Print("New column")
 		// Envoyer un message de succes ici
 		column.GetLastColumnWithName(dbPool)
-		println(column.Id)
+		*msg.Columns.Id = column.Id
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
