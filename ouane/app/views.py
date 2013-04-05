@@ -60,7 +60,7 @@ def project(id = 0):
     if formCard.validate_on_submit() and formCard.submit.data:
         formCard.idColumn.data
         a.createCard(session['author_id'], session['session_id'], id, form.name.data, form.description.data, int(formCard.idColumn.data))
-    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard)
+    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard, id = id)
 
 @app.route("/", methods = ['GET', 'POST'])
 @app.route("/index", methods = ['GET', 'POST'])

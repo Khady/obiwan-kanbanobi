@@ -251,6 +251,9 @@ class Api(threading.Thread):
                         #             msg.columns.scripts_ids, msg.columns.write)
                         columns = msg.columns
                         self.addNewColumnInDB(columns)
+                        dictcolumns = {'id' : columns.id, 'name' : columns.name, 'desc' : columns.desc, 'project_id' : msg.columns.project_id}
+                        dictcolumns['type'] = 'columns'
+                        red.publish('ouane', json.dumps(dictcolumns))
                         print "COLUMNS",
                         print [msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
                                msg.columns.scripts_ids, msg.columns.write]
@@ -282,7 +285,9 @@ class Api(threading.Thread):
                         for columns in msg.projects.projectColumns:
                             self.addNewColumnInDB(columns)
                             # dictcolumns = {'id' : column.id, 'name' : column.name, 'content' : column.content, 'read' : ' '.join(column.read), 'admins_id' : ' '.join(column.admins_id)}
-                            print columns
+                            dictcolumns = {'id' : columns.id, 'name' : columns.name, 'desc' : columns.desc, 'project_id' : msg.projects.id}
+                            dictcolumns['type'] = 'columns'
+                            red.publish('ouane', json.dumps(dictcolumns))
                             self.getCardsByColumnID(msg.author_id, msg.session_id, columns.id, msg.projects.id)
                             #dictcolumns['type'] = 'column'
                             #red.publish('ouane', json.dumps(dictcolumns))

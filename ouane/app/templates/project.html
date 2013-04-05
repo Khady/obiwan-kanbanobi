@@ -2,6 +2,17 @@
 {% block body %}
 
 <script>
+
+function sse() {
+	var source = new EventSource('/stream');
+        source.onmessage = function(e) {
+		mydata = JSON.parse(e.data);
+		if (mydata.type == 'columns' && mydata.project_id == {{ id }}) {
+			createNewColumn(mydata.id, mydata.name);
+		}
+	};
+}
+
 function createNewColumn(columnsNumber, columnName) {
 	
 	var columnID = "column" + columnsNumber;
@@ -81,6 +92,7 @@ $(document).on("click", ".open-AddACardPopup", function () {
      $(".modal-body #formCard-idColumn").val( columnId );
     $('#addACardPop').modal('show');
 });
+sse();
 </script>
 
 <div id="columnsHeader">
