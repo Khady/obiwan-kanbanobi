@@ -26,7 +26,8 @@ func (u *Project) Add(p *ConnectionPoolWrapper) error {
 	defer p.ReleaseConnection(db)
     _, err := db.Exec("INSERT INTO projects(name, admins_id, read, content) VALUES ($1,$2,$3,$4)", u.Name,
 	"," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",", 
-	","  + strings.Join(SString_of_SUInt32(u.Read), ",") , u.Content)
+	","  + strings.Join(SString_of_SUInt32(u.Read), ",") + ","
+    , u.Content)
     //    	u.Name + "', '," +  strings.Join(SString_of_SUInt32(u.admins_id), ",") +",', '," +  strings.Join(SString_of_SUInt32(u.Read), ",") + ",', '" +  u.Content + "');")
     return err
 }
