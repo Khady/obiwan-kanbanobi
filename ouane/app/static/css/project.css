@@ -31,12 +31,19 @@
 
 .columnTitle
 {
-	width: 100%;
-	height: 30px;
-	font-weight: bold;
-	font-size: 100%;
-	margin-bottom: 0.5em;
-	text-align: left;
+    overflow: hidden;
+    min-width: 100%;
+    width: 100%;
+    height: 30px;
+    font-weight: bold;
+    font-size: 100%;
+    margin-bottom: 0.5em;
+    text-align: left;
+ }
+
+.columnTitle:hover
+{
+    width:auto;
 }
 
 .cardsSpace
@@ -68,6 +75,14 @@
 	font-size: 90%;
 }
 
+
+.ui-sortable-helper
+{
+    -ms-transform:rotate(3deg); /* IE 9 */
+    -moz-transform:rotate(3deg); /* Firefox */
+    -webkit-transform:rotate(3deg); /* Safari and Chrome */
+    -o-transform:rotate(3deg); /* Opera */
+}
 
 .addCard
 {
