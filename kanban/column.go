@@ -114,11 +114,22 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 	} else {
 		LOGGER.Print("New column")
 		// Envoyer un message de succes ici
+		column.GetLastColumnWithName(dbPool)
+		println(column.Id)
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
+		Columns: &message.Msg_Columns{
+				ProjectId: &column.Project_id,
+				Id: &column.Id,
+				Name: &column.Name,
+				Desc: &column.Content,
+				Tags: column.Tags,
+				ScriptsIds: column.Scripts_id,
+				Write: column.Write,
+			},
 		}
 		notifyUsers(msg)
 	}
