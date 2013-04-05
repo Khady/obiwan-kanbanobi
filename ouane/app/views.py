@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards
 
@@ -47,13 +47,20 @@ def checklogin(name = None):
 @app.route("/project/<int:id>", methods = ['GET', 'POST'])
 @login_required
 def project(id = 0):
-    a.getColumnsByProjectId(session['author_id'], session['session_id'], id)
+    #a.getColumnsByProjectId(session['author_id'], session['session_id'], id)
     data = Columns.query.filter_by(project_id = id).order_by(Columns.id).all()
     card = {}
     for d in data:
-       c = Cards.query.filter_by(column_id = d.id).order_by(Cards.id).all()
-       card[d.id] = c
-    return render_template('project.html', columns=data, card=card)
+        c = Cards.query.filter_by(column_id = d.id).order_by(Cards.id).all()
+        card[d.id] = c
+    form = AddColumnForm(prefix="form")
+    formCard = AddCardForm(prefix="formCard")
+    if form.validate_on_submit() and form.submit.data:
+        a.createColumn(session['author_id'], session['session_id'], id, form.name.data, form.description.data)
+    if formCard.validate_on_submit() and formCard.submit.data:
+        formCard.idColumn.data
+        a.createCard(session['author_id'], session['session_id'], id, form.name.data, form.description.data, int(formCard.idColumn.data))
+    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard)
 
 @app.route("/", methods = ['GET', 'POST'])
 @app.route("/index", methods = ['GET', 'POST'])
@@ -73,7 +80,7 @@ def index():
     #a.getAllProjetList(session['author_id'], session['session_id'], session['author_id'])
     if form.validate_on_submit():
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
-    return render_template('index.html', data = data, form=form)
+    return render_template('index.html', data = data, form = form)
 
 @app.route("/admin", methods = ['GET', 'POST'])
 @login_required

@@ -2,14 +2,11 @@
 {% block body %}
 
 <script>
-var columnsNumber = 0;
-
-function createNewColumn() {
-	columnsNumber++;
+function createNewColumn(columnsNumber, columnName) {
 	
 	var columnID = "column" + columnsNumber;
 	var colContainer = $("<div class=\"column\" id=\"" + columnID + "\"></div>");
-	var columnTitle = $("<button class=\"columnTitle btn disabled\">Colonne</button>").button().click(function() { columnModif(); });
+	var columnTitle = $("<button class=\"columnTitle btn disabled\">" + columnName + "</button>").button().click(function() { columnModif(); });
 	var cardsSpace = $("<div class=\"cardsSpace\" id=\"" + columnID + "-cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" });
 	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
 
@@ -78,10 +75,16 @@ $(".addCard").button().click(function() {
 
 
 });
+
+$(document).on("click", ".open-AddACardPopup", function () {
+     var columnId = $(this).data('id');
+     $(".modal-body #formCard-idColumn").val( columnId );
+    $('#addACardPop').modal('show');
+});
 </script>
 
 <div id="columnsHeader">
-<a class="columnCreation btn btn-large">Ajouter une colonne</a>
+<button href="#addColumn" role="button" data-toggle="modal" class="btn btn-large">Add columns</button>
 <hr>
 </div>
 
@@ -98,7 +101,7 @@ $(".addCard").button().click(function() {
           {% endfor %}
         </ul>
       </div>
-    <button href="#addACardPopup" role="button" class="addCard btn disabled" data-toggle="modal" id="column{{c.id}}-addCardButton">Add a card...</button>
+    <button href="#addACardPopup" role="button" class="open-AddACardPopup btn disabled" data-toggle="modal" data-id="{{c.id}}" id="column{{c.id}}-addCardButton">Add a card...</button>
     </div>
     {% endfor %}
 
@@ -113,16 +116,42 @@ $(".addCard").button().click(function() {
 	  <h3 id="myModalLabel">Add a Card</h3>
 	</div>
 	<div class="modal-body">
+	  {{formCard.hidden_tag()}}
 	<p>
 	  Title:<br>
+	  {{formCard.name(class="input-block-level")}}<br>
 	  Description:<br>
-	  Personnes affectees:<br>
+	  {{formCard.description(class="input-block-level")}}<br>
 	</p>
 	</div>
 	<div class="modal-footer">
 	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	  <input class="btn btn-primary" type="submit" value="Add a Card!">
+	  <!-- <input class="btn btn-primary" type="submit" value="Add a Card!"> -->
+	  {{formCard.submit(class="btn btn-primary", value="Add a Card!")}}
 	</div>
       </form>
     </div>
-{% endblock %}
+
+    <div  id="addColumn" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addColumnLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="addColumnLabel">Add Columns</h3>
+	</div>
+	<div class="modal-body">
+	  {{form.hidden_tag()}}
+	<p>
+	  Name:<br>
+	  {{form.name(class="input-block-level")}}<br>
+	  Description:<br>
+	  {{form.description(class="input-block-level")}}<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <!-- <input class="btn btn-primary" type="submit" value="Add Columns!"> -->
+	  {{form.submit()}}
+	</div>
+      </form>
+      {% endblock %}
+      

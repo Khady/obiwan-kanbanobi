@@ -94,7 +94,23 @@ class Api(threading.Thread):
         msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
 
-    def createColumns(self, author_id, session_id, project_id, name = "", desc = "", tags = [], scripts_ids = [], write = []):
+    def createCard(self,  author_id, session_id, project_id, name, desc, column_id, tags = [], scripts_ids = [], write = []):
+        msg = Msg()
+        msg.target = message_pb2.CARDS
+        msg.command = message_pb2.CREATE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.cards.project_id = project_id
+        msg.cards.column_id = column_id
+        msg.cards.id = 0
+        msg.cards.name = name
+        msg.cards.desc = desc
+        msg.cards.user_id = author_id
+        for elem in write:
+            msg.cards.write.add(elem)
+        self.network.setWriteStack(msg.SerializeToString())
+
+    def createColumn(self, author_id, session_id, project_id, name = "", desc = "", tags = [], scripts_ids = [], write = []):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
         msg.command = message_pb2.CREATE
@@ -103,6 +119,7 @@ class Api(threading.Thread):
         msg.columns.project_id = project_id
         msg.columns.id = 0
         msg.columns.name = name
+        msg.columns.desc = desc
         for elem in write:
             msg.columns.write.add(elem)
         self.network.setWriteStack(msg.SerializeToString())
@@ -212,11 +229,16 @@ class Api(threading.Thread):
                 #     print ">>>>>>" + data
                 msg.ParseFromString(data)
                 if (msg.target == message_pb2.CARDS):
-                    c = Card(msg.cards.id, msg.cards.name, msg.cards.column_id, msg.cards.project_id, msg.cards.tags,
-                             msg.cards.user_id, msg.cards.scripts_id, msg.cards.write)
-                    # db.session.add(c)
-                    # db.session.commit()
-                    red.publish('ouane', u'CARDS')
+                    if msg.command == message_pb2.ERROR:
+                        print 'ERROR COLUMNS',
+                        print msg.error.error_id
+                    else:
+                        cards = msg.cards
+                        self.addNewCardInDB(cards)
+                        print "CARD",
+                        print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
+                               cards.user_id, cards.scripts_ids, cards.write]
+
                 if (msg.target == message_pb2.COLUMNS):
                     # db.session.add(c)
                     # db.session.commit()

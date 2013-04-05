@@ -6,13 +6,18 @@ import datetime
 import redis
 
 red = redis.StrictRedis()
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ouane.db'
-db = SQLAlchemy(app)
+app.config.from_pyfile('config.py')
 app.config['DEBUG'] = True
+
+db = SQLAlchemy(app)
+
 from dbUtils import *
 
-app.config.from_pyfile('config.py')
+db.drop_all()
+db.create_all()
 
 def event_stream():
     pubsub = red.pubsub()
