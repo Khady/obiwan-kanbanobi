@@ -7,11 +7,23 @@ function sse() {
 	var source = new EventSource('/stream');
         source.onmessage = function(e) {
 		mydata = JSON.parse(e.data);
-		if (mydata.type == 'columns' && mydata.project_id == {{ id }} && $("#columnsRow").find("#column"+mydata.id).length == 0) {
-			createNewColumn(mydata.id, mydata.name);
+		if (mydata.type == 'columns') {
+			if (mydata.project_id == {{ id }} && $("#columnsRow").find("#column"+mydata.id).length == 0) {
+				createNewColumn(mydata.id, mydata.name);
+			}
+			else {
+				$("#columnsRow").find("#column"+mydata.id).find("showDetailColumn").text = mydata.name;
+			}
 		}
-		else {
-			$("#columnsRow").find("#column"+mydata.id).find("showDetailColumn").text = mydata.name;
+		if (mydata.type == 'card') {
+			if (mydata.project_id == {{ id }}) {
+				if ($("#postit"+mydata.id).length != 0)
+					$("#postit"+mydata.id).remove();
+				addCardToColumn(mydata.column_id, mydata.id, mydata.name);
+			}
+			<!-- else { -->
+			<!-- 	$("#columnsRow").find("#column"+mydata.id).find("showDetailColumn").text = mydata.name; -->
+			<!-- } -->
 		}
 	};
 }
@@ -37,10 +49,10 @@ function columnModif() {
 	alert("Normalement ca permettra de modif la colonne");
 }
 
-function addCardToColumn(buttonID) {
-	var columnsCardsListID = "#" + buttonID.split("-")[0] + "-cardsList";
+function addCardToColumn(idColumns, idCard, name) {
+	var columnsCardsListID = "#column" + idColumns + "-cardsList";
 	var listSize = $(columnsCardsListID + " li").length;
-	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit0\">Nouveau post-it</li>");
+	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit"+idCard+"\">"+name+"</li>");
 	$(columnsCardsListID).append(newCard);
 }
 

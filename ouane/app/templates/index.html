@@ -37,8 +37,13 @@ function sse() {
                 author_id = {{ session.author_id }};
 		if (mydata.type == 'project' && isInTab(mydata.read.split(" "), author_id))
 		{
-			$(".accordion").find("#"+mydata.id).remove();
-			$(".accordion").append("<div class=\"accordion-group\" id=\""+mydata.id+"\"><div class=\"accordion-heading\"><h4><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#"+mydata.id+"-under\">"+mydata.name+"</a></h4></div><div id=\""+mydata.id+"-under\" class=\"accordion-body collapse\"><div class=\"accordion-inner\"><p>"+mydata.content+"</p><a href=\"project/"+mydata.id+"\" class=\"btn\">Go to the project page!</a></div></div></div>");
+			if ($(".accordion").find("#"+mydata.id).length == 0) {
+				$(".accordion").append("<div class=\"accordion-group\" id=\""+mydata.id+"\"><div class=\"accordion-heading\"><h4><a class=\"accordion-toggle\" data-toggle=\"collapse\" data-parent=\"#accordion2\" href=\"#"+mydata.id+"-under\">"+mydata.name+"</a></h4></div><div id=\""+mydata.id+"-under\" class=\"accordion-body collapse\"><div class=\"accordion-inner\"><p>"+mydata.content+"</p><a href=\"project/"+mydata.id+"\" class=\"btn\">Go to the project page!</a></div></div></div>");
+			}
+			else {
+				$(".accordion").find("#"+mydata.id).find(".accordion-heading").find("a").text(mydata.name);
+				$(".accordion").find("#"+mydata.id).find(".accordion-inner").find("p").text(mydata.content);
+			}
 		}
 	};
 }

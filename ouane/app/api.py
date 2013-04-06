@@ -238,7 +238,9 @@ class Api(threading.Thread):
                         print "CARD",
                         print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
                                cards.user_id, cards.scripts_ids, cards.write]
-
+                        dictcard = {'id' : cards.id, 'name' : cards.name, 'desc' : cards.desc, 'project_id' : cards.project_id, 'column_id' : cards.column_id}
+                        dictcard['type'] = 'card'
+                        red.publish('ouane', json.dumps(dictcard))
                 if (msg.target == message_pb2.COLUMNS):
                     # db.session.add(c)
                     # db.session.commit()
@@ -262,6 +264,9 @@ class Api(threading.Thread):
                             print "CARD",
                             print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
                                    cards.user_id, cards.scripts_ids, cards.write]
+                            dictcard = {'id' : cards.id, 'name' : cards.name, 'desc' : cards.desc, 'project_id' : cards.project_id, 'column_id' : cards.column_id}
+                            dictcard['type'] = 'card'
+                            red.publish('ouane', json.dumps(dictcard))
                 if (msg.target == message_pb2.IDENT):
                     if msg.command == message_pb2.ERROR:
                         print 'ERROR IDENT',
