@@ -46,12 +46,12 @@ func (c *Column) Update(p *ConnectionPoolWrapper) error {
 	return err
 }
 
-func (c *Column)GetLastColumnWithName(p* ConnectionPoolWrapper) error {
+func (c *Column) GetLastColumnWithName(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select max(id) from columns where name= $1", c.Name)
 	err := row.Scan(&c.Id)
-	if (err != nil) {
+	if err != nil {
 		return err
 	}
 	return err
@@ -63,7 +63,7 @@ func (c *Column) Get(p *ConnectionPoolWrapper) error {
 	var tags, scripts, write string
 	row := db.QueryRow("select * from columns where id = $1", c.Id)
 	err := row.Scan(&c.Id, &c.Name, &c.Project_id, &c.Content, &tags, &scripts, &write)
-	if (err != nil) {
+	if err != nil {
 		return err
 	}
 	c.Tags = strings.Split(tags, " ")
@@ -113,8 +113,8 @@ func (u *Column) GetCardByColumnId(p *ConnectionPoolWrapper) ([]Card, error) {
 	for row.Next() {
 		err = row.Scan(&t.Id, &t.Name, &t.Content, &t.Column_id, &t.Project_id, &tags, &t.User_id, &scriptid, &write)
 		t.Tags = strings.Split(tags, ",")
-                t.Scripts_id = SUInt32_of_SString(strings.Split(scriptid, ","))
-                t.Write = SUInt32_of_SString(strings.Split(write, ","))
+		t.Scripts_id = SUInt32_of_SString(strings.Split(scriptid, ","))
+		t.Write = SUInt32_of_SString(strings.Split(write, ","))
 		if err != nil {
 			return tab, err
 		}

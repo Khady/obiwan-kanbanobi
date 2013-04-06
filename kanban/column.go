@@ -121,14 +121,14 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			Command:   message.CMD_SUCCES.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
-		Columns: &message.Msg_Columns{
-				ProjectId: &column.Project_id,
-				Id: &column.Id,
-				Name: &column.Name,
-				Desc: &column.Content,
-				Tags: column.Tags,
+			Columns: &message.Msg_Columns{
+				ProjectId:  &column.Project_id,
+				Id:         &column.Id,
+				Name:       &column.Name,
+				Desc:       &column.Content,
+				Tags:       column.Tags,
 				ScriptsIds: column.Scripts_id,
-				Write: column.Write,
+				Write:      column.Write,
 			},
 		}
 		notifyUsers(msg)

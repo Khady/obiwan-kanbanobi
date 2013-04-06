@@ -16,10 +16,10 @@ type Project struct {
 
 func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 	proj := &Project{
-	Name:      *msg.Projects.Name,
-	admins_id: msg.Projects.AdminsId,
-	Read:      []uint32 {*msg.AuthorId},
-	Content:   *msg.Projects.Content,
+		Name:      *msg.Projects.Name,
+		admins_id: msg.Projects.AdminsId,
+		Read:      []uint32{*msg.AuthorId},
+		Content:   *msg.Projects.Content,
 	}
 	var answer *message.Msg
 	if err := proj.Add(dbPool); err != nil {
@@ -34,8 +34,8 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 			},
 		}
 	} else {
-	proj.Get(dbPool)	
-	answer = &message.Msg{
+		proj.Get(dbPool)
+		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
 			Command:   message.CMD_GET.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
@@ -47,9 +47,9 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 				AdminsId: proj.admins_id,
 				Read:     proj.Read},
 		}
-	notifyUsers(msg)
-    }
-    data, err := proto.Marshal(answer)
+		notifyUsers(msg)
+	}
+	data, err := proto.Marshal(answer)
 	if err != nil {
 		LOGGER.Print("Impossible to marshal msg in MsgProjectCreate", err, answer)
 		return

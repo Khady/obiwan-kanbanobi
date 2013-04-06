@@ -2,10 +2,10 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"github.com/bmizerany/pq"
 	"sort"
 	"strings"
-	"fmt"
 )
 
 func db_open(url string) (*sql.DB, error) {

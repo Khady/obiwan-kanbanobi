@@ -123,13 +123,13 @@ func (c *Card) DelScript(p *ConnectionPoolWrapper, id uint32) error {
 
 }
 
-func (c *Card)GetLastCardWithName(p* ConnectionPoolWrapper) error {
-        db := p.GetConnection()
-        defer p.ReleaseConnection(db)
+func (c *Card) GetLastCardWithName(p *ConnectionPoolWrapper) error {
+	db := p.GetConnection()
+	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select max(id) from cards where name= $1", c.Name)
-        err := row.Scan(&c.Id)
-        if (err != nil) {
+	err := row.Scan(&c.Id)
+	if err != nil {
 		println("lol")
-        }
-        return err
+	}
+	return err
 }
