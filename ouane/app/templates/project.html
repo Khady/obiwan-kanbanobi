@@ -36,7 +36,7 @@ function createNewColumn(columnsNumber, columnName) {
 	var cardsSpace = $("<div class=\"cardsSpace\" id=\"" + columnID + "-cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" });
 	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
 
-	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"addCard btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() { addCardToColumn($(this).attr('id')); });
+	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() { addCardToColumn($(this).attr('id')); });
 
 	colContainer.append(columnTitle);
 	cardsList.appendTo(cardsSpace);
