@@ -11,13 +11,13 @@ class AddProjectForm(Form):
     
 class AddUserForm(Form):
     login = TextField('Login', [validators.Length(min=4, max=25)])
-    email = TextField('Email Address', validators.Required())
+    email = TextField('Email Address', [validators.Required()])
     password = PasswordField('New Password', [
-        validators.Required(),
-        validators.EqualTo('confirm', message='Passwords must match')
-    ])
+            validators.Required(),
+            validators.EqualTo('confirm', message='Passwords must match')
+            ])
     confirm = PasswordField('Repeat Password')
-
+    
 class AddColumnForm(Form):
     name = TextField('Name', [validators.Length(min=1)])
     description = TextAreaField('Description', [validators.Length(min=1)])
