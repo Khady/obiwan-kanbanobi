@@ -33,7 +33,12 @@ function createNewColumn(columnsNumber, columnName) {
 	var columnID = "column" + columnsNumber;
 	var colContainer = $("<div class=\"column\" id=\"" + columnID + "\"></div>");
 	var columnTitle = $("<button class=\"columnTitle btn disabled\">" + columnName + "</button>").button().click(function() { columnModif(); });
-	var cardsSpace = $("<div class=\"cardsSpace\" id=\"" + columnID + "-cardsSpace\"></div>").droppable({ hoverClass: "ui-state-active" });
+	var cardsSpace = $("<div class=\"cardsSpace\" id=\"" + columnID + "-cardsSpace\"></div>").droppable({drop: function(event, ui) {
+	var idColumn = $(this).attr('id').split("column")[1].split("-")[0];
+	var idCard = ui.draggable.attr('id').split("postit")[1];
+	event.preventDefault();
+	var posting = $.post("{{url_for("modifCard")}}", { idColumn: idColumn, idCard: idCard } );
+	}});
 	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
 
 	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() { addCardToColumn($(this).attr('id')); });
@@ -88,8 +93,18 @@ $(".cardsList").sortable({
 }).disableSelection();
 
 $( ".cardsSpace" ).droppable({
-	hoverClass: "ui-state-active"
+	<!-- hoverClass: "ui-state-active"; -->
+	drop: function(event, ui) {
+	var idColumn = $(this).attr('id').split("column")[1].split("-")[0];
+	var idCard = ui.draggable.attr('id').split("postit")[1];
+	event.preventDefault();
+	var posting = $.post("{{url_for("modifCard")}}", { idColumn: idColumn, idCard: idCard } );
+	}
 });
+
+<!-- $( ".cardsSpace" ).droppable({ -->
+<!-- 	hoverClass: "ui-state-active" -->
+<!-- }); -->
 
 $( ".columnTitle" ).button().click(function() {
 	columnModif();
