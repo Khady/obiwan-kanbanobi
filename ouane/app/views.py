@@ -103,9 +103,6 @@ def stream():
 @login_required
 def modifCard():
     c = Cards.query.filter_by(id = int(request.form['idCard'])).all()
-    print request.form['idColumn']
-    print request.form['idCard']
-    print c
     c = c[0]
     a.modifyCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.project_id, c.name, c.content, int(request.form['idColumn']))
     return "OK"

@@ -250,6 +250,9 @@ class Api(threading.Thread):
                         print msg.error.error_id
                     else:
                         cards = msg.cards
+                        if cards.id == 0:
+                            print "SUCCESS"
+                            break
                         self.addNewCardInDB(cards)
                         print "CARD",
                         print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
@@ -268,6 +271,9 @@ class Api(threading.Thread):
                         # c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
                         #             msg.columns.scripts_ids, msg.columns.write)
                         columns = msg.columns
+                        if columns.id == 0:
+                            print "SUCCESS"
+                            break
                         self.addNewColumnInDB(columns)
                         dictcolumns = {'id' : columns.id, 'name' : columns.name, 'desc' : columns.desc, 'project_id' : msg.columns.project_id}
                         dictcolumns['type'] = 'columns'
@@ -298,6 +304,8 @@ class Api(threading.Thread):
                         print 'ERROR PROJECT',
                         print msg.error.error_id
                     else:
+                        if project.id == 0:
+                            break
                         self.addNewProjectInDB(msg.projects)
                         project = msg.projects
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}
