@@ -25,6 +25,12 @@ function sse() {
 			<!-- 	$("#columnsRow").find("#column"+mydata.id).find("showDetailColumn").text = mydata.name; -->
 			<!-- } -->
 		}
+		if (mydata.type == 'delcard') {
+			if (mydata.project_id == {{ id }}) {
+				if ($("#postit"+mydata.id).length != 0)
+					$("#postit"+mydata.id).remove();
+			}
+		}
 	};
 }
 
@@ -41,7 +47,10 @@ function createNewColumn(columnsNumber, columnName) {
 	}});
 	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
 
-	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() { addCardToColumn($(this).attr('id')); });
+	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() {var columnId = $(this).data('id');
+$(".modal-body #formCard-idColumn").val( columnId );
+$('#addACardPop').modal('show');
+ });
 
 	colContainer.append(columnTitle);
 	cardsList.appendTo(cardsSpace);
@@ -54,10 +63,18 @@ function columnModif() {
 	alert("Normalement ca permettra de modif la colonne");
 }
 
+function delCard(idCard) {
+	var posting = $.post("{{url_for("delCard")}}", { idCard: idCard } );
+}
+
 function addCardToColumn(idColumns, idCard, name) {
 	var columnsCardsListID = "#column" + idColumns + "-cardsList";
 	var listSize = $(columnsCardsListID + " li").length;
 	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit"+idCard+"\">"+name+"</li>");
+	var buttonRemove = $("<i class=\"icon-remove\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
+	delCard($(this).attr('id'));
+});
+	$(newCard).append(buttonRemove);
 	$(columnsCardsListID).append(newCard);
 }
 
@@ -114,8 +131,12 @@ $(".addCard").button().click(function() {
 	addCardToColumn($(this).attr('id'));
 })
 
+$(".icon-remove").button().click(function() {
+	delCard($(this).attr('id'));
+})
 
 });
+
 
 $(document).on("click", ".open-AddACardPopup", function () {
      var columnId = $(this).data('id');
@@ -139,7 +160,7 @@ sse();
       <div class="cardsSpace" id="column{{c.id}}-cardsSpace">
         <ul class="cardsList" id="column{{c.id}}-cardsList">
 	  {% for ca in card[c.id] %}
-          <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}}</li>
+          <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}} <i class="icon-remove"  style="float: right;" id="{{ca.id}}"></i></li>
           {% endfor %}
         </ul>
       </div>

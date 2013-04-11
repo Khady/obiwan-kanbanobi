@@ -107,3 +107,11 @@ def modifCard():
     a.modifyCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.project_id, c.name, c.content, int(request.form['idColumn']))
     print c
     return "OK"
+
+@app.route("/delCard", methods = ['POST'])
+@login_required
+def delCard():
+    c = Cards.query.filter_by(id = int(request.form['idCard'])).all()
+    c = c[0]
+    a.delCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.column_id, c.project_id)
+    return "OK"

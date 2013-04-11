@@ -167,6 +167,18 @@ class Api(threading.Thread):
         msg.users.admin = admin
         self.network.setWriteStack(msg.SerializeToString())
 
+    def delCard(self, author_id, session_id, idCard, idColumn, idProject):
+        msg = Msg()
+        msg.target = message_pb2.CARDS
+        msg.command = message_pb2.DELETE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.cards.id = idCard
+        msg.cards.column_id = idColumn
+        msg.cards.project_id = idProject
+        msg.cards.name = ""
+        self.network.setWriteStack(msg.SerializeToString())
+
     def sendLogin(self, login, password):
         msg = Msg()
         msg.author_id = 0
@@ -246,8 +258,18 @@ class Api(threading.Thread):
                 msg.ParseFromString(data)
                 if (msg.target == message_pb2.CARDS):
                     if msg.command == message_pb2.ERROR:
-                        print 'ERROR COLUMNS',
+                        print 'ERROR CARDS',
                         print msg.error.error_id
+                    elif msg.command == message_pb2.DELETE:
+                        cards = msg.cards
+                        c = Cards.query.get(cards.id)
+                        if c is None:
+                            continue
+                        db.session.delete(c)
+                        db.session.commit()
+                        dictcard = {'id' : cards.id, "project_id" : cards.project_id}
+                        dictcard['type'] = 'delcard'
+                        red.publish('ouane', json.dumps(dictcard))
                     else:
                         cards = msg.cards
                         if cards.id == 0:
