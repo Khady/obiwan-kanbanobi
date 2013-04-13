@@ -62,8 +62,8 @@ function createNewColumn(columnsNumber, columnName) {
 	}});
 	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
 
-	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\" style=\"float:left;\">Add a card...</button>").button().click(function() {var columnId = $(this).data('id');
-$(".modal-body #formCard-idColumn").val( columnId );
+	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" data-id=\""+mydata.id+"\" id=\"" + columnID + "-addCardButton\" style=\"float:left;\">Add a card...</button>").button().click(function() {var columnId = $(this).data('id');
+$(".modal-body").find("#formCard-idColumn").val( columnId );
 $('#addACardPop').modal('show');
  });
 
