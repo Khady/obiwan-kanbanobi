@@ -56,9 +56,10 @@ def project(id = 0):
     form = AddColumnForm(prefix="form")
     formCard = AddCardForm(prefix="formCard")
     if form.validate_on_submit() and form.submit.data:
+        print "TATA"
         a.createColumn(session['author_id'], session['session_id'], id, form.name.data, form.description.data)
     if formCard.validate_on_submit() and formCard.submit.data:
-        formCard.idColumn.data
+        print formCard.idColumn.data
         a.createCard(session['author_id'], session['session_id'], id, formCard.name.data, formCard.description.data, int(formCard.idColumn.data))
     return render_template('project.html', columns=data, card=card, form=form, formCard = formCard, id = id)
 
@@ -114,4 +115,16 @@ def delCard():
     c = Cards.query.filter_by(id = int(request.form['idCard'])).all()
     c = c[0]
     a.delCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.column_id, c.project_id)
+    return "OK"
+
+
+@app.route("/delColumn", methods = ['POST'])
+@login_required
+def delColumn():
+    c = Columns.query.filter_by(id = int(request.form['idColumn'])).all()
+    c = c[0]
+    ca = Cards.query.filter_by(column_id = c.id).all()
+    for card in ca:
+        a.delCard(session['author_id'], session['session_id'], card.id, card.column_id, card.project_id)
+    a.delColumn(session['author_id'], session['session_id'], int(request.form['idColumn']), c.project_id)
     return "OK"

@@ -179,6 +179,17 @@ class Api(threading.Thread):
         msg.cards.name = ""
         self.network.setWriteStack(msg.SerializeToString())
 
+    def delColumn(self, author_id, session_id, idColumn, idProject):
+        msg = Msg()
+        msg.target = message_pb2.COLUMNS
+        msg.command = message_pb2.DELETE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.columns.id = idColumn
+        msg.columns.name = ""
+        msg.columns.project_id = idProject
+        self.network.setWriteStack(msg.SerializeToString())
+
     def sendLogin(self, login, password):
         msg = Msg()
         msg.author_id = 0
@@ -289,6 +300,16 @@ class Api(threading.Thread):
                     if msg.command == message_pb2.ERROR:
                         print 'ERROR COLUMNS',
                         print msg.error.error_id
+                    elif msg.command == message_pb2.DELETE:
+                        columns = msg.columns
+                        c = Columns.query.get(columns.id)
+                        if c is None:
+                            continue
+                        db.session.delete(c)
+                        db.session.commit()
+                        dictcolumn = {'id' : columns.id, "project_id" : columns.project_id}
+                        dictcolumn['type'] = 'delcolumn'
+                        red.publish('ouane', json.dumps(dictcolumn))
                     else:
                         # c = Columns(msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
                         #             msg.columns.scripts_ids, msg.columns.write)

@@ -31,7 +31,22 @@ function sse() {
 					$("#postit"+mydata.id).remove();
 			}
 		}
+		if (mydata.type == 'delcolumn') {
+			if (mydata.project_id == {{ id }}) {
+				if ($("#column"+mydata.id).length != 0)
+					$("#column"+mydata.id).remove();
+			}
+		}
+
 	};
+}
+
+function delCard(idCard) {
+	var posting = $.post("{{url_for("delCard")}}", { idCard: idCard } );
+}
+
+function delColumn(idColumn) {
+	var posting = $.post("{{url_for("delColumn")}}", { idColumn: idColumn } );
 }
 
 function createNewColumn(columnsNumber, columnName) {
@@ -47,15 +62,20 @@ function createNewColumn(columnsNumber, columnName) {
 	}});
 	var cardsList = $("<ul class=\"cardsList\" id=\"" + columnID + "-cardsList\"></ul>").sortable({ connectWith: "ul" }).disableSelection();
 
-	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\">Add a card...</button></div>").button().click(function() {var columnId = $(this).data('id');
+	var addCard = $("<button href=\"#addACardPopup\" role=\"button\" class=\"open-AddACardPopup btn disabled\" data-toggle=\"modal\" id=\"" + columnID + "-addCardButton\" style=\"float:left;\">Add a card...</button>").button().click(function() {var columnId = $(this).data('id');
 $(".modal-body #formCard-idColumn").val( columnId );
 $('#addACardPop').modal('show');
  });
+
+	var delCol = $("<i class=\"icon-remove delcolumn\"  style=\"float: right;\" id=\""+mydata.id+"\"></i>").button().click(function() {
+	delColumn($(this).attr('id'));
+});
 
 	colContainer.append(columnTitle);
 	cardsList.appendTo(cardsSpace);
 	cardsSpace.appendTo(colContainer);
 	colContainer.append(addCard);
+	colContainer.append(delCol);
 	colContainer.appendTo("#columnsRow");
 }
 
@@ -63,15 +83,11 @@ function columnModif() {
 	alert("Normalement ca permettra de modif la colonne");
 }
 
-function delCard(idCard) {
-	var posting = $.post("{{url_for("delCard")}}", { idCard: idCard } );
-}
-
 function addCardToColumn(idColumns, idCard, name) {
 	var columnsCardsListID = "#column" + idColumns + "-cardsList";
 	var listSize = $(columnsCardsListID + " li").length;
 	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit"+idCard+"\">"+name+"</li>");
-	var buttonRemove = $("<i class=\"icon-remove\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
+	var buttonRemove = $("<i class=\"icon-remove delcard\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
 	delCard($(this).attr('id'));
 });
 	$(newCard).append(buttonRemove);
@@ -131,8 +147,13 @@ $(".addCard").button().click(function() {
 	addCardToColumn($(this).attr('id'));
 })
 
-$(".icon-remove").button().click(function() {
+$(".delcard").button().click(function() {
 	delCard($(this).attr('id'));
+})
+
+
+$(".delcolumn").button().click(function() {
+	delColumn($(this).attr('id'));
 })
 
 });
@@ -160,11 +181,11 @@ sse();
       <div class="cardsSpace" id="column{{c.id}}-cardsSpace">
         <ul class="cardsList" id="column{{c.id}}-cardsList">
 	  {% for ca in card[c.id] %}
-          <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}} <i class="icon-remove"  style="float: right;" id="{{ca.id}}"></i></li>
+          <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}} <i class="icon-remove delcard"  style="float: right;" id="{{ca.id}}"></i></li>
           {% endfor %}
         </ul>
       </div>
-    <button href="#addACardPopup" role="button" class="open-AddACardPopup btn disabled" data-toggle="modal" data-id="{{c.id}}" id="column{{c.id}}-addCardButton">Add a card...</button>
+    <button href="#addACardPopup" role="button" class="open-AddACardPopup btn disabled" data-toggle="modal" data-id="{{c.id}}" id="column{{c.id}}-addCardButton" style="float: left;">Add a card...</button><i class="icon-remove delcolumn"  style="float: right;" id="{{c.id}}"></i>
     </div>
     {% endfor %}
 
@@ -213,7 +234,7 @@ sse();
 	<div class="modal-footer">
 	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	  <!-- <input class="btn btn-primary" type="submit" value="Add Columns!"> -->
-	  {{form.submit(class="btn btn-primary", value="Add a Card!")}}
+	  {{form.submit(class="btn btn-primary", value="Add a Column!")}}
 	</div>
       </form>
       {% endblock %}
