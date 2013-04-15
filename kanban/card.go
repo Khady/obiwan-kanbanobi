@@ -229,7 +229,6 @@ func MsgCardGet(conn net.Conn, msg *message.Msg) {
 				Write:      card.Write,
 			},
 		}
-		notifyUsers(msg)
 	}
 	sendKanbanMsg(conn, answer)
 }
