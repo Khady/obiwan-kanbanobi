@@ -124,28 +124,36 @@ Cette erreur est renvoye sur une mauvaise authentification ou quand un message e
             }
         }
 
-
-.. - Identitifaction
-.. Client -> Premier message d'identification a la connexion
-.. Le author_id n'est pas connu au moment de l'identification, il importe donc peu
-.. Idem pour le session_id
-.. le login et le password sont en clair
-
-.. Serveur -> Deux reponses possibles selon la validite de l'ident
-.. En cas d'erreur:
-
-
-.. En cas de reussite:
-.. Msg {
-..     target = IDENT;
-..     command = CONNECT;
-..     author_id = id calcule par le serveur
-..     session_id = session_id calcule par le serveur
-.. }
-
-
 Cartes
 ------
+
+
+
+3. Erreur
+
+En cas d'erreur, le message est toujours identique, sauf le code d'erreur qui peut etre entre 5 et 8.
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+	5:erreur creation carte
+	6:erreur modification carte
+	7:erreur delete carte
+	8: erreur get carte
+
+Le message se presente sous la forme suivante :
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+	Msg {
+	    target = CARDS;
+	    command = ERROR;
+	    author_id = authorId du message demandant une action;
+	    session_id = sessionId du message demandant une action;
+	    Error: &message.Msg_Error{
+	    error_id = error_code; // Cette erreur provient de la l'enum decrit dans cette page
+	}
 
 Colonnes
 --------

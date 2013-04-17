@@ -129,6 +129,20 @@
 </div></blockquote>
 <ol class="arabic simple" start="2">
 <li>Reponse positive</li>
+</ol>
+<p>Dans le cas ou le password correspond a celui de l&#8217;utilisateur en base de donnee, l&#8217;authentification est acceptee. Le serveur renvoie alors un message avec les informations necessaires pour les autres communications.</p>
+<blockquote>
+<div><div class="highlight-protobuf"><pre> Msg {
+     target = IDENT;
+     command = SUCCESS;
+     AuthorId:  id de l'utilisateur
+     SessionId: chaine de session unique, sert pour verifier que l'utilisateur est bien authentifie par la suite.
+     Ident: &amp;message.Msg_Ident{
+     Login: pseudo;
+ }</pre>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
 <li>Erreur</li>
 </ol>
 <p>Cette erreur est renvoye sur une mauvaise authentification ou quand un message est envoye par une personne non authentifie.</p>
@@ -148,6 +162,30 @@
 </div>
 <div class="section" id="cartes">
 <h3>Cartes<a class="headerlink" href="#cartes" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple" start="3">
+<li>Erreur</li>
+</ol>
+<p>En cas d&#8217;erreur, le message est toujours identique, sauf le code d&#8217;erreur qui peut etre entre 5 et 8.</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre> <span class="mi">5</span><span class="o">:</span><span class="n">erreur</span> <span class="n">creation</span> <span class="n">carte</span>
+ <span class="mi">6</span><span class="o">:</span><span class="n">erreur</span> <span class="n">modification</span> <span class="n">carte</span>
+<span class="hll"> <span class="mi">7</span><span class="o">:</span><span class="n">erreur</span> <span class="n">delete</span> <span class="n">carte</span>
+</span> <span class="mi">8</span><span class="o">:</span> <span class="n">erreur</span> <span class="n">get</span> <span class="n">carte</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Le message se presente sous la forme suivante :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><pre> Msg {
+     target = CARDS;
+     command = ERROR;
+     author_id = authorId du message demandant une action;
+     session_id = sessionId du message demandant une action;
+     Error: &amp;message.Msg_Error{
+     error_id = error_code; // Cette erreur provient de la l'enum decrit dans cette page
+ }</pre>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="colonnes">
 <h3>Colonnes<a class="headerlink" href="#colonnes" title="Permalink to this headline">¶</a></h3>
