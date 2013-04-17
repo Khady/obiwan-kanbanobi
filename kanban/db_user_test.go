@@ -52,7 +52,6 @@ func Test_GetProjecByUserId(t *testing.T) {
 	if err != nil {
 		t.Error("could not get User project")
 	}
-	fmt.Println(tab[0].Name)
 	if len(tab) != 1 {
 		t.Error("mauvais nombre de projet pour l'utilisateur")
 	}
