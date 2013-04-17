@@ -108,7 +108,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(21), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -168,7 +168,7 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(22), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -211,7 +211,7 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(23), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -253,7 +253,7 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(1), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(24), // remplacer par le vrai code d'erreur ici
 			},
 		}
 	} else {
@@ -312,7 +312,7 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(36),
+				ErrorId: proto.Uint32(26),
 			},
 		}
 	} else {
