@@ -95,20 +95,17 @@ Le message Ident doit contenir le login et le password de l'utilisateur. Le pass
 
 Dans le cas ou le password correspond a celui de l'utilisateur en base de donnee, l'authentification est acceptee. Le serveur renvoie alors un message avec les informations necessaires pour les autres communications.
 
-
-
     .. code-block:: protobuf
        :emphasize-lines: 3,5
 
-       Msg {
-           target = ERROR;
-           command = CONNECT;
-           author_id = -1
-           session_id = "";
-           Message Error {
-               error_id = error_connexion_id; // Cette erreur provient de la l'enum decrit dans cette page
-            }
-        }
+	Msg {
+	    target = IDENT;
+	    command = SUCCESS;
+	    AuthorId:  id de l'utilisateur
+	    SessionId: chaine de session unique, sert pour verifier que l'utilisateur est bien authentifie par la suite.
+	    Ident: &message.Msg_Ident{
+	    Login: pseudo;
+	}
 
 3. Erreur
 
