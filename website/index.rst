@@ -23,6 +23,8 @@ La communication entre le client et le serveur se fait avec des Protobuf_ en tcp
 
 Les sources sont disponibles sur Bitbucket_ et un miroir sur Github_. Le depot contient les sources du serveur, du client et du site.
 
+Des tests sont effectues a chaque commit et sont disponibles sur Travis_.
+
 Contents:
 
 .. toctree::
@@ -37,3 +39,4 @@ Contents:
 .. _EPITECH: http://epitech.eu
 .. _Bitbucket: https://bitbucket.org/ongisnotaguild/obi-wan-kanbanobi
 .. _Github: https://github.com/Khady/obiwan-kanbanobi
+.. _Travis: https://travis-ci.org/Khady/obiwan-kanbanobi
