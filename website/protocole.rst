@@ -40,16 +40,18 @@ Tous les messages entre le serveur et les clients sont de type Msg et doivent co
        }
        
        enum CMD {
-          CREATE	= 1;
-          MODIFY	= 2;
-          DELETE	= 3;
-          GET		= 4;
-          MOVE		= 5;
-          CONNECT	= 6;
-          DISCONNECT	= 7;
-          ERROR		= 8;
-          SUCCES	= 9;
-          NONE		= 10;
+         CREATE		= 1;
+         MODIFY		= 2;
+         DELETE		= 3;
+         GET		= 4;
+         MOVE		= 5;
+         CONNECT	= 6;
+         DISCONNECT	= 7;
+         ERROR		= 8;
+         SUCCES		= 9;
+         NONE		= 10;
+         PASSWORD	= 11;
+         GETBOARD	= 12;
        };
        
        message Msg {

@@ -9,7 +9,7 @@ Welcome to Obi-wan Kanbanobi's documentation!
 Obi-wan Kanbanobi est un projet de serveur et client libre pour faire du Kanban_ réalisé dans le cadre du projet libre de troisième année à EPITECH_ par :
 
 * Louis Roché
-* Alexandre baron
+* Alexandre Baron
 * Arnaud Baussart
 * Maxime Constantinian
 * Timothée Maurin
@@ -20,6 +20,8 @@ Le serveur est réalisé en Go_ et le client en python. Notre serveur et notre p
 Le stockage des données côté serveur se fait sur une base de données Postgresql_.
 
 La communication entre le client et le serveur se fait avec des Protobuf_ en tcp. le :ref:`protocole` est documenté sur ce site.
+
+Les sources sont disponibles sur Bitbucket_ et un miroir sur Github_. Le depot contient les sources du serveur, du client et du site.
 
 Contents:
 
@@ -33,3 +35,5 @@ Contents:
 .. _Postgresql: http://www.postgresql.org/
 .. _Protobuf: http://code.google.com/p/protobuf/
 .. _EPITECH: http://epitech.eu
+.. _Bitbucket: https://bitbucket.org/ongisnotaguild/obi-wan-kanbanobi
+.. _Github: https://github.com/Khady/obiwan-kanbanobi
