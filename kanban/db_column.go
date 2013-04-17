@@ -41,7 +41,7 @@ func (c *Column) Update(p *ConnectionPoolWrapper) error {
 	tags := strings.Join(c.Tags, " ")
 	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), " ")
 	write := strings.Join(SString_of_SUInt32(c.Write), " ")
-	_, err := db.Exec(`update columns set name = $1, project_id = $2, content = $3, tags = $4, scripts_id = $5, write = $6 ehere id = $7;`,
+	_, err := db.Exec(`update columns set name = $1, project_id = $2, content = $3, tags = $4, scripts_id = $5, write = $6 where id = $7;`,
 		c.Name, c.Project_id, c.Content, tags, sid, write, c.Id)
 	return err
 }
