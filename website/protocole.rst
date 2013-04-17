@@ -93,7 +93,22 @@ Le message Ident doit contenir le login et le password de l'utilisateur. Le pass
 
 2. Reponse positive
 
+Dans le cas ou le password correspond a celui de l'utilisateur en base de donnee, l'authentification est acceptee. Le serveur renvoie alors un message avec les informations necessaires pour les autres communications.
 
+
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = ERROR;
+           command = CONNECT;
+           author_id = -1
+           session_id = "";
+           Message Error {
+               error_id = error_connexion_id; // Cette erreur provient de la l'enum decrit dans cette page
+            }
+        }
 
 3. Erreur
 
