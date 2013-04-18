@@ -40,3 +40,19 @@ func notifyUsers(msg *message.Msg) error {
 	}
 	return err
 }
+
+func sendMsgToallUser(listOfUsers []uint32, msg *message.Msg) {
+	for _, value := range listOfUsers {
+                conn, ok := CONNECTION_LIST.ids[value]
+                        if ok {
+                        sendKanbanMsg(conn.c, msg)
+                }
+        }
+}
+
+func getListOfUser(projectId uint32) []uint32 {
+	listOfUsers, _ := getUInt32SliceCell(dbPool, "projects", "read", projectId)
+	listOfAdmins, _ := getUInt32SliceCell(dbPool, "projects", "admins_id", projectId)
+	listOfUsers = append(listOfUsers, listOfAdmins...)
+	return listOfUsers
+}

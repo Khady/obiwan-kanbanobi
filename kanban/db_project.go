@@ -2,7 +2,6 @@ package main
 
 import (
 	"strings"
-	"fmt"
 )
 
 //setter les admins multiples
@@ -45,7 +44,6 @@ func (u *Project) Update(p *ConnectionPoolWrapper) error {
 	_, err := db.Exec("update projects set name = $1, admins_id = $2, read = $3, content = $4 where id = $5",
 		u.Name, ","+strings.Join(SString_of_SUInt32(u.admins_id), ",")+",",
 		","+strings.Join(SString_of_SUInt32(u.Read), ",")+",", u.Content, u.Id)
-	fmt.Println(err)
 	return err
 }
 

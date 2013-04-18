@@ -101,6 +101,7 @@ func MsgProjectDelete(conn net.Conn, msg *message.Msg) {
 		Id: *msg.Projects.Id,
 	}
 	var answer *message.Msg
+	temp := getListOfUser(proj.Id)
 	if err := proj.Del(dbPool); err != nil {
 		answer = &message.Msg{
 			Target:    message.TARGET_PROJECTS.Enum(),
@@ -118,7 +119,7 @@ func MsgProjectDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 		}
-		notifyUsers(msg)
+		sendMsgToallUser(temp, msg)
 	}
 	data, err := proto.Marshal(answer)
 	if err != nil {
