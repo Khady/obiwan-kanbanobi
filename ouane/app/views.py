@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm, UpdateProjectForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm, UpdateProjectForm, AddUserToProjectForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards, Users
 
@@ -86,6 +86,7 @@ def index():
         elif t.count("0") == len(t):
             data.append(p)
     form = AddProjectForm(prefix='form')
+    formAdd = AddUserToProjectForm(prefix='formAdd')
     if form.validate_on_submit() and form.submit.data:
         print "dasdasd"
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
@@ -161,6 +162,5 @@ def delProject():
         for card in ca:
             a.delCard(session['author_id'], session['session_id'], card.id, card.column_id, card.project_id)
         a.delColumn(session['author_id'], session['session_id'], d.id, d.project_id)
-    print "tata"
     a.delProject(session['author_id'], session['session_id'], int(request.form['idProject']))
     return "OK"

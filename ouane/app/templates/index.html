@@ -71,7 +71,7 @@ var posting = $.post("{{url_for("delProject")}}", { idProject: $(this).attr('id'
 			}
 		}
 		else if (mydata.type == 'delproject') {
-	(".accordion").find("#"+mydata.id).remove();
+	$(".accordion-group[id='"+mydata.id+"']").remove();
 }
 
 	};
