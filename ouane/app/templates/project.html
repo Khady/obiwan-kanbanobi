@@ -77,11 +77,19 @@ $('#addACardPop').modal('show');
 	delColumn($(this).attr('id'));
 });
 
+	var modCol = $("<i class=\"icon-edit updatecolumn\"  style=\"float: right;\" id=\""+mydata.id+"\"></i>").button().click(function() {
+		$("#updateColumn #formUpdate-name").val($("#showDetailColumn[data-id='"+$(this).attr('id')+"']").val());
+	$("#updateColumn #formUpdate-description").val($("#showDetailColumn[data-id='"+$(this).attr('id')+"']").data("content"));
+	$("#updateColumn #formUpdate-idColumn").val($(this).attr('id'));
+	$("#updateColumn").modal('show');
+});
+
 	colContainer.append(columnTitle);
 	cardsList.appendTo(cardsSpace);
 	cardsSpace.appendTo(colContainer);
 	colContainer.append(addCard);
 	colContainer.append(delCol);
+	colContainer.append(modCol);
 	colContainer.appendTo("#columnsRow");
 }
 
@@ -196,6 +204,7 @@ sse();
       <div class="cardsSpace" id="column{{c.id}}-cardsSpace">
         <ul class="cardsList" id="column{{c.id}}-cardsList">
 	  {% for ca in card[c.id] %}
+
           <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}} <i class="icon-remove delcard"  style="float: right;" id="{{ca.id}}"></i></li>
           {% endfor %}
         </ul>
