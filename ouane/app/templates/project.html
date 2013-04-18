@@ -114,7 +114,8 @@ function addCardToColumn(idColumns, idCard, name) {
 
 	var buttonInfo = $("<i class=\"icon-file infocard\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
 	$("#modalColInfoLabel").text($(".postit[data-id='"+$(this).attr('id')+"']").text());
-	$("#modalColInfo .modal-body p").text($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
+	$("#modalColInfo .modal-body #description").text($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
+	$("#modalColInfo .modal-body #").text($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
 	$('#modalColInfo').modal('show');
 });
 	$(newCard).append(buttonRemove);
@@ -127,7 +128,7 @@ function refreshColumnsListHeight() {
     var bodyheight = $(window).height();
     var navbarheight = $("#navbar").height();
     var headerheight = $("#columnsHeader").height();
-    var newcolumnsheight = bodyheight - navbarheight - headerheight - 42; <!-- // 32 is an empirical constant amount of pixels probably due to some margins somewhere -->
+    var newcolumnsheight = bodyheight - navbarheight - headerheight - 42; <!-- // 42 is an empirical constant amount of pixels probably due to some margins somewhere -->
 
     $('#columnsList').height(newcolumnsheight);
 }
@@ -346,8 +347,14 @@ sse();
       </div>
       <div class="modal-body">
 	<label>Description:</label>
-	<p></p>
+	<p id="description"></p>
       </div>
+      <div class="modal-body"><label>Commentaires:</label></div>
+      <div class="modal-body" id="comments">
+	<h3>coucou</h3>
+	<h3>coucou</h3>
+      </div>
+      <input type="text" id = "addComment" class="input-block-level" placeholder="Ajouter un commentaire...">
       <div class="modal-footer">
 	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
       </div>

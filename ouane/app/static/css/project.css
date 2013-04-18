@@ -109,6 +109,11 @@
     padding-top: 14px;
 }
 
+#comments
+{
+    background-color: red;
+}
+
 .module
 
 /*.ui-state-highlight { width: 195px; height: 30px; line-height: 1.2em; }*/
@@ -137,4 +142,15 @@ div.newProject textarea
 
 form {
   margin-bottom: 0px;
+}
+
+#modalColInfo {
+    max-height: 90%;
+    overflow-y: scroll;
+}
+
+#addComment {
+    margin: 5px;
+    min-height: 50px;
+    max-width: 95%;
 }
