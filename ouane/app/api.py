@@ -421,10 +421,10 @@ class Api(threading.Thread):
                         dictcolumn['type'] = 'delproject'
                         red.publish('ouane', json.dumps(dictcolumn))
                     else:
+                        project = msg.projects
                         if project.id == 0:
                             continue
                         self.addNewProjectInDB(msg.projects)
-                        project = msg.projects
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}
                         dictproject['type'] = 'project'
                         red.publish('ouane', json.dumps(dictproject))
