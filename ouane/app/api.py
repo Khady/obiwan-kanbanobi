@@ -231,6 +231,17 @@ class Api(threading.Thread):
         msg.columns.project_id = idProject
         self.network.setWriteStack(msg.SerializeToString())
 
+    def delProject(self, author_id, session_id, idProject):
+        msg = Msg()
+        msg.target = message_pb2.PROJECTS
+        msg.command = message_pb2.DELETE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.projects.id = idProject
+        msg.projects.name = ""
+        msg.projects.content = ""
+        self.network.setWriteStack(msg.SerializeToString())
+
     def sendLogin(self, login, password):
         msg = Msg()
         msg.author_id = 0
@@ -398,6 +409,17 @@ class Api(threading.Thread):
                     if msg.command == message_pb2.ERROR:
                         print 'ERROR PROJECT',
                         print msg.error.error_id
+                    elif msg.command == message_pb2.DELETE:
+                        project = msg.projects
+                        c = Projects.query.get(project.id)
+                        print c
+                        if c is None:
+                            continue
+                        db.session.delete(c)
+                        db.session.commit()
+                        dictcolumn = {'id' : projects.id}
+                        dictcolumn['type'] = 'delproject'
+                        red.publish('ouane', json.dumps(dictcolumn))
                     else:
                         if project.id == 0:
                             continue

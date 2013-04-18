@@ -45,6 +45,10 @@ function sse() {
 				$(".accordion").find("#"+mydata.id).find(".accordion-inner").find("p").text(mydata.content);
 			}
 		}
+		else if (mydata.type == 'delproject') {
+	(".accordion").find("#"+mydata.id).remove();
+}
+
 	};
 }
 sse();
@@ -56,6 +60,11 @@ $(".updateproject").button().click(function() {
 	$("#updateProject #formUpdate-idProject").val($(this).attr('id'));
 	$("#updateProject").modal('show');
 })
+
+$(".delproject").button().click(function() {
+var posting = $.post("{{url_for("delProject")}}", { idProject: $(this).attr('id') } );
+})
+
 })
 
 </script>
@@ -94,7 +103,7 @@ $(".updateproject").button().click(function() {
 	</div>
 	<div class="modal-footer">
 	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-	  <input class="btn btn-primary" type="submit" value="Add Project!">
+	  {{form.submit(class="btn btn-primary", value="Add Project!")}}
 	</div>
       </form>
     </div>
