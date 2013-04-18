@@ -162,8 +162,98 @@
 </div>
 <div class="section" id="cartes">
 <h3>Cartes<a class="headerlink" href="#cartes" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li>Creation</li>
+</ol>
+<p>Pour la creation d&#8217;une carte, le message doit etre le suivant :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><pre>Msg {
+    target = CARDS;
+    command = CREATE;
+    author_id = id
+    session_id = chaine de session unique
+    message Cards {
+      id = id sans importance a la creation;
+      project_id = id du projet;
+      column_id = id de la colonne;
+      name = nom de la carte;
+      desc = contenu de la carte;
+      tags = les tags de la carte;
+      user_id = id du createur;
+      scripts_ids = id non utilise pour le moment; // IDs of the scripts attached to the card
+      write = liste d'id d'utilisateurs qui ont les droits sur la carte;
+    }
+}</pre>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Update</li>
+</ol>
+<p>Les informations demandees pour un update sont les memes que celles pour la creation. Seule la partie de presentation du message change :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">CARDS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">UPDATE</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">carte</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
 <ol class="arabic simple" start="3">
-<li>Erreur</li>
+<li>Delete</li>
+</ol>
+<p>Pour le delete, les seules informations necessaires sont l&#8217;id et le project id :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">CARDS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">DELETE</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">carte</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Get</li>
+</ol>
+<p>Pour le get, les seules informations necessaires sont l&#8217;id et le project id :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">CARDS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">GET</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">carte</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="6">
+<li><p class="first">Success</p>
+<blockquote>
+<div><div class="highlight-protobuf"><pre> Msg{
+         Target:    message.TARGET_CARDS.Enum(),
+         Command:   message.CMD_SUCCES.Enum(),
+         AuthorId:  proto.Uint32(*msg.AuthorId),
+         SessionId: proto.String(*msg.SessionId),
+ }</pre>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Erreur</p>
+</li>
 </ol>
 <p>En cas d&#8217;erreur, le message est toujours identique, sauf le code d&#8217;erreur qui peut etre entre 5 et 8.</p>
 <blockquote>
@@ -192,118 +282,163 @@
 </div>
 <div class="section" id="erreurs">
 <h3>Erreurs<a class="headerlink" href="#erreurs" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div>1:Utilisateur non connecte
+2:Pas les droits
+3:Commande invalide
+5:erreur creation carte
+6:erreur modification carte
+7:erreur delete carte
+8: erreur get carte
+11 - 20 -&gt; user :
+- 11: erreur creation utilisateur
+- 12: erreur modification utilisateur
+- 13: erreur modification du mot de passe utilisateur
+- 14: erreur suppression utilisateur
+- 15: erreur get utilisateur
+- 16: erreur get user board
+- 17: erreur set admin
+- 18: erreur unset admin
+21-30 -&gt; colonnes
+31 - 40 -&gt; projet
+- 31 unspecified project error
+- 32 db_error.
+- 33 migrating (changement d&#8217;admin)
+41 -50 -&gt; metadata
+- 41 unspecified metadata error
+- 42 erreur 42, serviette non trouvée
+- 43 metadataID inconnu
+- 44
+51-60 -&gt; ident {
+51 -&gt; Login error
+52 -&gt; disconnect error
+}</div></blockquote>
 </div>
 </div>
 <div class="section" id="message-proto">
 <h2>message.proto<a class="headerlink" href="#message-proto" title="Permalink to this headline">¶</a></h2>
 <blockquote>
-<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="kn">package</span> <span class="nn">message</span><span class="p">;</span>
+<div><div class="highlight-protobuf"><div class="highlight"><pre> <span class="kn">package</span> <span class="nn">message</span><span class="p">;</span>
 
-<span class="hll"><span class="kd">enum</span> <span class="n">TARGET</span> <span class="p">{</span>
-</span>  <span class="na">USERS</span>          <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-<span class="hll">  <span class="na">COLUMNS</span>        <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-</span>  <span class="na">PROJECTS</span>       <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="na">CARDS</span>          <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-  <span class="na">ADMIN</span>          <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-  <span class="na">IDENT</span>          <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-  <span class="na">NOTIF</span>          <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-  <span class="na">METADATA</span>      <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
-<span class="p">};</span>
+<span class="hll"> <span class="kd">enum</span> <span class="n">TARGET</span> <span class="p">{</span>
+</span>   <span class="na">USERS</span>         <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="hll">   <span class="na">COLUMNS</span>       <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span>   <span class="na">PROJECTS</span>      <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+   <span class="na">CARDS</span>         <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+   <span class="na">ADMIN</span>         <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="na">IDENT</span>         <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+   <span class="na">NOTIF</span>         <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+   <span class="na">METADATA</span>      <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+ <span class="p">};</span>
 
-<span class="kd">enum</span> <span class="n">CMD</span> <span class="p">{</span>
-  <span class="na">CREATE</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="na">MODIFY</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="na">DELETE</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-  <span class="na">GET</span>            <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-  <span class="na">MOVE</span>           <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-  <span class="na">CONNECT</span>       <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-  <span class="na">DISCONNECT</span>    <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-  <span class="na">ERROR</span>          <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="na">SUCCES</span>        <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
-  <span class="na">NONE</span>          <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-<span class="p">};</span>
+ <span class="kd">enum</span> <span class="n">CMD</span> <span class="p">{</span>
+   <span class="na">CREATE</span>        <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="na">MODIFY</span>        <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="na">DELETE</span>        <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+   <span class="na">GET</span>           <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+   <span class="na">MOVE</span>          <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="na">CONNECT</span>       <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+   <span class="na">DISCONNECT</span>    <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+   <span class="na">ERROR</span>         <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+   <span class="na">SUCCES</span>        <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+   <span class="na">NONE</span>          <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+   <span class="na">PASSWORD</span>      <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+   <span class="na">GETBOARD</span>      <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+ <span class="p">};</span>
 
-<span class="kd">message</span> <span class="nc">Msg</span> <span class="p">{</span>
-  <span class="k">required</span> <span class="n">TARGET</span>        <span class="na">target</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="k">required</span> <span class="n">CMD</span>           <span class="na">command</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="k">required</span> <span class="kt">uint32</span>        <span class="na">author_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// contains author id (who is speaking) in reception and addressee msg in sending</span>
-  <span class="k">required</span> <span class="kt">string</span>        <span class="na">session_id</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+ <span class="kd">message</span> <span class="nc">Msg</span> <span class="p">{</span>
+   <span class="k">required</span> <span class="n">TARGET</span>       <span class="na">target</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="k">required</span> <span class="n">CMD</span>          <span class="na">command</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="k">required</span> <span class="kt">uint32</span>       <span class="na">author_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// contains author id (who is speaking) in reception and addressee msg in sending</span>
+   <span class="k">required</span> <span class="kt">string</span>       <span class="na">session_id</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
 
-  <span class="kd">message</span> <span class="nc">Users</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">password</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">bool</span>        <span class="na">admin</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// is SUPERadmin or not</span>
-    <span class="k">optional</span> <span class="kt">string</span>      <span class="na">mail</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Password</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">oldpassword</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">newpassword</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+   <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
+     <span class="c1">// Comments struct</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">project_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">column_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">name</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+     <span class="c1">// repeated Comment comments = 5; // repeated = dynamically sized array of Comments</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">desc</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+     <span class="k">repeated</span> <span class="kt">string</span>     <span class="na">tags</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+     <span class="k">optional</span> <span class="kt">uint32</span>     <span class="na">user_id</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span> <span class="c1">// ID of the card author</span>
+     <span class="k">repeated</span> <span class="kt">uint32</span>     <span class="na">scripts_ids</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span> <span class="c1">// IDs of the scripts attached to the card</span>
+     <span class="k">repeated</span> <span class="kt">uint32</span>     <span class="na">write</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// // list of the user IDs with write permission on the card (if empty: free for all)</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Columns</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">project_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">name</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="k">optional</span> <span class="kt">string</span>      <span class="na">desc</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-    <span class="k">repeated</span> <span class="kt">string</span>      <span class="na">tags</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-    <span class="k">repeated</span> <span class="kt">uint32</span>      <span class="na">scripts_ids</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span> <span class="c1">// IDs of the scripts attached to the column</span>
-    <span class="k">repeated</span> <span class="kt">uint32</span>      <span class="na">write</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span> <span class="c1">// list of the user IDs with write permission on the column (if empty: free for all)</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Columns</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">project_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">name</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">desc</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+     <span class="k">repeated</span> <span class="kt">string</span>     <span class="na">tags</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+     <span class="k">repeated</span> <span class="kt">uint32</span>     <span class="na">scripts_ids</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span> <span class="c1">// IDs of the scripts attached to the column</span>
+     <span class="k">repeated</span> <span class="kt">uint32</span>     <span class="na">write</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span> <span class="c1">// list of the user IDs with write permission on the column (if empty: free for all)</span>
+     <span class="k">repeated</span> <span class="n">Cards</span>      <span class="na">ColumnCards</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Projects</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">repeated</span> <span class="kt">uint32</span>      <span class="na">admins_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span> <span class="c1">// list of the administrator users of the projects</span>
-    <span class="k">repeated</span> <span class="kt">uint32</span>      <span class="na">read</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>  <span class="c1">// list of the user IDs with read permission on the project (if empty: free for all)</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Projects</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">content</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="k">repeated</span> <span class="kt">uint32</span>     <span class="na">admins_id</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// list of the administrator users of the projects</span>
+     <span class="k">repeated</span> <span class="kt">uint32</span>     <span class="na">read</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>  <span class="c1">// list of the user IDs with read permission on the project (if empty: free for all)</span>
+     <span class="k">repeated</span> <span class="n">Columns</span>    <span class="na">projectColumns</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
-    <span class="c1">// Comments struct</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">project_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">column_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">name</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-    <span class="c1">// repeated Comment  comments = 5; // repeated = dynamically sized array of Comments</span>
-    <span class="k">optional</span> <span class="kt">string</span>      <span class="na">desc</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-    <span class="k">repeated</span> <span class="kt">string</span>      <span class="na">tags</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-    <span class="k">optional</span> <span class="kt">uint32</span>      <span class="na">user_id</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span> <span class="c1">// ID of the card author</span>
-    <span class="k">repeated</span> <span class="kt">uint32</span>      <span class="na">scripts_ids</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span> <span class="c1">// IDs of the scripts attached to the card</span>
-    <span class="k">repeated</span> <span class="kt">uint32</span>      <span class="na">write</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span> <span class="c1">// // list of the user IDs with write permission on the card (if empty: free for all)</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Comment</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">content</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">author_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">timestamp</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">card_id</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Comment</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">content</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">author_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">timestamp</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">card_id</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Metadata</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">object_type</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">object_id</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">data_key</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">data_value</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Metadata</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">object_type</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">object_id</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-    <span class="k">optional</span> <span class="kt">string</span>     <span class="na">data_key</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-    <span class="k">optional</span> <span class="kt">uint32</span>     <span class="na">data_value</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Users</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">name</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">password</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+     <span class="k">required</span> <span class="kt">bool</span>       <span class="na">admin</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span> <span class="c1">// is SUPERadmin or not</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">mail</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+     <span class="k">repeated</span> <span class="n">Projects</span>   <span class="na">userProject</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>  <span class="c1">// permit to send the user the list of the project he can read</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Ident</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">string</span>      <span class="na">login</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">optional</span> <span class="kt">string</span>      <span class="na">password</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Ident</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">string</span>     <span class="na">login</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">password</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Error</span> <span class="p">{</span>
-    <span class="k">required</span> <span class="kt">uint32</span>      <span class="na">error_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Error</span> <span class="p">{</span>
+     <span class="k">required</span> <span class="kt">uint32</span>     <span class="na">error_id</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="kd">message</span> <span class="nc">Notif</span> <span class="p">{</span>
-    <span class="k">optional</span> <span class="kt">string</span>      <span class="na">msg</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-  <span class="p">}</span>
+   <span class="kd">message</span> <span class="nc">Notif</span> <span class="p">{</span>
+     <span class="k">optional</span> <span class="kt">string</span>     <span class="na">msg</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+   <span class="p">}</span>
 
-  <span class="k">optional</span> <span class="n">Users</span> <span class="na">users</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
-  <span class="k">optional</span> <span class="n">Columns</span>       <span class="na">columns</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
-  <span class="k">optional</span> <span class="n">Projects</span>      <span class="na">projects</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
-  <span class="k">optional</span> <span class="n">Cards</span> <span class="na">cards</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
-  <span class="k">optional</span> <span class="n">Ident</span> <span class="na">ident</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
-  <span class="k">optional</span> <span class="n">Error</span> <span class="na">error</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-  <span class="k">optional</span> <span class="n">Notif</span> <span class="na">notif</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
-<span class="p">}</span>
+   <span class="k">optional</span> <span class="n">Users</span>        <span class="na">users</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Columns</span>      <span class="na">columns</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Projects</span>     <span class="na">projects</span> <span class="o">=</span> <span class="mi">7</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Cards</span>        <span class="na">cards</span> <span class="o">=</span> <span class="mi">8</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Ident</span>        <span class="na">ident</span> <span class="o">=</span> <span class="mi">9</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Error</span>        <span class="na">error</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Notif</span>        <span class="na">notif</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Password</span>     <span class="na">password</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+   <span class="k">optional</span> <span class="n">Metadata</span>     <span class="na">metadata</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+ <span class="p">}</span>
 </pre></div>
 </div>
 </div></blockquote>
