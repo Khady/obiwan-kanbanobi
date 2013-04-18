@@ -8,7 +8,8 @@ class LoginForm(Form):
 class AddProjectForm(Form):
     name = TextField('Name', validators = [Required()])
     description = TextAreaField('Description', validators = [Required()])
-    
+    submit = SubmitField('Submit',  validators = [Required()])
+
 class AddUserForm(Form):
     login = TextField('Login', [validators.Length(min=4, max=25)])
     email = TextField('Email Address', [validators.Required()])
@@ -34,7 +35,13 @@ class UpdateCardForm(Form):
     name = TextField('Name', [validators.Length(min=1)])
     description = TextAreaField('Description', [validators.Length(min=1)])
     submit = SubmitField('Submit',  validators = [Required()])
-    idCard = HiddenField('IdColumn', validators = [Required()])
+    idCard = HiddenField('IdCard', validators = [Required()])
+
+class UpdateProjectForm(Form):
+    name = TextField('Name', [validators.Length(min=1)])
+    description = TextAreaField('Description', [validators.Length(min=1)])
+    submit = SubmitField('Submit',  validators = [Required()])
+    idProject = HiddenField('IdProject', validators = [Required()])
 
 class UpdateUserForm(Form):
     oldPassword = PasswordField('Old Password')

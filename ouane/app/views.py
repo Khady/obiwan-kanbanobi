@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm, UpdateProjectForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards, Users
 
@@ -74,6 +74,7 @@ def project(id = 0):
 @app.route("/index", methods = ['GET', 'POST'])
 @login_required
 def index():
+    formUpdate = UpdateProjectForm(prefix="formUpdate")
     d = Projects.query.order_by(Projects.id).all()
     data = []
     for p in d:
@@ -84,10 +85,16 @@ def index():
             data.append(p)
         elif t.count("0") == len(t):
             data.append(p)
-    form = AddProjectForm()
-    if form.validate_on_submit():
+    form = AddProjectForm(prefix='form')
+    if form.validate_on_submit() and form.submit.data:
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
-    return render_template('index.html', data = data, form = form)
+    if formUpdate.validate_on_submit() and formUpdate.submit.data:
+        p = Projects.query.filter_by(id = int(formUpdate.idProject.data)).all()
+        p = p[0]
+        print p.read
+        read = filter (lambda a: a != 0, [int(s) for s in p.read.split(" ")])
+        a.updateProject(session['author_id'], session['session_id'], int(formUpdate.idProject.data), formUpdate.name.data, formUpdate.description.data, read)
+    return render_template('index.html', data = data, form = form, formUpdate = formUpdate)
 
 @app.route("/admin", methods = ['GET', 'POST'])
 @login_required

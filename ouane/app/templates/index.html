@@ -48,6 +48,16 @@ function sse() {
 	};
 }
 sse();
+
+$(function() {
+$(".updateproject").button().click(function() {
+	$("#updateProject #formUpdate-name").val($(".accordion").find("#"+$(this).attr('id')).find(".accordion-heading").find("a").text());
+	$("#updateProject #formUpdate-description").val($(".accordion").find("#"+$(this).attr('id')).find(".accordion-inner").find("p").text());
+	$("#updateProject #formUpdate-idProject").val($(this).attr('id'));
+	$("#updateProject").modal('show');
+})
+})
+
 </script>
   <h1>Project List</h1>
   <button href="#myModal" role="button" class="btn" data-toggle="modal">Add a project</button>
@@ -56,7 +66,7 @@ sse();
 {% for message in data %}
 <div class="accordion-group" id="{{message.id}}">
   <div class="accordion-heading">
-    <h4><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{message.id}}-under">{{message.name}}</a></h4>
+    <h4><a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#{{message.id}}-under">{{message.name}}</a><i class="icon-remove delproject"  style="float: right;" id="{{message.id}}"></i> <i class="icon-edit updateproject"  style="float: right;" id="{{message.id}}"> </i></h4>
   </div>
   <div id="{{message.id}}-under" class="accordion-body collapse">
     <div class="accordion-inner">
@@ -88,6 +98,30 @@ sse();
 	</div>
       </form>
     </div>
+
+    <div  id="updateProject" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="updateProjectLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="updateProjectLabel">Update Project</h3>
+	</div>
+	<div class="modal-body">
+	  {{formUpdate.hidden_tag()}}
+	<p>
+	  Name:<br>
+	  {{formUpdate.name(class="input-block-level")}}<br>
+	  Description:<br>
+	  {{formUpdate.description(class="input-block-level")}}<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <!-- <input class="btn btn-primary" type="submit" value="Add Projects!"> -->
+	  {{formUpdate.submit(class="btn btn-primary", value="Update a Project!")}}
+	</div>
+      </form>
+    </div>
+
 {%  endblock %}
 
 

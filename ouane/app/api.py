@@ -169,6 +169,21 @@ class Api(threading.Thread):
             msg.projects.read.add(elem)
         self.network.setWriteStack(msg.SerializeToString())
 
+    def updateProject(self, author_id, session_id, project_id, name = "", content = "", read = []):
+        msg = Msg()
+        msg.target = message_pb2.PROJECTS
+        msg.command = message_pb2.MODIFY
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.projects.admins_id.append(author_id)
+        msg.projects.name = name
+        msg.projects.content = content
+        msg.projects.id = project_id
+        print read
+        for elem in read:
+            i = msg.projects.read.append(elem)
+        self.network.setWriteStack(msg.SerializeToString())
+
     def createUser(self, author_id, session_id, login, email, password, admin = False):
         msg = Msg()
         msg.target = message_pb2.USERS
