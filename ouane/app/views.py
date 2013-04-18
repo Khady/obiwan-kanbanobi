@@ -87,6 +87,7 @@ def index():
             data.append(p)
     form = AddProjectForm(prefix='form')
     if form.validate_on_submit() and form.submit.data:
+        print "dasdasd"
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
     if formUpdate.validate_on_submit() and formUpdate.submit.data:
         p = Projects.query.filter_by(id = int(formUpdate.idProject.data)).all()
@@ -149,4 +150,19 @@ def delColumn():
     for card in ca:
         a.delCard(session['author_id'], session['session_id'], card.id, card.column_id, card.project_id)
     a.delColumn(session['author_id'], session['session_id'], int(request.form['idColumn']), c.project_id)
+    return "OK"
+
+@app.route("/delProject", methods = ['POST'])
+@login_required
+def delProject():
+    print "TOTO"
+    c = Columns.query.filter_by(id = int(request.form['idProject'])).all()
+    if not c:
+        return "OK"
+    for d in c:
+        ca = Cards.query.filter_by(column_id = d.id).all()
+        for card in ca:
+            a.delCard(session['author_id'], session['session_id'], card.id, card.column_id, card.project_id)
+        a.delColumn(session['author_id'], session['session_id'], d.id, d.project_id)
+    a.delProject(session['author_id'], session['session_id'], int(request.form['idProject']))
     return "OK"
