@@ -111,8 +111,15 @@ function addCardToColumn(idColumns, idCard, name) {
 	$("#updateCard #formUpdateCard-idCard").val($(this).attr('id'));
 	$("#updateCard").modal('show');
 });
+
+	var buttonInfo = $("<i class=\"icon-file infocard\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
+	$("#modalColInfoLabel").text($(".postit[data-id='"+$(this).attr('id')+"']").text());
+	$("#modalColInfo .modal-body p").text($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
+	$('#modalColInfo').modal('show');
+});
 	$(newCard).append(buttonRemove);
-	$(newCard).append(buttonUpdate)
+	$(newCard).append(buttonUpdate);
+	$(newCard).append(buttonInfo);
 	$(columnsCardsListID).append(newCard);
 }
 
@@ -187,6 +194,12 @@ $(".delcolumn").button().click(function() {
 	delColumn($(this).attr('id'));
 })
 
+$(".infocard").button().click(function() {
+	$("#modalColInfoLabel").text($(".postit[data-id='"+$(this).attr('id')+"']").text());
+	$("#modalColInfo .modal-body p").text($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
+	$('#modalColInfo').modal('show');
+})
+
 $(".updatecolumn").button().click(function() {
 	$("#updateColumn #formUpdate-name").val($("#showDetailColumn[data-id='"+$(this).attr('id')+"']").val());
 	$("#updateColumn #formUpdate-description").val($("#showDetailColumn[data-id='"+$(this).attr('id')+"']").data("content"));
@@ -220,7 +233,7 @@ sse();
         <ul class="cardsList" id="column{{c.id}}-cardsList">
 	  {% for ca in card[c.id] %}
 
-          <li class="navbar-inner postit" id="postit{{ca.id}}" data-id="{{ca.id}}" data-content="{{ca.content}}">{{ca.name}}<i class="icon-remove delcard"  style="float: right;" id="{{ca.id}}"></i> <i class="icon-edit updatecard"  style="float: right;" id="{{ca.id}}"></i></li>
+          <li class="navbar-inner postit" id="postit{{ca.id}}" data-id="{{ca.id}}" data-content="{{ca.content}}">{{ca.name}}<i class="icon-remove delcard"  style="float: right;" id="{{ca.id}}"></i> <i class="icon-edit updatecard"  style="float: right;" id="{{ca.id}}"> </i><i class="icon-file infocard"  style="float: right;" id="{{ca.id}}"></i></li>
           {% endfor %}
         </ul>
       </div>
