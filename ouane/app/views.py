@@ -124,9 +124,10 @@ def modifCard():
 @login_required
 def delCard():
     c = Cards.query.filter_by(id = int(request.form['idCard'])).all()
+    if not c:
+        return "OK"
     c = c[0]
-    if c != None:
-        a.delCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.column_id, c.project_id)
+    a.delCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.column_id, c.project_id)
     return "OK"
 
 
@@ -134,9 +135,9 @@ def delCard():
 @login_required
 def delColumn():
     c = Columns.query.filter_by(id = int(request.form['idColumn'])).all()
-    c = c[0]
-    if c == None:
+    if not c:
         return "OK"
+    c = c[0]
     ca = Cards.query.filter_by(column_id = c.id).all()
     for card in ca:
         a.delCard(session['author_id'], session['session_id'], card.id, card.column_id, card.project_id)
