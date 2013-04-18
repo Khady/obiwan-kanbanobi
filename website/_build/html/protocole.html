@@ -192,17 +192,23 @@
 </ol>
 <p>Les informations demandees pour un update sont les memes que celles pour la creation. Seule la partie de presentation du message change :</p>
 <blockquote>
-<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
-    <span class="na">target</span> <span class="o">=</span> <span class="n">CARDS</span><span class="p">;</span>
-<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">UPDATE</span><span class="p">;</span>
-</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
-<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
-</span>    <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
-      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">carte</span><span class="p">;</span>
-      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
+<div><div class="highlight-protobuf"><pre>Msg {
+    target = CARDS;
+    command = UPDATE;
+    author_id = id
+    session_id = chaine de session unique
+    message Cards {
+      id = id de la carte;
+      project_id = id du projet;
+      column_id = id de la colonne;
+      name = nom de la carte;
+      desc = contenu de la carte;
+      tags = les tags de la carte;
+      user_id = id du createur;
+      scripts_ids = id non utilise pour le moment; // IDs of the scripts attached to the card
+      write = liste d'id d'utilisateurs qui ont les droits sur la carte;
+    }
+}</pre>
 </div>
 </div></blockquote>
 <ol class="arabic simple" start="3">
@@ -281,8 +287,114 @@
 </div>
 <div class="section" id="colonnes">
 <h3>Colonnes<a class="headerlink" href="#colonnes" title="Permalink to this headline">¶</a></h3>
-<p>La reception differentes colonnes composannt un projet s&#8217;effecture avec l&#8217;envoi d&#8217;un paquet MSG_COLUMN contenant l&#8217;identifiant du projet cible.
-Le serveur peut repondre</p>
+<ol class="arabic simple">
+<li>Creation</li>
+</ol>
+<p>Pour la creation d&#8217;une colonne, le message doit etre le suivant :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">COLUMNS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">CREATE</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Columns</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">sans</span> <span class="n">importance</span> <span class="n">a</span> <span class="n">la</span> <span class="n">creation</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+      <span class="na">name</span> <span class="o">=</span> <span class="n">nom</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">desc</span> <span class="o">=</span> <span class="n">contenu</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">tags</span> <span class="o">=</span> <span class="n">les</span> <span class="n">tags</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">scripts_ids</span> <span class="o">=</span> <span class="n">id</span> <span class="n">non</span> <span class="n">utilise</span> <span class="n">pour</span> <span class="n">le</span> <span class="n">moment</span><span class="p">;</span> <span class="c1">// IDs of the scripts attached to the card</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="2">
+<li>Update</li>
+</ol>
+<p>Les informations demandees pour un update sont les memes que celles pour la creation. Seule la partie de presentation du message change :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">COLUMNS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">CREATE</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Columns</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+      <span class="na">name</span> <span class="o">=</span> <span class="n">nom</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">desc</span> <span class="o">=</span> <span class="n">contenu</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">tags</span> <span class="o">=</span> <span class="n">les</span> <span class="n">tags</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">scripts_ids</span> <span class="o">=</span> <span class="n">id</span> <span class="n">non</span> <span class="n">utilise</span> <span class="n">pour</span> <span class="n">le</span> <span class="n">moment</span><span class="p">;</span> <span class="c1">// IDs of the scripts attached to the card</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="3">
+<li>Delete</li>
+</ol>
+<p>Pour le delete, les seules informations necessaires sont l&#8217;id et le project id :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">COLUMNS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">DELETE</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic simple" start="4">
+<li>Get</li>
+</ol>
+<p>Pour le get, les seules informations necessaires sont l&#8217;id et le project id :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">COLUMNS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">GET</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span>    <span class="kd">message</span> <span class="nc">Cards</span> <span class="p">{</span>
+      <span class="na">id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">de</span> <span class="n">la</span> <span class="n">colonne</span><span class="p">;</span>
+      <span class="na">project_id</span> <span class="o">=</span> <span class="n">id</span> <span class="n">du</span> <span class="n">projet</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+<ol class="arabic" start="5">
+<li><p class="first">Success</p>
+<blockquote>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">COLUMNS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">SUCCESS</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span><span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p class="first">Erreur</p>
+</li>
+</ol>
+<p>Le message se presente sous la forme suivante :</p>
+<blockquote>
+<div><div class="highlight-protobuf"><pre> Msg {
+     target = COLUMNS;
+     command = ERROR;
+     author_id = authorId du message demandant une action;
+     session_id = sessionId du message demandant une action;
+     Error: &amp;message.Msg_Error{
+     error_id = error_code; // Cette erreur provient de la l'enum decrit dans cette page
+ }</pre>
+</div>
+</div></blockquote>
 </div>
 <div class="section" id="erreurs">
 <h3>Erreurs<a class="headerlink" href="#erreurs" title="Permalink to this headline">¶</a></h3>

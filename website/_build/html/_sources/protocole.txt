@@ -169,6 +169,13 @@ Les informations demandees pour un update sont les memes que celles pour la crea
            message Cards {
              id = id de la carte;
              project_id = id du projet;
+             column_id = id de la colonne;
+             name = nom de la carte;
+             desc = contenu de la carte;
+             tags = les tags de la carte;
+             user_id = id du createur;
+             scripts_ids = id non utilise pour le moment; // IDs of the scripts attached to the card
+             write = liste d'id d'utilisateurs qui ont les droits sur la carte;
            }
        }
 
@@ -250,8 +257,114 @@ Le message se presente sous la forme suivante :
 Colonnes
 --------
 
-La reception differentes colonnes composannt un projet s'effecture avec l'envoi d'un paquet MSG_COLUMN contenant l'identifiant du projet cible.
-Le serveur peut repondre 
+1. Creation
+
+Pour la creation d'une colonne, le message doit etre le suivant :
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = COLUMNS;
+           command = CREATE;
+           author_id = id
+           session_id = chaine de session unique
+           message Columns {
+             id = id sans importance a la creation;
+             project_id = id du projet;
+             name = nom de la colonne;
+             desc = contenu de la colonne;
+             tags = les tags de la colonne;
+             scripts_ids = id non utilise pour le moment; // IDs of the scripts attached to the card
+           }
+       }
+
+2. Update
+
+Les informations demandees pour un update sont les memes que celles pour la creation. Seule la partie de presentation du message change :
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = COLUMNS;
+           command = CREATE;
+           author_id = id
+           session_id = chaine de session unique
+           message Columns {
+             id = id de la colonne;
+             project_id = id du projet;
+             name = nom de la colonne;
+             desc = contenu de la colonne;
+             tags = les tags de la colonne;
+             scripts_ids = id non utilise pour le moment; // IDs of the scripts attached to the card
+           }
+       }
+
+
+3. Delete
+
+Pour le delete, les seules informations necessaires sont l'id et le project id :
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = COLUMNS;
+           command = DELETE;
+           author_id = id
+           session_id = chaine de session unique
+           message Cards {
+             id = id de la colonne;
+             project_id = id du projet;
+           }
+       }
+
+4. Get
+
+Pour le get, les seules informations necessaires sont l'id et le project id :
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = COLUMNS;
+           command = GET;
+           author_id = id
+           session_id = chaine de session unique
+           message Cards {
+             id = id de la colonne;
+             project_id = id du projet;
+           }
+       }
+
+5. Success
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+       Msg {
+           target = COLUMNS;
+           command = SUCCESS;
+           author_id = id
+           session_id = chaine de session unique
+       }
+
+6. Erreur
+
+Le message se presente sous la forme suivante :
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
+
+	Msg {
+	    target = COLUMNS;
+	    command = ERROR;
+	    author_id = authorId du message demandant une action;
+	    session_id = sessionId du message demandant une action;
+	    Error: &message.Msg_Error{
+	    error_id = error_code; // Cette erreur provient de la l'enum decrit dans cette page
+	}
 
 
 Erreurs
