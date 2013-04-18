@@ -100,11 +100,19 @@ function columnModif() {
 function addCardToColumn(idColumns, idCard, name) {
 	var columnsCardsListID = "#column" + idColumns + "-cardsList";
 	var listSize = $(columnsCardsListID + " li").length;
-	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit"+idCard+"\">"+name+"</li>");
+	var newCard = $("<li class=\"navbar-inner postit\" id=\"postit"+idCard+"\" data-id=\""+mydata.id+"\" data-content=\""+mydata.desc+"\">"+name+"</li>");
 	var buttonRemove = $("<i class=\"icon-remove delcard\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
 	delCard($(this).attr('id'));
 });
+
+	var buttonUpdate = $("<i class=\"icon-edit updatecard\" style=\"float: right;\" id=\""+idCard+"\"></i>").button().click(function() {
+	$("#updateCard #formUpdateCard-name").val($(".postit[data-id='"+$(this).attr('id')+"']").text());
+	$("#updateCard #formUpdateCard-description").val($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
+	$("#updateCard #formUpdateCard-idCard").val($(this).attr('id'));
+	$("#updateCard").modal('show');
+});
 	$(newCard).append(buttonRemove);
+	$(newCard).append(buttonUpdate)
 	$(columnsCardsListID).append(newCard);
 }
 
@@ -168,6 +176,13 @@ $(".delcard").button().click(function() {
 })
 
 
+$(".updatecard").button().click(function() {
+	$("#updateCard #formUpdateCard-name").val($(".postit[data-id='"+$(this).attr('id')+"']").text());
+	$("#updateCard #formUpdateCard-description").val($(".postit[data-id='"+$(this).attr('id')+"']").data("content"));
+	$("#updateCard #formUpdateCard-idCard").val($(this).attr('id'));
+	$("#updateCard").modal('show');
+})
+
 $(".delcolumn").button().click(function() {
 	delColumn($(this).attr('id'));
 })
@@ -205,7 +220,7 @@ sse();
         <ul class="cardsList" id="column{{c.id}}-cardsList">
 	  {% for ca in card[c.id] %}
 
-          <li class="navbar-inner postit" id="postit{{ca.id}}">{{ca.name}} <i class="icon-remove delcard"  style="float: right;" id="{{ca.id}}"></i></li>
+          <li class="navbar-inner postit" id="postit{{ca.id}}" data-id="{{ca.id}}" data-content="{{ca.content}}">{{ca.name}}<i class="icon-remove delcard"  style="float: right;" id="{{ca.id}}"></i> <i class="icon-edit updatecard"  style="float: right;" id="{{ca.id}}"></i></li>
           {% endfor %}
         </ul>
       </div>
@@ -283,6 +298,30 @@ sse();
 	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	  <!-- <input class="btn btn-primary" type="submit" value="Add Columns!"> -->
 	  {{formUpdate.submit(class="btn btn-primary", value="Update a Column!")}}
+	</div>
+      </form>
+    </div>
+
+
+    <div  id="updateCard" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="updateCardLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="updateCardLabel">Update Carte</h3>
+	</div>
+	<div class="modal-body">
+	  {{formUpdateCard.hidden_tag()}}
+	<p>
+	  Name:<br>
+	  {{formUpdateCard.name(class="input-block-level")}}<br>
+	  Description:<br>
+	  {{formUpdateCard.description(class="input-block-level")}}<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <!-- <input class="btn btn-primary" type="submit" value="Add Columns!"> -->
+	  {{formUpdateCard.submit(class="btn btn-primary", value="Update a Column!")}}
 	</div>
       </form>
     </div>

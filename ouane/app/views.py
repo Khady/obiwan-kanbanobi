@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards
 
@@ -55,6 +55,7 @@ def project(id = 0):
     form = AddColumnForm(prefix="form")
     formCard = AddCardForm(prefix="formCard")
     formUpdate = UpdateColumnForm(prefix="formUpdate")
+    formUpdateCard = UpdateCardForm(prefix="formUpdateCard")
     if form.validate_on_submit() and form.submit.data:
         a.createColumn(session['author_id'], session['session_id'], id, form.name.data, form.description.data)
     if formCard.validate_on_submit() and formCard.submit.data:
@@ -63,7 +64,11 @@ def project(id = 0):
         c = Columns.query.filter_by(id = int(formUpdate.idColumn.data)).all()
         c = c[0]
         a.modifyColumn(session['author_id'], session['session_id'], int(formUpdate.idColumn.data), c.project_id, formUpdate.name.data, formUpdate.description.data)
-    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard, formUpdate = formUpdate, id = id)
+    if formUpdateCard.validate_on_submit() and formUpdateCard.submit.data:
+        c = Cards.query.filter_by(id = int(formUpdateCard.idCard.data)).all()
+        c = c[0]
+        a.modifyCard(session['author_id'], session['session_id'], int(formUpdateCard.idCard.data), c.project_id, formUpdateCard.name.data, formUpdateCard.description.data, c.column_id)
+    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard, formUpdate = formUpdate, formUpdateCard = formUpdateCard, id = id)
 
 @app.route("/", methods = ['GET', 'POST'])
 @app.route("/index", methods = ['GET', 'POST'])
