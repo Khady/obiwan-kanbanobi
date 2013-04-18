@@ -213,12 +213,12 @@ Pour le get, les seules informations necessaires sont l'id et le project id :
     .. code-block:: protobuf
        :emphasize-lines: 3,5
 
-	Msg{
-		Target:    message.TARGET_CARDS.Enum(),
-		Command:   message.CMD_SUCCES.Enum(),
-		AuthorId:  proto.Uint32(*msg.AuthorId),
-		SessionId: proto.String(*msg.SessionId),
-	}
+       Msg {
+           target = CARDS;
+           command = SUCCESS;
+           author_id = id
+           session_id = chaine de session unique
+       }
 
 7. Erreur
 

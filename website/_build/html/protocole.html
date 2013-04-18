@@ -243,12 +243,13 @@
 <ol class="arabic" start="6">
 <li><p class="first">Success</p>
 <blockquote>
-<div><div class="highlight-protobuf"><pre> Msg{
-         Target:    message.TARGET_CARDS.Enum(),
-         Command:   message.CMD_SUCCES.Enum(),
-         AuthorId:  proto.Uint32(*msg.AuthorId),
-         SessionId: proto.String(*msg.SessionId),
- }</pre>
+<div><div class="highlight-protobuf"><div class="highlight"><pre><span class="n">Msg</span> <span class="p">{</span>
+    <span class="na">target</span> <span class="o">=</span> <span class="n">CARDS</span><span class="p">;</span>
+<span class="hll">    <span class="na">command</span> <span class="o">=</span> <span class="n">SUCCESS</span><span class="p">;</span>
+</span>    <span class="na">author_id</span> <span class="o">=</span> <span class="n">id</span>
+<span class="hll">    <span class="na">session_id</span> <span class="o">=</span> <span class="n">chaine</span> <span class="n">de</span> <span class="n">session</span> <span class="n">unique</span>
+</span><span class="p">}</span>
+</pre></div>
 </div>
 </div></blockquote>
 </li>
