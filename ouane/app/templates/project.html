@@ -12,7 +12,9 @@ function sse() {
 				createNewColumn(mydata.id, mydata.name);
 			}
 			else {
-				$("#columnsRow").find("#column"+mydata.id).find("showDetailColumn").text = mydata.name;
+				$("#showDetailColumn[data-id='"+mydata.id+"']").text(mydata.name);
+				$("#showDetailColumn[data-id='"+mydata.id+"']").val(mydata.name);
+				$("#showDetailColumn[data-id='"+mydata.id+"']").data("content", mydata.desc);
 			}
 		}
 		if (mydata.type == 'card') {
@@ -53,7 +55,11 @@ function createNewColumn(columnsNumber, columnName) {
 	
 	var columnID = "column" + columnsNumber;
 	var colContainer = $("<div class=\"column\" id=\"" + columnID + "\"></div>");
-	var columnTitle = $("<button class=\"columnTitle btn disabled\">" + columnName + "</button>").button().click(function() { columnModif(); });
+	var columnTitle = $("<button class=\"columnTitle btn disabled\" id=\"showDetailColumn\" data-id=\""+mydata.id+"\" data-content=\""+mydata.desc+"\" value=\""+mydata.name+"\">" + columnName + "</button>");
+	$(columnTitle).button().click(function() { 
+			$("#modalColInfoLabel").text($(this).val()).html();
+			$("#modalColInfo .modal-body p").text($(this).data("content")).html();
+			$('#modalColInfo').modal('show'); });
 	var cardsSpace = $("<div class=\"cardsSpace\" id=\"" + columnID + "-cardsSpace\"></div>").droppable({drop: function(event, ui) {
 	var idColumn = $(this).attr('id').split("column")[1].split("-")[0];
 	var idCard = ui.draggable.attr('id').split("postit")[1];
@@ -140,7 +146,9 @@ $( ".cardsSpace" ).droppable({
 <!-- }); -->
 
 $( ".columnTitle" ).button().click(function() {
-	columnModif();
+	$("#modalColInfoLabel").text($(this).val());
+	$("#modalColInfo .modal-body p").text($(this).data('content'));
+	$('#modalColInfo').modal('show');
 })
 
 $(".addCard").button().click(function() {
@@ -154,6 +162,13 @@ $(".delcard").button().click(function() {
 
 $(".delcolumn").button().click(function() {
 	delColumn($(this).attr('id'));
+})
+
+$(".updatecolumn").button().click(function() {
+	$("#updateColumn #formUpdate-name").val($("#showDetailColumn[data-id='"+$(this).attr('id')+"']").val());
+	$("#updateColumn #formUpdate-description").val($("#showDetailColumn[data-id='"+$(this).attr('id')+"']").data("content"));
+	$("#updateColumn #formUpdate-idColumn").val($(this).attr('id'));
+	$("#updateColumn").modal('show');
 })
 
 });
@@ -177,7 +192,7 @@ sse();
     
     {% for c in columns %}
     <div class="column" id="column{{c.id}}">
-      <button class="columnTitle btn disabled" id="showDetailColumn">{{c.name}}</button>
+      <button class="columnTitle btn disabled" id="showDetailColumn" data-id="{{c.id}}" data-content="{{c.content}}" value="{{c.name}}">{{c.name}}</button>
       <div class="cardsSpace" id="column{{c.id}}-cardsSpace">
         <ul class="cardsList" id="column{{c.id}}-cardsList">
 	  {% for ca in card[c.id] %}
@@ -186,9 +201,9 @@ sse();
         </ul>
       </div>
     <button href="#addACardPopup" role="button" class="open-AddACardPopup btn disabled" data-toggle="modal" data-id="{{c.id}}" id="column{{c.id}}-addCardButton" style="float: left;">Add a card...</button><i class="icon-remove delcolumn"  style="float: right;" id="{{c.id}}"></i>
+    <i class="icon-edit updatecolumn"  style="float: right;" id="{{c.id}}"></i>
     </div>
     {% endfor %}
-
   </div>
 </div>
 
@@ -215,7 +230,7 @@ sse();
 	</div>
       </form>
     </div>
-
+    
     <div  id="addColumn" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addColumnLabel" aria-hidden="true">
       <form action="" method="post" class="form-horizontal">
 	<div class="modal-header">
@@ -237,5 +252,45 @@ sse();
 	  {{form.submit(class="btn btn-primary", value="Add a Column!")}}
 	</div>
       </form>
-      {% endblock %}
+    </div>
+
+
+    <div  id="updateColumn" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="updateColumnLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="updateColumnLabel">Update Column</h3>
+	</div>
+	<div class="modal-body">
+	  {{formUpdate.hidden_tag()}}
+	<p>
+	  Name:<br>
+	  {{formUpdate.name(class="input-block-level")}}<br>
+	  Description:<br>
+	  {{formUpdate.description(class="input-block-level")}}<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <!-- <input class="btn btn-primary" type="submit" value="Add Columns!"> -->
+	  {{formUpdate.submit(class="btn btn-primary", value="Update a Column!")}}
+	</div>
+      </form>
+    </div>
+
+    <div id="modalColInfo" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modalColInfoLabel" aria-hidden="true">
+      <div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	<h3 id="modalColInfoLabel"></h3>
+      </div>
+      <div class="modal-body">
+	<label>Description:</label>
+	<p></p>
+      </div>
+      <div class="modal-footer">
+	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+
+    {% endblock %}
       

@@ -140,6 +140,21 @@ class Api(threading.Thread):
             msg.columns.write.add(elem)
         self.network.setWriteStack(msg.SerializeToString())
 
+
+    def modifyColumn(self, author_id, session_id, column_id, project_id, name = "", desc = "", tags = [], scripts_ids = [], write = []):
+        msg = Msg()
+        msg.target = message_pb2.COLUMNS
+        msg.command = message_pb2.MODIFY
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.columns.project_id = project_id
+        msg.columns.id = column_id
+        msg.columns.name = name
+        msg.columns.desc = desc
+        for elem in write:
+            msg.columns.write.add(elem)
+        self.network.setWriteStack(msg.SerializeToString())
+
     def createProject(self, author_id, session_id, name = "", content = "", read = []):
         msg = Msg()
         msg.target = message_pb2.PROJECTS

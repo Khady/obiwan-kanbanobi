@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards
 
@@ -24,8 +24,8 @@ def login():
         a.sendLogin(form.login.data, form.password.data)
         return redirect(url_for('checklogin', name = form.login.data))
     return render_template('login.html', 
-        title = 'Sign In',
-        form = form)
+                           title = 'Sign In',
+                           form = form)
 
 @app.route('/checklogin', methods = ['GET', 'POST'])
 @app.route('/checklogin/<name>', methods = ['GET', 'POST'])
@@ -47,7 +47,6 @@ def checklogin(name = None):
 @app.route("/project/<int:id>", methods = ['GET', 'POST'])
 @login_required
 def project(id = 0):
-    #a.getColumnsByProjectId(session['author_id'], session['session_id'], id)
     data = Columns.query.filter_by(project_id = id).order_by(Columns.id).all()
     card = {}
     for d in data:
@@ -55,13 +54,16 @@ def project(id = 0):
         card[d.id] = c
     form = AddColumnForm(prefix="form")
     formCard = AddCardForm(prefix="formCard")
+    formUpdate = UpdateColumnForm(prefix="formUpdate")
     if form.validate_on_submit() and form.submit.data:
-        print "TATA"
         a.createColumn(session['author_id'], session['session_id'], id, form.name.data, form.description.data)
     if formCard.validate_on_submit() and formCard.submit.data:
-        print formCard.idColumn.data
         a.createCard(session['author_id'], session['session_id'], id, formCard.name.data, formCard.description.data, int(formCard.idColumn.data))
-    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard, id = id)
+    if formUpdate.validate_on_submit() and formUpdate.submit.data:
+        c = Columns.query.filter_by(id = int(formUpdate.idColumn.data)).all()
+        c = c[0]
+        a.modifyColumn(session['author_id'], session['session_id'], int(formUpdate.idColumn.data), c.project_id, formUpdate.name.data, formUpdate.description.data)
+    return render_template('project.html', columns=data, card=card, form=form, formCard = formCard, formUpdate = formUpdate, id = id)
 
 @app.route("/", methods = ['GET', 'POST'])
 @app.route("/index", methods = ['GET', 'POST'])
@@ -78,7 +80,6 @@ def index():
         elif t.count("0") == len(t):
             data.append(p)
     form = AddProjectForm()
-    #a.getAllProjetList(session['author_id'], session['session_id'], session['author_id'])
     if form.validate_on_submit():
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
     return render_template('index.html', data = data, form = form)
@@ -99,14 +100,12 @@ def stream():
     return Response(event_stream(),
                     mimetype="text/event-stream")
 
-
 @app.route("/modifCard", methods = ['POST'])
 @login_required
 def modifCard():
     c = Cards.query.filter_by(id = int(request.form['idCard'])).all()
     c = c[0]
     a.modifyCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.project_id, c.name, c.content, int(request.form['idColumn']))
-    print c
     return "OK"
 
 @app.route("/delCard", methods = ['POST'])

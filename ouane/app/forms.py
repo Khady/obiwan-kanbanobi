@@ -22,6 +22,13 @@ class AddColumnForm(Form):
     name = TextField('Name', [validators.Length(min=1)])
     description = TextAreaField('Description', [validators.Length(min=1)])
     submit = SubmitField('Submit',  validators = [Required()])
+
+class UpdateColumnForm(Form):
+    name = TextField('Name', [validators.Length(min=1)])
+    description = TextAreaField('Description', [validators.Length(min=1)])
+    submit = SubmitField('Submit',  validators = [Required()])
+    idColumn = HiddenField('IdColumn', validators = [Required()])
+
 class AddCardForm(Form):
     name = TextField('Name', [validators.Length(min=1)])
     description = TextAreaField('Description', [validators.Length(min=1)])
