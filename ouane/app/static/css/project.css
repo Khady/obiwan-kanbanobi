@@ -43,7 +43,7 @@
 
 .columnTitle:hover
 {
-    width:auto;
+    transparency:100%;
 }
 
 .cardsSpace
@@ -78,10 +78,10 @@
 
 .ui-sortable-helper
 {
-    -ms-transform:rotate(3deg); /* IE 9 */
-    -moz-transform:rotate(3deg); /* Firefox */
-    -webkit-transform:rotate(3deg); /* Safari and Chrome */
-    -o-transform:rotate(3deg); /* Opera */
+    -ms-transform:rotate(2deg); /* IE 9 */
+    -moz-transform:rotate(2deg); /* Firefox */
+    -webkit-transform:rotate(2deg); /* Safari and Chrome */
+    -o-transform:rotate(2deg); /* Opera */
 }
 
 .addCard

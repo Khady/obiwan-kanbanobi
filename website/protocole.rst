@@ -12,7 +12,9 @@ Ce protocole utilise les Protobuf_ pour communiquer. Il le fait sur des sockets 
 
 Chaque client ouvre une socket pour communiquer mais peut parler au nom de plusieurs utilisateurs. Ce qui permet par exemple a un client web de se connecter une seule fois au serveur, mais de gerer plusieurs utilisateurs qui se connectent en parallele.
 
-Informations de base
+La base de donnee obi-wan-kanbanobi est repartie en projets, contenant des colonnes contenant des cartes.
+
+Information de base
 ====================
 
 Chaque message est précédé d'un int décrivant la taille du message à lire.
@@ -132,11 +134,18 @@ Cette erreur est renvoye sur une mauvaise authentification ou quand un message e
 .. }
 
 
-Cartes
-------
 
 Colonnes
 --------
+
+La reception differentes colonnes composannt un projet s'effecture avec l'envoi d'un paquet MSG_COLUMN contenant l'identifiant du projet cible.
+Le serveur peut repondre 
+
+Cartes
+------
+
+La rececption du contenu des colonnes (les cartes), s'effecture via l'envoi d'un message MSG_CARD contenant l'identifiant du projet cible et l'identifiant de la colonne.
+
 
 Erreurs
 -------

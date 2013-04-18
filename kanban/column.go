@@ -96,7 +96,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(2),
 			},
 		}
 	} else if err := column.Add(dbPool); err != nil {
@@ -108,7 +108,7 @@ func MsgColumnCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(21), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(21),
 			},
 		}
 	} else {
@@ -157,7 +157,7 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(2),
 			},
 		}
 	} else if err := column.Update(dbPool); err != nil {
@@ -168,11 +168,10 @@ func MsgColumnUpdate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(22), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(22),
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
@@ -200,22 +199,20 @@ func MsgColumnDelete(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(2),
 			},
 		}
 	} else if err := column.Del(dbPool); err != nil {
-		// Envoyer un message d'erreur ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(23), // remplacer par le vrai code d'erreur ici
+		ErrorId: proto.Uint32(23),
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_SUCCES.Enum(),
@@ -242,22 +239,22 @@ func MsgColumnGet(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(2),
 			},
 		}
 	} else if err := column.Get(dbPool); err != nil {
-		// Envoyer un message d'erreur ici
+
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_ERROR.Enum(),
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(24), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(24),
 			},
 		}
 	} else {
-		// Envoyer un message de succes ici
+
 		answer = &message.Msg{
 			Target:    message.TARGET_COLUMNS.Enum(),
 			Command:   message.CMD_GET.Enum(),
@@ -302,7 +299,7 @@ func MsgColumnGetBoard(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(2), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(2),
 			},
 		}
 	} else if board, err := col.GetCardByColumnId(dbPool); err != nil {

@@ -30,7 +30,7 @@ func MsgProjectCreate(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(31), // remplacer par le vrai code d'erreur ici
+				ErrorId: proto.Uint32(31),
 			},
 		}
 	} else {
@@ -141,8 +141,7 @@ func MsgProjectGet(conn net.Conn, msg *message.Msg) {
 			AuthorId:  proto.Uint32(*msg.AuthorId),
 			SessionId: proto.String(*msg.SessionId),
 			Error: &message.Msg_Error{
-				ErrorId: proto.Uint32(35), // remplacer par le vrai code d'erreur ici
-			},
+				ErrorId: proto.Uint32(35),			},
 		}
 	} else {
 		answer = &message.Msg{
