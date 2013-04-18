@@ -10,6 +10,10 @@ class AddProjectForm(Form):
     description = TextAreaField('Description', validators = [Required()])
     submit = SubmitField('Submit',  validators = [Required()])
 
+class AddUserToProjectForm(Form):
+    name = TextField('Name', validators = [Required()])
+    submit = SubmitField('Submit',  validators = [Required()])
+
 class AddUserForm(Form):
     login = TextField('Login', [validators.Length(min=4, max=25)])
     email = TextField('Email Address', [validators.Required()])

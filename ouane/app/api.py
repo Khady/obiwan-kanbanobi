@@ -417,7 +417,7 @@ class Api(threading.Thread):
                             continue
                         db.session.delete(c)
                         db.session.commit()
-                        dictcolumn = {'id' : projects.id}
+                        dictcolumn = {'id' : project.id}
                         dictcolumn['type'] = 'delproject'
                         red.publish('ouane', json.dumps(dictcolumn))
                     else:
