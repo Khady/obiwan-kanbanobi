@@ -24,7 +24,7 @@ def event_stream():
     pubsub.subscribe('ouane')
     # TODO: handle client disconnection.
     for message in pubsub.listen():
-        print message
+        # print message
         yield 'data: %s\n\n' % message['data']
 
 from api import Api

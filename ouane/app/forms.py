@@ -17,6 +17,7 @@ class AddUserForm(Form):
             validators.EqualTo('confirm', message='Passwords must match')
             ])
     confirm = PasswordField('Repeat Password')
+    submit = SubmitField('Submit',  validators = [Required()])
     
 class AddColumnForm(Form):
     name = TextField('Name', [validators.Length(min=1)])
@@ -34,6 +35,16 @@ class UpdateCardForm(Form):
     description = TextAreaField('Description', [validators.Length(min=1)])
     submit = SubmitField('Submit',  validators = [Required()])
     idCard = HiddenField('IdColumn', validators = [Required()])
+
+class UpdateUserForm(Form):
+    oldPassword = PasswordField('Old Password')
+    password = PasswordField('New Password', [
+            validators.Required(),
+            validators.EqualTo('confirm', message='Passwords must match')
+            ])
+    confirm = PasswordField('Repeat Password')
+    idUser = HiddenField('IdUser', validators = [Required()])
+    submit = SubmitField('Submit', validators = [Required()])
 
 class AddCardForm(Form):
     name = TextField('Name', [validators.Length(min=1)])

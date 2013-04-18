@@ -50,6 +50,8 @@ function sse() {
 sse();
 </script>
   <h1>Project List</h1>
+  <button href="#myModal" role="button" class="btn" data-toggle="modal">Add a project</button>
+  <hr>
   <div class="accordion" id="accordion2">
 {% for message in data %}
 <div class="accordion-group" id="{{message.id}}">
@@ -65,7 +67,6 @@ sse();
 </div>
 {% endfor %}
   </div>
-    <button href="#myModal" role="button" class="btn" data-toggle="modal">Add a project</button>
     <div  id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
       <form action="" method="post" class="form-horizontal">
 	<div class="modal-header">

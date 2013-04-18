@@ -194,6 +194,17 @@ class Api(threading.Thread):
         msg.cards.name = ""
         self.network.setWriteStack(msg.SerializeToString())
 
+    def updatePassword(self, author_id, session_id, idUser, oldpassword, newpassword):
+        msg = Msg()
+        msg.target = message_pb2.USERS
+        msg.command = message_pb2.PASSWORD
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.password.id = idUser
+        msg.password.oldpassword = oldpassword
+        msg.password.newpassword = newpassword
+        self.network.setWriteStack(msg.SerializeToString())
+
     def delColumn(self, author_id, session_id, idColumn, idProject):
         msg = Msg()
         msg.target = message_pb2.COLUMNS
@@ -273,6 +284,17 @@ class Api(threading.Thread):
             c.write = writestr
         db.session.commit()
 
+    def addNewUserInDB(self, user):
+        c = Users.query.get(user.id)
+        if (c == None):
+            c = Users(user.id, user.name, user.admin, "", user.mail, 1)
+            db.session.add(c)
+        else:
+            c.name = user.name
+            c.admin = user.admin
+            c.mail = user.mail
+        db.session.commit()
+
     def run(self):
         while 1:
             self.network.run()
@@ -302,9 +324,9 @@ class Api(threading.Thread):
                             print "SUCCESS"
                             continue
                         self.addNewCardInDB(cards)
-                        print "CARD",
-                        print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
-                               cards.user_id, cards.scripts_ids, cards.write]
+                        # print "CARD",
+                        # print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
+                        #        cards.user_id, cards.scripts_ids, cards.write]
                         dictcard = {'id' : cards.id, 'name' : cards.name, 'desc' : cards.desc, 'project_id' : cards.project_id, 'column_id' : cards.column_id}
                         dictcard['type'] = 'card'
                         red.publish('ouane', json.dumps(dictcard))
@@ -336,14 +358,14 @@ class Api(threading.Thread):
                         dictcolumns = {'id' : columns.id, 'name' : columns.name, 'desc' : columns.desc, 'project_id' : msg.columns.project_id}
                         dictcolumns['type'] = 'columns'
                         red.publish('ouane', json.dumps(dictcolumns))
-                        print "COLUMNS",
-                        print [msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
-                               msg.columns.scripts_ids, msg.columns.write]
+                        # print "COLUMNS",
+                        # print [msg.columns.id, msg.columns.name, msg.columns.desc, msg.columns.project_id, msg.columns.tags,
+                        #        msg.columns.scripts_ids, msg.columns.write]
                         for cards in msg.columns.ColumnCards:
                             self.addNewCardInDB(cards)
-                            print "CARD",
-                            print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
-                                   cards.user_id, cards.scripts_ids, cards.write]
+                            # print "CARD",
+                            # print [cards.id, cards.name, cards.desc, cards.column_id, cards.project_id, cards.tags,
+                            #        cards.user_id, cards.scripts_ids, cards.write]
                             dictcard = {'id' : cards.id, 'name' : cards.name, 'desc' : cards.desc, 'project_id' : cards.project_id, 'column_id' : cards.column_id}
                             dictcard['type'] = 'card'
                             red.publish('ouane', json.dumps(dictcard))
@@ -382,6 +404,8 @@ class Api(threading.Thread):
                     red.publish('ouane', u'ERROR')
                     print "ERROR"
                 if (msg.target == message_pb2.USERS):
+                    if msg.users.name != "":
+                        self.addNewUserInDB(msg.users)
                     for project in msg.users.userProject:
                         self.addNewProjectInDB(project)
                         dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}

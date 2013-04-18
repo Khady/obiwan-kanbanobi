@@ -1,8 +1,8 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm
 from functools import wraps
-from dbUtils import Projects, Columns, Cards
+from dbUtils import Projects, Columns, Cards, Users
 
 # index view function suppressed for brevity
 
@@ -92,12 +92,19 @@ def index():
 @app.route("/admin", methods = ['GET', 'POST'])
 @login_required
 def admin():
-    form = AddUserForm()
-    if form.validate_on_submit():
+    form = AddUserForm(prefix="form")
+    formUpdate = UpdateUserForm(prefix="formUpdate", idUser='0')
+    u = Users.query.order_by(Users.id).all()
+    print u
+    if form.validate_on_submit() and form.submit.data:
         a.createUser(session['author_id'], session['session_id'], form.login.data, form.email.data, form.password.data, False)
-    elif request.method == 'POST' and form.validate() == False:
+    elif request.method == 'POST' and form.validate() == False and not formUpdate.submit.data:
         flash("Error during the user creation!")
-    return render_template('admin.html', form=form)
+    if formUpdate.validate_on_submit() and formUpdate.submit.data:
+        if formUpdate.idUser.data == '0':
+            formUpdate.idUser.data = session['author_id']
+        a.updatePassword(session['author_id'], session['session_id'], int(formUpdate.idUser.data), formUpdate.oldPassword.data, formUpdate.password.data)
+    return render_template('admin.html', form=form, formUpdate=formUpdate,u = u)
 
 @app.route('/stream')
 @login_required
@@ -118,7 +125,8 @@ def modifCard():
 def delCard():
     c = Cards.query.filter_by(id = int(request.form['idCard'])).all()
     c = c[0]
-    a.delCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.column_id, c.project_id)
+    if c != None:
+        a.delCard(session['author_id'], session['session_id'], int(request.form['idCard']), c.column_id, c.project_id)
     return "OK"
 
 
@@ -127,6 +135,8 @@ def delCard():
 def delColumn():
     c = Columns.query.filter_by(id = int(request.form['idColumn'])).all()
     c = c[0]
+    if c == None:
+        return "OK"
     ca = Cards.query.filter_by(column_id = c.id).all()
     for card in ca:
         a.delCard(session['author_id'], session['session_id'], card.id, card.column_id, card.project_id)

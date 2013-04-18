@@ -10,30 +10,58 @@ jQuery.fn.center = function () {
     return this;
 }
 $(function() {
-$( ".addUser" ).button().click(function() {
-$( ".newProject" ).center();
-$( ".newProject" ).show();
-})
-$( ".newProject" ).hide();
+$(
 });
 </script>
   <h1>Admin</h1>
-    <button class="addUser">Add user</button>
-    <div class="newProject">
-      <h3>Add Users</h3>
-      <form action="" method="post" name="addUsers">
-	{{form.hidden_tag()}}
+    <button href="#myModal" role="button" class="btn" data-toggle="modal">Add a User</button>
+    <div  id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="myModalLabel">Add User</h3>
+	</div>
+	<div class="modal-body">
+	  {{form.hidden_tag()}}
 	<p>
 	  Login:<br>
 	  {{form.login}}<br>
 	  Email:<br>
 	  {{form.email}}<br>
-	  Password:<br>
+	  Admin password:<br>
 	  {{form.password}}<br>
-	  Confirm Password:<br>
+	  Confirm admin password:<br>
 	  {{form.confirm}}<br>
-	  <input type="submit" style="width:100%;" value="Add Users!">
 	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  {{form.submit(class="btn btn-primary", value="Add User!")}}
+	</div>
+      </form>
+    </div>
+    <button href="#updatePass" role="button" class="btn" data-toggle="modal">Change password</button>
+    <div  id="updatePass" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="updatePassLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="updatePassLabel">Change password</h3>
+	</div>
+	<div class="modal-body">
+	  {{formUpdate.hidden_tag()}}
+	<p>
+	  Old password:<br>
+	  {{formUpdate.oldPassword}}<br>
+	  Password:<br>
+	  {{formUpdate.password}}<br>
+	  Confirm password:<br>
+	  {{formUpdate.confirm}}<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  {{formUpdate.submit(class="btn btn-primary", value="Change password!")}}
+	</div>
       </form>
     </div>
 {%  endblock %}
