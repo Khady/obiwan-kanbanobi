@@ -253,14 +253,12 @@ Colonnes
 La reception differentes colonnes composannt un projet s'effecture avec l'envoi d'un paquet MSG_COLUMN contenant l'identifiant du projet cible.
 Le serveur peut repondre 
 
-Cartes
-------
-
-La rececption du contenu des colonnes (les cartes), s'effecture via l'envoi d'un message MSG_CARD contenant l'identifiant du projet cible et l'identifiant de la colonne.
-
 
 Erreurs
 -------
+
+    .. code-block:: protobuf
+       :emphasize-lines: 3,5
 
         1:Utilisateur non connecte
         2:Pas les droits

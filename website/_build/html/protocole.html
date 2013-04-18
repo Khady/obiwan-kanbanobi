@@ -284,43 +284,41 @@
 <p>La reception differentes colonnes composannt un projet s&#8217;effecture avec l&#8217;envoi d&#8217;un paquet MSG_COLUMN contenant l&#8217;identifiant du projet cible.
 Le serveur peut repondre</p>
 </div>
-<div class="section" id="id2">
-<h3>Cartes<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h3>
-<p>La rececption du contenu des colonnes (les cartes), s&#8217;effecture via l&#8217;envoi d&#8217;un message MSG_CARD contenant l&#8217;identifiant du projet cible et l&#8217;identifiant de la colonne.</p>
-</div>
 <div class="section" id="erreurs">
 <h3>Erreurs<a class="headerlink" href="#erreurs" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>1:Utilisateur non connecte
-2:Pas les droits
-3:Commande invalide
-5:erreur creation carte
-6:erreur modification carte
-7:erreur delete carte
-8: erreur get carte
-11 - 20 -&gt; user :
-- 11: erreur creation utilisateur
-- 12: erreur modification utilisateur
-- 13: erreur modification du mot de passe utilisateur
-- 14: erreur suppression utilisateur
-- 15: erreur get utilisateur
-- 16: erreur get user board
-- 17: erreur set admin
-- 18: erreur unset admin
-21-30 -&gt; colonnes
-31 - 40 -&gt; projet
-- 31 unspecified project error
-- 32 db_error.
-- 33 migrating (changement d&#8217;admin)
-41 -50 -&gt; metadata
-- 41 unspecified metadata error
-- 42 erreur 42, serviette non trouvée
-- 43 metadataID inconnu
-- 44
-51-60 -&gt; ident {
-51 -&gt; Login error
-52 -&gt; disconnect error
-}</div></blockquote>
+<div><div class="highlight-protobuf"><pre> 1:Utilisateur non connecte
+ 2:Pas les droits
+ 3:Commande invalide
+ 5:erreur creation carte
+ 6:erreur modification carte
+ 7:erreur delete carte
+ 8: erreur get carte
+ 11 - 20 -&gt; user :
+ - 11: erreur creation utilisateur
+ - 12: erreur modification utilisateur
+ - 13: erreur modification du mot de passe utilisateur
+ - 14: erreur suppression utilisateur
+ - 15: erreur get utilisateur
+ - 16: erreur get user board
+ - 17: erreur set admin
+ - 18: erreur unset admin
+ 21-30 -&gt; colonnes
+ 31 - 40 -&gt; projet
+ - 31 unspecified project error
+ - 32 db_error.
+ - 33 migrating (changement d'admin)
+ 41 -50 -&gt; metadata
+ - 41 unspecified metadata error
+ - 42 erreur 42, serviette non trouvée
+ - 43 metadataID inconnu
+ - 44
+ 51-60 -&gt; ident {
+ 51 -&gt; Login error
+ 52 -&gt; disconnect error
+ }</pre>
+</div>
+</div></blockquote>
 </div>
 </div>
 <div class="section" id="message-proto">
@@ -467,7 +465,6 @@ Le serveur peut repondre</p>
 <li><a class="reference internal" href="#authentification">Authentification</a></li>
 <li><a class="reference internal" href="#cartes">Cartes</a></li>
 <li><a class="reference internal" href="#colonnes">Colonnes</a></li>
-<li><a class="reference internal" href="#id2">Cartes</a></li>
 <li><a class="reference internal" href="#erreurs">Erreurs</a></li>
 </ul>
 </li>
