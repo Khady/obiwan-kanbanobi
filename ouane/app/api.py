@@ -94,6 +94,17 @@ class Api(threading.Thread):
         msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
 
+    def getUserByName(self, author_id, session_id, name):
+        msg = Msg()
+        msg.target = message_pb2.USERS
+        msg.command = message_pb2.GET
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.users.id = 0
+        msg.users.name = name
+        msg.users.admin = False
+        self.network.setWriteStack(msg.SerializeToString())
+
     def createCard(self,  author_id, session_id, project_id, name, desc, column_id, tags = [], scripts_ids = [], write = []):
         msg = Msg()
         msg.target = message_pb2.CARDS

@@ -3,6 +3,7 @@ from app  import app, a, event_stream
 from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm, UpdateProjectForm, AddUserToProjectForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards, Users
+import time
 
 # index view function suppressed for brevity
 
@@ -88,15 +89,26 @@ def index():
     form = AddProjectForm(prefix='form')
     formAdd = AddUserToProjectForm(prefix='formAdd')
     if form.validate_on_submit() and form.submit.data:
-        print "dasdasd"
         a.createProject(session['author_id'], session['session_id'], form.name.data, form.description.data)
     if formUpdate.validate_on_submit() and formUpdate.submit.data:
         p = Projects.query.filter_by(id = int(formUpdate.idProject.data)).all()
         p = p[0]
-        print p.read
         read = filter (lambda a: a != 0, [int(s) for s in p.read.split(" ")])
         a.updateProject(session['author_id'], session['session_id'], int(formUpdate.idProject.data), formUpdate.name.data, formUpdate.description.data, read)
-    return render_template('index.html', data = data, form = form, formUpdate = formUpdate)
+    if formAdd.validate_on_submit() and formAdd.submit.data:
+        p = Projects.query.filter_by(id = int(formAdd.idProject.data)).all()
+        p = p[0]
+        read = filter (lambda a: a != 0, [int(s) for s in p.read.split(" ")])
+        a.getUserByName(session['author_id'], session['session_id'], formAdd.name.data)
+        time.sleep(1)
+        u = Users.query.filter_by(name = formAdd.name.data).all()
+        if not u:
+            flash("User not found or the server don't send the user information!")
+        else:
+            u = u[0]
+            read.append(u.id)
+            a.updateProject(session['author_id'], session['session_id'], int(formAdd.idProject.data), p.name, p.content, read)
+    return render_template('index.html', data = data, form = form, formUpdate = formUpdate, formAdd = formAdd)
 
 @app.route("/admin", methods = ['GET', 'POST'])
 @login_required
@@ -104,7 +116,6 @@ def admin():
     form = AddUserForm(prefix="form")
     formUpdate = UpdateUserForm(prefix="formUpdate", idUser='0')
     u = Users.query.order_by(Users.id).all()
-    print u
     if form.validate_on_submit() and form.submit.data:
         a.createUser(session['author_id'], session['session_id'], form.login.data, form.email.data, form.password.data, False)
     elif request.method == 'POST' and form.validate() == False and not formUpdate.submit.data:

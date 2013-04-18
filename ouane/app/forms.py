@@ -13,6 +13,7 @@ class AddProjectForm(Form):
 class AddUserToProjectForm(Form):
     name = TextField('Name', validators = [Required()])
     submit = SubmitField('Submit',  validators = [Required()])
+    idProject = HiddenField('IdProject', validators = [Required()])
 
 class AddUserForm(Form):
     login = TextField('Login', [validators.Length(min=4, max=25)])
