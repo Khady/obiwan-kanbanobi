@@ -10,9 +10,9 @@ type cellGet func(*Card, *ConnectionPoolWrapper) ([]int, error)
 func (c *Card) Add(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	tags := strings.Join(c.Tags, " ")
-	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), " ")
-	write := strings.Join(SString_of_SUInt32(c.Write), " ")
+	tags := strings.Join(c.Tags, ",")
+	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), ",")
+	write := strings.Join(SString_of_SUInt32(c.Write), ",")
 	_, err := db.Exec(`INSERT INTO cards(name, content, column_id, project_id, tags, user_id, scripts_id, write)
 VALUES($1, $2, $3, $4, $5, $6, $7, $8);`,
 		c.Name, c.Content, c.Column_id, c.Project_id, tags, c.User_id, sid, write)
@@ -29,9 +29,9 @@ func (c *Card) Del(p *ConnectionPoolWrapper) error {
 func (c *Card) Update(p *ConnectionPoolWrapper) error {
 	db := p.GetConnection()
 	defer p.ReleaseConnection(db)
-	tags := strings.Join(c.Tags, " ")
-	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), " ")
-	write := strings.Join(SString_of_SUInt32(c.Write), " ")
+	tags := strings.Join(c.Tags, ",")
+	sid := strings.Join(SString_of_SUInt32(c.Scripts_id), ",")
+	write := strings.Join(SString_of_SUInt32(c.Write), ",")
 	_, err := db.Exec(`update cards set name = $1, content = $2, column_id = $3, project_id = $4,
 tags = $5, user_id = $6, scripts_id = $7, write = $8 where id = $9`,
 		c.Name, c.Content, c.Column_id, c.Project_id, tags, c.User_id, sid, write, c.Id)
@@ -128,8 +128,6 @@ func (c *Card) GetLastCardWithName(p *ConnectionPoolWrapper) error {
 	defer p.ReleaseConnection(db)
 	row := db.QueryRow("select max(id) from cards where name= $1", c.Name)
 	err := row.Scan(&c.Id)
-	if err != nil {
-		println("lol")
-	}
+
 	return err
 }

@@ -549,4 +549,7 @@ message.proto
 .. - cmd invalid
 .. - session invalide
 
+.. toctree::
+   :maxdepth: 1
+
 .. _Protobuf: http://code.google.com/p/protobuf/

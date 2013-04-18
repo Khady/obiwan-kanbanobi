@@ -31,6 +31,7 @@ Contents:
    :maxdepth: 1
 
    protocole.rst
+   installation.rst
 
 .. _Kanban: http://fr.wikipedia.org/wiki/Kanban
 .. _Go: http://golang.org
