@@ -20,6 +20,7 @@ func (u *User) HaveRight(authorId uint32) bool {
 	if authorId != u.Id {
 		u.Id = authorId
 	}
+
 	if ret, err := u.CheckPassword(dbPool, u.Password); err == nil && ret == true {
 		if admin, err := u.GetAdminById(dbPool, authorId); (err == nil && admin == true) ||
 			authorId == sId {
@@ -60,6 +61,7 @@ func MsgUserCreate(conn net.Conn, msg *message.Msg) {
 			*msg.Users.Mail,
 			true,
 		}
+
 		if err := verifExisting.GetByName(dbPool); user.HaveRight((*msg.AuthorId)) &&
 			err != nil && verifExisting.Id == 0 && user.VerifExistingMail(dbPool) == false {
 			user.Password = user.Name
@@ -199,7 +201,7 @@ func MsgUserDelete(conn net.Conn, msg *message.Msg) {
 		*msg.Users.Id,
 		*msg.Users.Name,
 		*msg.Users.Admin,
-		"",
+		*msg.Users.Password,
 		"",
 		true,
 	}
