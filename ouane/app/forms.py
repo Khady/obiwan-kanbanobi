@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, PasswordField, TextAreaField, HiddenField, SubmitField
+from flask.ext.wtf import Form, TextField, PasswordField, TextAreaField, HiddenField, SubmitField, BooleanField
 from flask.ext.wtf import Required, validators
 
 class LoginForm(Form):
@@ -15,6 +15,10 @@ class AddUserToProjectForm(Form):
     submit = SubmitField('Submit',  validators = [Required()])
     idProject = HiddenField('IdProject', validators = [Required()])
 
+class DeleteUserForm(Form):
+    name = TextField('Name', validators = [Required()])
+    submit = SubmitField('Submit',  validators = [Required()])
+
 class AddUserForm(Form):
     login = TextField('Login', [validators.Length(min=4, max=25)])
     email = TextField('Email Address', [validators.Required()])
@@ -23,6 +27,7 @@ class AddUserForm(Form):
             validators.EqualTo('confirm', message='Passwords must match')
             ])
     confirm = PasswordField('Repeat Password')
+    admin = BooleanField('admin', default = False)
     submit = SubmitField('Submit',  validators = [Required()])
     
 class AddColumnForm(Form):

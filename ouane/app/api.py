@@ -253,6 +253,17 @@ class Api(threading.Thread):
         msg.projects.content = ""
         self.network.setWriteStack(msg.SerializeToString())
 
+    def delUser(self, author_id, session_id, idUser):
+        msg = Msg()
+        msg.target = message_pb2.USERS
+        msg.command = message_pb2.DELETE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.users.id = idUser
+        msg.users.name = ""
+        msg.users.admin = False
+        self.network.setWriteStack(msg.SerializeToString())
+
     def sendLogin(self, login, password):
         msg = Msg()
         msg.author_id = 0
@@ -452,11 +463,23 @@ class Api(threading.Thread):
                     red.publish('ouane', u'ERROR')
                     print "ERROR"
                 if (msg.target == message_pb2.USERS):
-                    if msg.users.name != "":
-                        self.addNewUserInDB(msg.users)
-                    for project in msg.users.userProject:
-                        self.addNewProjectInDB(project)
-                        dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}
-                        dictproject['type'] = 'project'
-                        red.publish('ouane', json.dumps(dictproject))
-                        self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)
+                    if msg.command == message_pb2.ERROR:
+                        print 'ERROR USERS',
+                        print msg.error.error_id
+                    elif msg.command == message_pb2.DELETE:
+                        users = msg.users
+                        c = Users.query.get(users.id)
+                        print c
+                        if c is None:
+                            continue
+                        db.session.delete(c)
+                        db.session.commit()
+                    else:
+                        if msg.users.name != "":
+                            self.addNewUserInDB(msg.users)
+                        for project in msg.users.userProject:
+                            self.addNewProjectInDB(project)
+                            dictproject = {'id' : project.id, 'name' : project.name, 'content' : project.content, 'read' : ' '.join([str(r) for r in project.read]), 'admins_id' : ' '.join([str(r) for r in project.admins_id])}
+                            dictproject['type'] = 'project'
+                            red.publish('ouane', json.dumps(dictproject))
+                            self.getColumnsByProjectId(msg.author_id, msg.session_id, project.id)

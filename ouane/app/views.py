@@ -1,6 +1,6 @@
 from flask import render_template, flash, redirect, g, request, url_for, session, Response
 from app  import app, a, event_stream
-from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm, UpdateProjectForm, AddUserToProjectForm
+from forms import LoginForm, AddProjectForm, AddUserForm, AddColumnForm, AddCardForm, UpdateColumnForm, UpdateCardForm, UpdateUserForm, UpdateProjectForm, AddUserToProjectForm, DeleteUserForm
 from functools import wraps
 from dbUtils import Projects, Columns, Cards, Users
 import time
@@ -116,15 +116,25 @@ def admin():
     form = AddUserForm(prefix="form")
     formUpdate = UpdateUserForm(prefix="formUpdate", idUser='0')
     u = Users.query.order_by(Users.id).all()
+    formDelete = DeleteUserForm(prefix="formDelete")
     if form.validate_on_submit() and form.submit.data:
-        a.createUser(session['author_id'], session['session_id'], form.login.data, form.email.data, form.password.data, False)
-    elif request.method == 'POST' and form.validate() == False and not formUpdate.submit.data:
+        a.createUser(session['author_id'], session['session_id'], form.login.data, form.email.data, form.password.data, form.admin.data)
+    elif request.method == 'POST' and form.validate() == False and not formUpdate.submit.data and not formDelete.submit.data:
         flash("Error during the user creation!")
     if formUpdate.validate_on_submit() and formUpdate.submit.data:
         if formUpdate.idUser.data == '0':
             formUpdate.idUser.data = session['author_id']
         a.updatePassword(session['author_id'], session['session_id'], int(formUpdate.idUser.data), formUpdate.oldPassword.data, formUpdate.password.data)
-    return render_template('admin.html', form=form, formUpdate=formUpdate,u = u)
+    if formDelete.validate_on_submit() and formDelete.submit.data:
+        a.getUserByName(session['author_id'], session['session_id'], formDelete.name.data)
+        time.sleep(1)
+        u = Users.query.filter_by(name = formDelete.name.data).all()
+        if not u:
+            flash("User not found or the server don't send the user information!")
+        else:
+            u = u[0]
+            a.delUser(session['author_id'], session['session_id'], u.id)
+    return render_template('admin.html', form=form, formUpdate=formUpdate,u = u, formDelete=formDelete)
 
 @app.route('/stream')
 @login_required
