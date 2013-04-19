@@ -28,6 +28,8 @@ $(
 	  {{form.login}}<br>
 	  Email:<br>
 	  {{form.email}}<br>
+	  Set as Admin:
+	  {{form.admin}}<br>
 	  Admin password:<br>
 	  {{form.password}}<br>
 	  Confirm admin password:<br>
@@ -61,6 +63,27 @@ $(
 	<div class="modal-footer">
 	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
 	  {{formUpdate.submit(class="btn btn-primary", value="Change password!")}}
+	</div>
+      </form>
+    </div>
+    <button href="#deleteUsers" role="button" class="btn" data-toggle="modal">Delete Users</button>
+    <div  id="deleteUsers" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="deleteUsersLabel" aria-hidden="true">
+      <form action="" method="post" class="form-horizontal">
+	<div class="modal-header">
+	  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+	  <h3 id="deleteUsersLabel">Delete users</h3>
+	</div>
+	<div class="modal-body">
+	  {{formDelete.hidden_tag()}}
+	<p>
+	  Name:<br>
+	  {{formDelete.name(class="input-block-level")}}<br>
+	</p>
+	</div>
+	<div class="modal-footer">
+	  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+	  <!-- <input class="btn btn-primary" type="submit" value="Add Projects!"> -->
+	  {{formDelete.submit(class="btn btn-primary", value="Delete users!")}}
 	</div>
       </form>
     </div>
