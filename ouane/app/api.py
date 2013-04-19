@@ -253,7 +253,7 @@ class Api(threading.Thread):
         msg.projects.content = ""
         self.network.setWriteStack(msg.SerializeToString())
 
-    def delUser(self, author_id, session_id, idUser):
+    def delUser(self, author_id, session_id, idUser, password):
         msg = Msg()
         msg.target = message_pb2.USERS
         msg.command = message_pb2.DELETE
@@ -261,6 +261,7 @@ class Api(threading.Thread):
         msg.session_id = session_id
         msg.users.id = idUser
         msg.users.name = ""
+        msg.users.password = password
         msg.users.admin = False
         self.network.setWriteStack(msg.SerializeToString())
 

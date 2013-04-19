@@ -17,6 +17,11 @@ class AddUserToProjectForm(Form):
 
 class DeleteUserForm(Form):
     name = TextField('Name', validators = [Required()])
+    password = PasswordField('New Password', [
+            validators.Required(),
+            validators.EqualTo('confirm', message='Passwords must match')
+            ])
+    confirm = PasswordField('Repeat Password')
     submit = SubmitField('Submit',  validators = [Required()])
 
 class AddUserForm(Form):

@@ -133,7 +133,8 @@ def admin():
             flash("User not found or the server don't send the user information!")
         else:
             u = u[0]
-            a.delUser(session['author_id'], session['session_id'], u.id)
+            print formDelete.password.data
+            a.delUser(session['author_id'], session['session_id'], u.id, formDelete.password.data)
     return render_template('admin.html', form=form, formUpdate=formUpdate,u = u, formDelete=formDelete)
 
 @app.route('/stream')
