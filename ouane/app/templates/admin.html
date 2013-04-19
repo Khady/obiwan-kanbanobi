@@ -25,15 +25,15 @@ $(
 	  {{form.hidden_tag()}}
 	<p>
 	  Login:<br>
-	  {{form.login}}<br>
+	  {{form.login(class="input-block-level")}}<br>
 	  Email:<br>
-	  {{form.email}}<br>
+	  {{form.email(class="input-block-level")}}<br>
 	  Set as Admin:
 	  {{form.admin}}<br>
 	  Admin password:<br>
-	  {{form.password}}<br>
+	  {{form.password(class="input-block-level")}}<br>
 	  Confirm admin password:<br>
-	  {{form.confirm}}<br>
+	  {{form.confirm(class="input-block-level")}}<br>
 	</p>
 	</div>
 	<div class="modal-footer">
@@ -53,11 +53,11 @@ $(
 	  {{formUpdate.hidden_tag()}}
 	<p>
 	  Old password:<br>
-	  {{formUpdate.oldPassword}}<br>
+	  {{formUpdate.oldPassword(class="input-block-level")}}<br>
 	  Password:<br>
-	  {{formUpdate.password}}<br>
+	  {{formUpdate.password(class="input-block-level")}}<br>
 	  Confirm password:<br>
-	  {{formUpdate.confirm}}<br>
+	  {{formUpdate.confirm(class="input-block-level")}}<br>
 	</p>
 	</div>
 	<div class="modal-footer">
@@ -79,9 +79,9 @@ $(
 	  Name:<br>
 	  {{formDelete.name(class="input-block-level")}}<br>
 	  Admin password:<br>
-	  {{formDelete.password}}<br>
+	  {{formDelete.password(class="input-block-level")}}<br>
 	  Confirm admin password:<br>
-	  {{formDelete.confirm}}<br>
+	  {{formDelete.confirm(class="input-block-level")}}<br>
 	</p>
 	</div>
 	<div class="modal-footer">
