@@ -180,6 +180,22 @@ class Api(threading.Thread):
             msg.projects.read.add(elem)
         self.network.setWriteStack(msg.SerializeToString())
 
+    def createComment(self, author_id, card_id, session_id, content = ""):
+        msg = Msg()
+        msg.target = message_pb2.METADATAS
+        msg.command = message_pb2.CREATE
+        msg.author_id = author_id
+        msg.session_id = session_id
+        msg.metadata.objecttype = 2
+        msg.metadata.objectid = card_id
+        msg.metadata.datakey = "comment"
+        msg.metadata.datavalue = "$1;$2;$3".format(author_id, -1, content)
+        msg.metadata.id = 0
+        for elem in read:
+            msg.metadata.read.add(elem)
+        self.network.setWriteStack(msg.SerializeToString())
+
+
     def updateProject(self, author_id, session_id, project_id, name = "", content = "", read = []):
         msg = Msg()
         msg.target = message_pb2.PROJECTS
